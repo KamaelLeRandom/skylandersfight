@@ -1,0 +1,5 @@
+name: SkylandersFight
+version: 1.0
+author: Kamael
+main: fr.kamael.skylandersfight.Plugin
+api-version: '1.13'
