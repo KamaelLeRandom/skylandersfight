@@ -3,3 +3,8 @@ version: 1.0
 author: Kamael
 main: fr.kamael.skylandersfight.Plugin
 api-version: '1.13'
+commands:
+  skylander:
+    description: "Commande principale du plugin Skylander"
+    permission: skylander.use
+    aliases: [s]
