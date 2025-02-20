@@ -26,11 +26,11 @@ public class Config {
 		Inventory inv = Bukkit.createInventory(null, 36, Constants.inventoryConfigName);
 		for (Integer i = 0; i < 9; i++) {
 			inv.setItem(i     , ItemManager.getInventoryGlass());
-			inv.setItem(i + 18, ItemManager.getInventoryGlass());
+			inv.setItem(i + 27, ItemManager.getInventoryGlass());
 		}
 		inv.setItem( 4, ItemManager.makeBasicItem(Material.SLIME_BALL, "§aCommencer", 1));
-		inv.setItem( 9, ItemManager.makeBasicItem(Material.OAK_SIGN, "§7Nombre de ligne de Skylanders", this.nbSkylanderLine));
-		inv.setItem(10, ItemManager.makeBasicItem(Material.OAK_SIGN, "§7Nombre de point", this.nbPointWin));
+		inv.setItem( 9, ItemManager.makeBasicItem(Material.NETHER_STAR, "§7Nombre de point", this.nbPointWin));
+		inv.setItem(10, ItemManager.makeBasicItem(Material.OAK_SIGN, "§7Nombre de ligne de Skylanders", this.nbSkylanderLine));
 		inv.setItem(11, ItemManager.makeBasicItem(Material.OAK_SIGN, "§7Nombre de barre de vie", this.nbLifebar));
 		inv.setItem(12, ItemManager.makeBasicItem(Material.OAK_SIGN, "§7Durée avant le Deathmatch", this.timerDM));
 		inv.setItem(18, ItemManager.makeBasicItem(Material.RED_TERRACOTTA, "§7Équipes", 1));
@@ -76,7 +76,7 @@ public class Config {
 	public Integer updateNbLifebar(InventoryAction action) {
 		switch (action) {
 			case PICKUP_ALL: {
-				if (this.nbLifebar > 1)
+				if (this.nbLifebar > 3)
 					this.nbLifebar--;
 				break;
 			}

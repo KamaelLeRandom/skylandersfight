@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
+import fr.kamael.skylandersfight.game.Game;
+import fr.kamael.skylandersfight.game.GameState;
 
 public class SkylanderCommand implements CommandExecutor {
 	private Plugin plugin = Plugin.plugin;
@@ -47,7 +49,16 @@ public class SkylanderCommand implements CommandExecutor {
 						
 						// < /skylander game >
 						if (args[0].equalsIgnoreCase("game")) {
+							if (plugin.game != null && !plugin.game.isState(GameState.ENDING)) {
+								player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+								player.sendMessage(Constants.prefixMessage + "Une partie est déjà en cours.");
+								return false;
+							}
 							
+							plugin.game = new Game();
+							
+							player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1, 1);
+							player.openInventory(plugin.game.getConfig().getInventory());
 							return true;
 						}
 					}
