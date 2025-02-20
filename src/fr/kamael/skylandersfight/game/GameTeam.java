@@ -19,6 +19,16 @@ public class GameTeam {
 		}
 	}
 	
+	public GameTeam(String name, GamePlayer player) {
+		this.name = name;
+		this.nbPoint = 0;
+		this.nbKill = 0;
+		this.players = new ArrayList<GamePlayer>();
+		this.players.add(player);
+
+		player.setInitialTeam(this);
+	}
+	
 	public String getName() {
 		return this.name;
 	}
