@@ -15,6 +15,7 @@ public class Config {
 	private Integer nbLifebar = 5;
 	private Integer nbSkylanderLine = 4;
 	private Integer timerDM = 5;
+	private Boolean activeTeam = false;
 	private Boolean activeHeal = true;
 	private Boolean activeDeathmatch = true;
 	private Boolean activeItem = true;
@@ -32,11 +33,12 @@ public class Config {
 		inv.setItem(10, ItemManager.makeBasicItem(Material.OAK_SIGN, "§7Nombre de point", this.nbPointWin));
 		inv.setItem(11, ItemManager.makeBasicItem(Material.OAK_SIGN, "§7Nombre de barre de vie", this.nbLifebar));
 		inv.setItem(12, ItemManager.makeBasicItem(Material.OAK_SIGN, "§7Durée avant le Deathmatch", this.timerDM));
-		inv.setItem(18, ItemManager.makeBasicItem(Material.GREEN_TERRACOTTA, "§7Bloc de soin", 1));
-		inv.setItem(19, ItemManager.makeBasicItem(Material.GREEN_TERRACOTTA, "§7Deathmatch", 1));
-		inv.setItem(20, ItemManager.makeBasicItem(Material.GREEN_TERRACOTTA, "§7Objets Aléatoire", 1));
-		inv.setItem(21, ItemManager.makeBasicItem(Material.GREEN_TERRACOTTA, "§7Bonus élémentaire", 1));
-		inv.setItem(22, ItemManager.makeBasicItem(Material.GREEN_TERRACOTTA, "§7Événement d'Arène", 1));
+		inv.setItem(18, ItemManager.makeBasicItem(Material.RED_TERRACOTTA, "§7Équipes", 1));
+		inv.setItem(19, ItemManager.makeBasicItem(Material.GREEN_TERRACOTTA, "§7Bloc de soin", 1));
+		inv.setItem(20, ItemManager.makeBasicItem(Material.GREEN_TERRACOTTA, "§7Deathmatch", 1));
+		inv.setItem(21, ItemManager.makeBasicItem(Material.GREEN_TERRACOTTA, "§7Objets Aléatoire", 1));
+		inv.setItem(22, ItemManager.makeBasicItem(Material.GREEN_TERRACOTTA, "§7Bonus élémentaire", 1));
+		inv.setItem(23, ItemManager.makeBasicItem(Material.GREEN_TERRACOTTA, "§7Événement d'Arène", 1));
 		
 		this.inventoryConfig = inv;
 	}
@@ -131,6 +133,22 @@ public class Config {
 				break;
 		}
 		return this.timerDM;
+	}
+	
+	public Boolean getActiveTeam() {
+		return this.activeTeam;
+	}
+	
+	public void updateActiveTeam(ItemStack item) {
+		this.activeTeam = !this.activeTeam;
+		
+		if (this.activeHeal) {
+			item.setType(Material.GREEN_TERRACOTTA);
+		} else {
+			item.setType(Material.RED_TERRACOTTA);
+		}
+		
+		return;
 	}
 
 	public Boolean getActiveHeal() {

@@ -5,6 +5,8 @@ import java.util.Random;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.kamael.skylandersfight.arena.ArenaListener;
+import fr.kamael.skylandersfight.command.SkylanderCommand;
+import fr.kamael.skylandersfight.command.SkylanderTabCompleter;
 import fr.kamael.skylandersfight.game.Game;
 
 public class Plugin extends JavaPlugin {
@@ -18,6 +20,9 @@ public class Plugin extends JavaPlugin {
 		plugin = this;
 		random = new Random();
 
+        getCommand("skylander").setExecutor(new SkylanderCommand());
+        getCommand("skylander").setTabCompleter(new SkylanderTabCompleter());
+		
 		getServer().getPluginManager().registerEvents(new PluginListener(), this);
 		getServer().getPluginManager().registerEvents(new ArenaListener(), this);
 		
