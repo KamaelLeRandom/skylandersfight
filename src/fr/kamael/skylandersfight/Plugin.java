@@ -18,6 +18,7 @@ public class Plugin extends JavaPlugin {
 		plugin = this;
 		random = new Random();
 
+		getServer().getPluginManager().registerEvents(new PluginListener(), this);
 		getServer().getPluginManager().registerEvents(new ArenaListener(), this);
 		
 		System.out.println("[SkylandersFight] Plugin activé.");
