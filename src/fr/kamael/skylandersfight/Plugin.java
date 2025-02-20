@@ -8,7 +8,7 @@ import fr.kamael.skylandersfight.game.Game;
 
 public class Plugin extends JavaPlugin {
 	public static Plugin plugin;
-	public static Random random;
+	public Random random;
 	public Game game;
 	
 	/// --- Méthodes initial.
