@@ -13,11 +13,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
 import fr.kamael.skylandersfight.game.config.Config;
+import fr.kamael.skylandersfight.game.config.ConfigSkylander;
 import fr.kamael.skylandersfight.utils.manager.FireworkManager;
 
 public class Game {
 	protected Plugin plugin = Plugin.plugin;
 	protected Config config;
+	protected ConfigSkylander configSkylander;
 	protected GameState state;
 	// TODO : Ajout le Round.
 	protected ArrayList<GamePlayer> listPlayers;
@@ -25,6 +27,7 @@ public class Game {
 	
 	public Game() {
 		this.config = new Config();
+		this.configSkylander = new ConfigSkylander();
 		this.state = GameState.WAITING;
 		this.listTeams = new ArrayList<GameTeam>();
 		this.listPlayers = new ArrayList<GamePlayer>();
@@ -32,6 +35,10 @@ public class Game {
 	
 	public Config getConfig() {
 		return this.config;
+	}
+	
+	public ConfigSkylander getConfigSkylander() {
+		return this.configSkylander;
 	}
 	
 	public void setState(GameState state) {
