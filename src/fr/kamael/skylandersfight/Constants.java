@@ -19,6 +19,7 @@ public class Constants {
 			"vient de s'enfuir, encore un lâche.");
 	
 	public static String inventorySkylanderName = "§cSkylanders";
+	public static String inventoryArenaName = "§cArènes";
 	public static String inventoryConfigName = "§cConfiguration";
 	
 	public static String itemNameEon = "§3Bénédiction d'Eon";
