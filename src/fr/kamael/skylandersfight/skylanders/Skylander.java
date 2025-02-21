@@ -183,6 +183,10 @@ public class Skylander {
 		}
 		return true;
 	}
+	
+	public ArrayList<Skylander> getMates() {
+		return this.mates;
+	}
 
 	/// --- Méthodes à surcharger.
 	
