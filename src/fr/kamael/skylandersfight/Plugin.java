@@ -8,6 +8,7 @@ import fr.kamael.skylandersfight.arena.ArenaListener;
 import fr.kamael.skylandersfight.command.SkylanderCommand;
 import fr.kamael.skylandersfight.command.SkylanderTabCompleter;
 import fr.kamael.skylandersfight.game.Game;
+import fr.kamael.skylandersfight.skylanders.magie.listener.MagieListener;
 
 public class Plugin extends JavaPlugin {
 	public static Plugin plugin;
@@ -25,6 +26,8 @@ public class Plugin extends JavaPlugin {
 		
 		getServer().getPluginManager().registerEvents(new PluginListener(), this);
 		getServer().getPluginManager().registerEvents(new ArenaListener(), this);
+		
+		getServer().getPluginManager().registerEvents(new MagieListener(), this);
 		
 		System.out.println("[SkylandersFight] Plugin activé.");
 	}
