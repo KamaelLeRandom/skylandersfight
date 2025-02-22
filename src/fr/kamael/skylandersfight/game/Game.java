@@ -101,12 +101,6 @@ public class Game {
 		}
 	}
 	
-	// TODO - chooseSkylander
-	public void chooseSkylander() { return; }
-	
-	// TODO - chooseArena
-	public void chooseArena() { return; }
-	
 	@SuppressWarnings("deprecation")
 	public void finish(GameTeam winningTeam) {
 		this.state = GameState.ENDING;
