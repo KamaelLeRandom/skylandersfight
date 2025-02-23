@@ -3,19 +3,42 @@ package fr.kamael.skylandersfight.utils;
 import java.util.ArrayList;
 
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
 import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
+import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.utils.runnable.ParticleRunnable;
 import fr.kamael.skylandersfight.utils.runnable.SkylanderDamageRunnable;
 
 public class SpellUtils {
+	
+	public static void heal(Skylander skylander, Double value) {
+		Player player = skylander.getPlayer();
+		
+		if (skylander.checkStatus(Status.NOHEAL)) {
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+			player.sendMessage(Constants.prefixMessage + "Vous êtes sous §cHémorragie§f, vous ne pouvez pas vous soigner pour le moment.");
+		} else {
+			player.getWorld().spawnParticle(Particle.HEART, player.getEyeLocation().getX(), player.getEyeLocation().getY() + 0.5, player.getEyeLocation().getZ(), 10, 0., 0., 0.);
+			player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EAT, 1, 1);
+
+			if (player.getHealth() + value >= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
+				player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+			} else {
+				player.setHealth(player.getHealth() + value);
+			}
+		}
+	}
 	
 	public static void dash(Skylander skylander, Double value, SkylanderDamageRunnable damageCallback, ParticleRunnable particleCallback) {
 		Plugin plugin = Plugin.plugin;
