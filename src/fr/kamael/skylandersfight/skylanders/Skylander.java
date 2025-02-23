@@ -2,6 +2,7 @@ package fr.kamael.skylandersfight.skylanders;
 
 import java.util.ArrayList;
 
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -65,6 +66,11 @@ public class Skylander {
 	}
 	
 	public Boolean isAlive() {
+		return this.alive;
+	}
+	
+	public Boolean setAlive(Boolean alive) {
+		this.alive = alive;
 		return this.alive;
 	}
 	
@@ -191,6 +197,11 @@ public class Skylander {
 	
 	public ArrayList<Skylander> getMates() {
 		return this.mates;
+	}
+	
+	public void setFullHealth() {
+		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(plugin.game.getConfig().getNbLifebar() * 20);
+		player.setHealth(plugin.game.getConfig().getNbLifebar() * 20);
 	}
 
 	/// --- Méthodes à surcharger.
