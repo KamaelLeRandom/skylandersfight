@@ -30,5 +30,6 @@ public class Constants {
 	public static String itemNameGlumshank = "§9Affaiblissement de Glumshanks";
 	
 	public static Location spawnLocation = new Location(Bukkit.getWorld("world"), -920, 62 , -483);
+	public static Double valueHeal = 5.;
 
 }
