@@ -112,7 +112,8 @@ public class Spyro extends Skylander {
 		}
 	}
 
-	public static void sendDescription(Player player) {
+	public void sendDescription() {
+		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");
 		player.sendMessage("   ▶§5" + Spyro.name + "§f◀");
@@ -124,6 +125,7 @@ public class Spyro extends Skylander {
 		player.sendMessage("≫ §5" + Spyro.nameSecondSpell + "§f, vous êtes §dpropulsé§f dans les airs, vous infligez §d" + Spyro.damageSecondSpell + " dégats§f aux joueurs sur votre passage. §b(" + Spyro.timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("===============");
+		player.sendMessage("\n");
 	}
 	
 	public static ItemStack getSignatureItem() {

@@ -27,6 +27,11 @@ public class Skylander {
 		this.player = player;
 		this.element = element;
 		this.name = name;
+		this.alive = true;
+		this.force = 1.;
+		this.resis = 1.;
+		this.status = new ArrayList<Status>();
+		this.cooldowns = new ArrayList<Cooldown>();
 	}
 	
 	public Player getPlayer() {
