@@ -15,20 +15,23 @@ import fr.kamael.skylandersfight.Plugin;
 import fr.kamael.skylandersfight.game.config.Config;
 import fr.kamael.skylandersfight.game.config.ConfigSkylander;
 import fr.kamael.skylandersfight.utils.manager.FireworkManager;
+import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class Game {
-	protected Plugin plugin = Plugin.plugin;
-	protected Config config;
-	protected ConfigSkylander configSkylander;
-	protected GameState state;
-	// TODO : Ajout le Round.
-	protected ArrayList<GamePlayer> listPlayers;
-	protected ArrayList<GameTeam> listTeams;
+	private Plugin plugin = Plugin.plugin;
+	private Config config;
+	private ConfigSkylander configSkylander;
+	private GameState state;
+	private GameRound round;
+	private Integer numeroRound;
+	private ArrayList<GamePlayer> listPlayers;
+	private ArrayList<GameTeam> listTeams;
 	
 	public Game() {
 		this.config = new Config();
 		this.configSkylander = new ConfigSkylander();
 		this.state = GameState.WAITING;
+		this.numeroRound = 0;
 		this.listTeams = new ArrayList<GameTeam>();
 		this.listPlayers = new ArrayList<GamePlayer>();
 	}
@@ -50,6 +53,10 @@ public class Game {
 			return true;
 		}
 		return false;
+	}
+	
+	public GameRound getRound() {
+		return this.round;
 	}
 	
 	public GamePlayer getPlayer(Player player) {
@@ -99,6 +106,33 @@ public class Game {
 				this.listTeams.add(new GameTeam("§7"+gamePlayer.getPlayer().getName(), gamePlayer));
 			}
 		}
+		
+		playRound();
+	}
+	
+	public void playRound() {
+		numeroRound++;
+		round = new GameRound(numeroRound);
+	}
+	
+	public void checkVictory() {
+	    StringBuilder resume = new StringBuilder("§6§l===== Récapitulatif des Scores =====\n");
+
+	    for (GameTeam gameTeam : listTeams) {
+	        if (gameTeam.getNbPoint().equals(this.config.getNbPointWin())) {
+	            finish(gameTeam);
+	            return;
+	        } else {
+	            resume.append("§e→ §bÉquipe §6").append(gameTeam.getName())
+	                  .append("§f : §a").append(gameTeam.getNbPoint()).append(" §epoints\n");
+	        }
+	    }
+
+	    resume.append("§6=================================");
+	    
+	    Bukkit.broadcastMessage(resume.toString());
+	    
+	    playRound();
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -111,6 +145,7 @@ public class Game {
 			Player player = gamePlayer.getPlayer();
 			player.teleport(Constants.spawnLocation);
 			player.setGameMode(GameMode.ADVENTURE);
+			ItemManager.clearPlayer(player);
 			
 			if (winningTeam.getPlayers().contains(gamePlayer)) {
 				player.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
