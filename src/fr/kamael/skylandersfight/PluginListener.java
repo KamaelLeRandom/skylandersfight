@@ -7,9 +7,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import fr.kamael.skylandersfight.game.GamePlayer;
+import fr.kamael.skylandersfight.game.GameState;
+import fr.kamael.skylandersfight.utils.converter.SkylanderConverter;
 
 public class PluginListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -115,4 +121,96 @@ public class PluginListener implements Listener {
 			return;
 		}
 	}
+	
+	@EventHandler
+	public void inventorySkylanderClick(InventoryClickEvent event) {
+		try {
+			event.setCancelled(true);
+			
+			ItemStack it = event.getCurrentItem();
+			
+			if (event.getView().getTitle().equalsIgnoreCase(Constants.inventorySkylanderName)) {
+				if (it == null || it.getType().equals(Material.GRAY_STAINED_GLASS_PANE) || it.getType().equals(Material.BARRIER)) {
+					return;
+				}
+				
+				Player player = (Player) event.getWhoClicked();
+				GamePlayer gamePlayer = plugin.game.getPlayer(player);
+				String nameSkylander = it.getItemMeta().getDisplayName().substring(2);
+				
+				if (it.getType().equals(Material.COMPASS)) {
+					// TODO : Choix aléatoire.
+				}
+				
+				gamePlayer.setSkylander(SkylanderConverter.convert(nameSkylander, player));
+				gamePlayer.getSkylander().sendDescription();
+				player.closeInventory();
+				return;
+			}
+			return;
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(PluginListener, inventorySkylanderClick) : §7"+e.getMessage());	
+			return;
+		}
+	}
+	
+	@EventHandler
+	public void inventoryArenaClick(InventoryClickEvent event) {
+		try {
+			event.setCancelled(true);
+			
+			ItemStack it = event.getCurrentItem();
+			
+			if (event.getView().getTitle().equalsIgnoreCase(Constants.inventoryArenaName)) {
+				if (it == null || it.getType().equals(Material.GRAY_STAINED_GLASS_PANE)) {
+					return;
+				}
+				
+				Player player = (Player) event.getWhoClicked();
+				GamePlayer gamePlayer = plugin.game.getPlayer(player);
+				gamePlayer.setVotedArena(it.getItemMeta().getDisplayName());
+				player.closeInventory();
+				return;
+			}
+			return;
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(PluginListener, inventoryArenaClick) : §7"+e.getMessage());	
+			return;
+		}
+	}
+	
+	@EventHandler
+    public void inventoryClose(InventoryCloseEvent event) {
+		try {
+			if (plugin.game != null && plugin.game.isState(GameState.CHOOSING)) {
+				
+				Player player = (Player) event.getPlayer();
+				GamePlayer gamePlayer = plugin.game.getPlayer(player);
+				Boolean reopen = false;
+				
+				if (
+					(event.getView().getTitle().equals(Constants.inventorySkylanderName) && gamePlayer.getSkylander() == null) ||
+					(event.getView().getTitle().equals(Constants.inventoryArenaName) && gamePlayer.getVotedArena() == null)
+				) {
+					reopen = true;
+				}
+				
+				if (reopen) {
+        			new BukkitRunnable() {
+						@Override
+						public void run() {
+							player.openInventory(event.getInventory());
+							cancel();
+							return;
+						}
+					}.runTaskTimer(plugin, 0, 10);
+				}
+			}
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage("§c[Error]§f (PluginListener, inventoryClose) : §7"+e.getMessage());	
+		}
+    }
 }
