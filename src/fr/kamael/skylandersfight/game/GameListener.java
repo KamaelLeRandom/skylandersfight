@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -22,10 +23,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
+import fr.kamael.skylandersfight.arena.entity.ArenaItem;
 import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
@@ -254,6 +257,66 @@ public class GameListener implements Listener {
 		}
 		catch (Exception e) {
 			Bukkit.broadcastMessage(Constants.prefixError + "(GameListener, playerDeath) : §7"+e.getMessage());	
+			return;
+		}
+	}
+	
+	@EventHandler
+	public void playerInteract(PlayerInteractEvent event) {
+		try {
+			if (plugin.game != null && plugin.game.isState(GameState.FIGHTING)) {
+	            Action action = event.getAction();
+	            Player player = event.getPlayer();
+	            ItemStack item = event.getItem();
+	            Skylander skylander = plugin.game.getPlayer(player).getSkylander();
+	            
+	            if (skylander.checkStatus(Status.NOSPELL) || item == null || item.getItemMeta() == null)
+	                return;
+	            
+	            if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
+		            String nameItem = item.getItemMeta().getDisplayName();
+
+		            switch (nameItem) {
+						case Constants.itemNameEon: {
+							ItemManager.removeAmount(item, -1);
+							ArenaItem.spellEon(plugin, skylander);
+							break;
+						}
+						case Constants.itemNameFlynn: {
+							ItemManager.removeAmount(item, -1);
+							ArenaItem.spellFlynn(plugin, skylander);
+							break;
+						}
+						case Constants.itemNameHugo: {
+							ItemManager.removeAmount(item, -1);
+							ArenaItem.spellHugo(plugin, skylander);
+							break;
+						}
+						case Constants.itemNameCali: {
+							ItemManager.removeAmount(item, -1);
+							ArenaItem.spellCali(plugin, skylander);
+							break;
+						}
+						case Constants.itemNameKaos: {
+							if (ArenaItem.spellKaos(plugin, skylander)) {
+								ItemManager.removeAmount(item, -1);	
+							}
+							break;
+						}
+						case Constants.itemNameGlumshank: {
+							if (ArenaItem.spellGlum(plugin, skylander)) {
+								ItemManager.removeAmount(item, -1);
+							}
+							break;
+						}
+						default:
+							break;
+					}
+	            }
+			}
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(GameListener, playerInteract) : §7"+e.getMessage());	
 			return;
 		}
 	}

@@ -37,7 +37,7 @@ public class ConfigSkylander {
 		
 		ArrayList<ItemStack> feu = new ArrayList<>();
 		// TODO : Remplir les Skylanders Feu.
-		this.data.put(Element.TECH, feu);
+		this.data.put(Element.FEU, feu);
 		
 		ArrayList<ItemStack> eau = new ArrayList<>();
 		// TODO : Remplir les Skylanders Eau.

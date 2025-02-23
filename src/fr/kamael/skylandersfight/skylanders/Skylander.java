@@ -33,6 +33,7 @@ public class Skylander {
 		this.resis = 1.;
 		this.status = new ArrayList<Status>();
 		this.cooldowns = new ArrayList<Cooldown>();
+		this.mates = new ArrayList<Skylander>();
 	}
 	
 	public Player getPlayer() {
