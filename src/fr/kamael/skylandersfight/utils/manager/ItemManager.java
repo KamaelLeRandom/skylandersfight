@@ -34,6 +34,14 @@ public class ItemManager {
 		player.setExp(0);
 	}
 	
+	public static void removeAmount(ItemStack item, Integer amount) {
+		if (item.getAmount() + amount < 0) {
+			item.setAmount(0);
+		} else {
+			item.setAmount(item.getAmount() + amount);
+		}
+	}
+	
 	public static void giveColorArmor(Player player, Color color) {
 		player.getInventory().setHelmet(makeColorArmor(Material.LEATHER_HELMET, color));
 		player.getInventory().setChestplate(makeColorArmor(Material.LEATHER_CHESTPLATE, color));

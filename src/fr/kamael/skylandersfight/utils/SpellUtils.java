@@ -2,6 +2,7 @@ package fr.kamael.skylandersfight.utils;
 
 import java.util.ArrayList;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -38,6 +39,37 @@ public class SpellUtils {
 				player.setHealth(player.getHealth() + value);
 			}
 		}
+	}
+	
+	public static Skylander targetPlayer(Skylander skylander, Integer distance, ParticleRunnable particule) {
+		Player player = skylander.getPlayer();
+		Location eyeLocation = player.getEyeLocation();
+	    Vector direction = eyeLocation.getDirection();
+		
+		for (int i = 2; i<=distance; i++) {
+	        Location checkLocation = eyeLocation.clone().add(direction.clone().multiply(i));
+	        
+	        if (particule != null) {
+	        	particule.execute(checkLocation);
+	        }
+			
+			if (TraversableBlocksUtils.isTraversableBlock(player.getWorld().getBlockAt(checkLocation).getType())) {
+				for (Entity entity : player.getWorld().getNearbyEntities(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(i)), 0.75, 0.75, 0.75)) {
+					if (entity instanceof Player && entity != player) {
+						Player playerTarget = (Player) entity;
+						Skylander skylanderTarget = Plugin.plugin.game.getPlayer(playerTarget).getSkylander();
+						
+						if (skylanderTarget.isAlive() && !skylander.getMates().contains(skylanderTarget)) {
+							return skylanderTarget;
+						}
+					}
+				}
+			} else {
+				return null;
+			}
+		}
+		
+		return null;
 	}
 	
 	public static void dash(Skylander skylander, Double value, SkylanderDamageRunnable damageCallback, ParticleRunnable particleCallback) {
