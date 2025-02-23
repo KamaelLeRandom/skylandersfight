@@ -19,13 +19,11 @@ import fr.kamael.skylandersfight.game.CustomEntity;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 
 public class ArenaItem extends CustomEntity {
-	private Location location;
 	private ItemStack item;
 	
 	public ArenaItem(Location location) {
-		super(null);
+		super(null, location);
 		
-		this.location = location;
 		this.item = getRandomItem();
 	}
 	
@@ -33,11 +31,10 @@ public class ArenaItem extends CustomEntity {
 		ArmorStand as = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
 		as.setVisible(false);
 		as.setCanPickupItems(false);
-		as.setCustomName("§cObjet Aléatoire");
+		as.setCustomName("§eObjet Aléatoire");
 		as.setCustomNameVisible(true);
-		as.setSmall(true);
 		as.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 5, 1, false, false));
-		as.getEquipment().setHelmet(item);
+		as.getEquipment().setHelmet(new ItemStack(Material.BEACON));
 		this.entity = as;
 		
 		return;

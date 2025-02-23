@@ -34,22 +34,25 @@ public class ParadisBlanc extends Arena {
 		this.playerSpawns.add(new Location(w, -1456, 9, -144));
 		this.playerSpawns.add(new Location(w, -1497, 41, -104));
 		
-		this.healSpawns.add(new Location(w, -909, 23, -1109));
-		this.healSpawns.add(new Location(w, -908, 22, -1140));
-		this.healSpawns.add(new Location(w, -849, 21, -1160));
-		this.healSpawns.add(new Location(w, -851, 30, -1107));
-		this.healSpawns.add(new Location(w, -849, 21, -1112));
-		this.healSpawns.add(new Location(w, -851,  9, -1099));
-		this.healSpawns.add(new Location(w, -889,  4, -1122));
-		this.healSpawns.add(new Location(w, -880, 13, -1097));
+		this.healSpawns.add(new Location(w, -1478, 32, -144));
+		this.healSpawns.add(new Location(w, -1500, 28, -161));
+		this.healSpawns.add(new Location(w, -1497, 40, -109));
+		this.healSpawns.add(new Location(w, -1511, 7, -101));
+		this.healSpawns.add(new Location(w, -1476, 6, -151));
+		this.healSpawns.add(new Location(w, -1454, 4, -114));
+		this.healSpawns.add(new Location(w, -1496, 20, -133));
+		this.healSpawns.add(new Location(w, -1496, 20, -134));
+		this.healSpawns.add(new Location(w, -1480, 6, -120));
+		this.healSpawns.add(new Location(w, -1527, 10, -153));
 		
-		this.itemSpawns.add(new Location(w, -904.5,  5, -1126.5));
-		this.itemSpawns.add(new Location(w, -885.5,  8, -1151.5));
-		this.itemSpawns.add(new Location(w, -851.5, 22, -1152.5));
-		this.itemSpawns.add(new Location(w, -852.5, 31, -1110.5));
-		this.itemSpawns.add(new Location(w, -885.5, 21, -1096.5));
-		this.itemSpawns.add(new Location(w, -899.5, 20, -1156.5));
-		this.itemSpawns.add(new Location(w, -863.5, 12, -1092.5));
+		this.itemSpawns.add(new Location(w, -1525, 12, -151));
+		this.itemSpawns.add(new Location(w, -1495, 17, -133));
+		this.itemSpawns.add(new Location(w, -1510, 12, -106));
+		this.itemSpawns.add(new Location(w, -1525, 7, -93));
+		this.itemSpawns.add(new Location(w, -1462, 12, -96));
+		this.itemSpawns.add(new Location(w, -1454, 6, -115));
+		this.itemSpawns.add(new Location(w, -1456, 9, -144));
+		this.itemSpawns.add(new Location(w, -1497, 41, -104));
 		
 		this.elements.add(Element.EAU);
 		this.elements.add(Element.AIR);

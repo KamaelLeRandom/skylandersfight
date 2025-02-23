@@ -13,10 +13,9 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class ArenaCorpse extends CustomEntity {
-	private Location location;
-	
+
 	public ArenaCorpse(Skylander skylander, Location location) {
-		super(skylander);
+		super(skylander, location);
 	}
 	
 	public void summon() { 
@@ -32,6 +31,7 @@ public class ArenaCorpse extends CustomEntity {
 		as.setRightArmPose(new EulerAngle(5, 0, 0));
 		as.getEquipment().setHelmet(ItemManager.createPlayerSkull(player));
 		as.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
+		
 		this.entity = as;
 		
 		return;

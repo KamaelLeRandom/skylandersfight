@@ -2,9 +2,12 @@ package fr.kamael.skylandersfight.arena;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
+import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
 import fr.kamael.skylandersfight.arena.entity.ArenaCorpse;
 import fr.kamael.skylandersfight.arena.entity.ArenaItem;
@@ -64,8 +67,9 @@ public class Arena {
 	}
 
 	public ArenaItem summonArenaItem() {
+		Bukkit.broadcastMessage(Constants.prefixMessage + "Un §eObjet Aléatoire§f est apparu dans l'arène !");
 		ArenaItem item = new ArenaItem(getRandomItemSpawn());
-		this.items.add(item);
+		this.items.add(item);		
 		return item;
 	}
 	
@@ -88,7 +92,11 @@ public class Arena {
 	}
 	
 	public CustomEntity isCustomEntity(Entity entity) {
-		for (CustomEntity customEntity : this.entites) {
+		ArrayList<CustomEntity> allEntities = new ArrayList<>();
+		allEntities.addAll(this.entites);
+		allEntities.addAll(this.items);
+		allEntities.addAll(this.corpse);
+		for (CustomEntity customEntity : allEntities) {
 			if (entity.equals(customEntity.getEntity())) {
 				return customEntity;
 			}
@@ -120,6 +128,12 @@ public class Arena {
 				gamePlayer.getPlayer().teleport(playerSpawns.get((index+i)%taille));
 			}
 			i++;
+		}
+	}
+	
+	public void resetHeal() {
+		for (Location location : healSpawns) {
+			location.getBlock().setType(Material.EMERALD_BLOCK);
 		}
 	}
 
