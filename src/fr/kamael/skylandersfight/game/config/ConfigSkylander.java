@@ -6,13 +6,17 @@ import java.util.HashMap;
 import org.bukkit.inventory.ItemStack;
 
 import fr.kamael.skylandersfight.skylanders.Element;
+import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 
 public class ConfigSkylander {
 	private HashMap<Element, ArrayList<ItemStack>> data;
 	
 	public ConfigSkylander() {
+		this.data = new HashMap<Element, ArrayList<ItemStack>>();
+		
 		ArrayList<ItemStack> magie = new ArrayList<>();
 		// TODO : Remplir les Skylanders Magie.
+		magie.add(Spyro.getSignatureItem());
 		this.data.put(Element.MAGIE, magie);
 
 		ArrayList<ItemStack> tech = new ArrayList<>();
