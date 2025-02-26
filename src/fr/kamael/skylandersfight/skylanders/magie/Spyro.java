@@ -1,12 +1,15 @@
 package fr.kamael.skylandersfight.skylanders.magie;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -26,12 +29,12 @@ public class Spyro extends Skylander {
 	
 	public static final String nameFirstSpell = "§5Percée Cornue";
 	public static final Integer timerFirstSpell = 15;
-	public static final Double damageFirstSpell = 4.;
+	public static final Double damageFirstSpell = 3.;
 	public static final Double vectorPowerFirstSpell = 2.;
 	
 	public static final String nameSecondSpell = "§5Vol Draconique";
 	public static final Integer timerSecondSpell = 15;
-	public static final Double damageSecondSpell = 5.;
+	public static final Double damageSecondSpell = 3.;
 	public static final Double rangeSecondSpell = 3.;
 	
 	public Spyro(Player player) {
@@ -44,7 +47,9 @@ public class Spyro extends Skylander {
 		ItemManager.giveColorArmor(player, Color.PURPLE);
 		
 		Inventory inv = player.getInventory();
-		// TODO - Item à faire.
+		inv.setItem(0, getItemFirstSpell());
+		inv.setItem(1, getItemWeapon());
+		inv.setItem(2, getItemSecondSpell());
 		inv.setItem(9, new ItemStack(Material.ARROW));
 	}
 	
@@ -130,7 +135,7 @@ public class Spyro extends Skylander {
 	
 	public static ItemStack getSignatureItem() {
 		ArrayList<String> lore = new ArrayList<>();
-		lore.add("§5Spyro§f est un Skylander à §cdistance§f très mobile");
+		lore.add("§5"+ name +"§f est un Skylander à §cdistance§f très mobile");
 		lore.add("§fet maitrisant des armes enflammées.");
 		
 		ItemStack item = new ItemStack(Material.BLAZE_POWDER, 1);
@@ -141,6 +146,53 @@ public class Spyro extends Skylander {
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
+		
+		return item;
+	}
+	
+	public static ItemStack getItemFirstSpell() {
+		List<String> lore = Arrays.asList("§fVous effectuez une §5ruée§f vers l'avant", "§finfligeant §d"+ damageFirstSpell +" dégats§f aux joueurs" , "§fsur votre passage.");
+		
+		ItemStack item = new ItemStack(Material.STICK, 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(nameFirstSpell);
+		meta.setUnbreakable(true);
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+		
+		return item;
+	}
+	
+	public static ItemStack getItemSecondSpell() {
+		List<String> lore = Arrays.asList("§fVous êtes envoyé dans les §dair§f", "§favec des §dElytra§f en infligeant §d"+ damageSecondSpell +" dégats", "§faux joueurs sur votre passage.");
+		
+		ItemStack item = new ItemStack(Material.FEATHER, 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(nameSecondSpell);
+		meta.setUnbreakable(true);
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+		
+		return item;
+	}
+	
+	public static ItemStack getItemWeapon() {
+		ItemStack item = new ItemStack(Material.BOW, 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName("§5Tri-flamme");
+		meta.setUnbreakable(true);
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		item.setItemMeta(meta);
+		item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+		item.addUnsafeEnchantment(Enchantment.ARROW_FIRE, 1);
 		
 		return item;
 	}

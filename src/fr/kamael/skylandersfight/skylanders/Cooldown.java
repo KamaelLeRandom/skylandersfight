@@ -54,6 +54,6 @@ public class Cooldown {
 	public void printCooldown() {
 		Player player = skylander.getPlayer();
 		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(name +"§7 est en récupération. (§c" + timer + "§7s)."));
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(name +"§f est en récupération. (§c" + timer + "§7s)."));
 	}
 }
