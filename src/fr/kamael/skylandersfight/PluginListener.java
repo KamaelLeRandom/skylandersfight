@@ -125,29 +125,36 @@ public class PluginListener implements Listener {
 	@EventHandler
 	public void inventorySkylanderClick(InventoryClickEvent event) {
 		try {
-			event.setCancelled(true);
-			
-			ItemStack it = event.getCurrentItem();
-			
-			if (event.getView().getTitle().equalsIgnoreCase(Constants.inventorySkylanderName)) {
-				if (it == null || it.getType().equals(Material.GRAY_STAINED_GLASS_PANE) || it.getType().equals(Material.BARRIER)) {
+			if (plugin.game != null && plugin.game.isState(GameState.CHOOSING)) {
+				ItemStack it = event.getCurrentItem();
+				
+				if (it == null || it.getType().equals(Material.GRAY_STAINED_GLASS_PANE)) {
+					event.setCancelled(true);
 					return;
 				}
-				
-				Player player = (Player) event.getWhoClicked();
-				GamePlayer gamePlayer = plugin.game.getPlayer(player);
-				String nameSkylander = it.getItemMeta().getDisplayName().substring(2);
-				
-				if (it.getType().equals(Material.COMPASS)) {
-					// TODO : Choix aléatoire.
+							
+				if (event.getView().getTitle().equalsIgnoreCase(Constants.inventorySkylanderName)) {
+					event.setCancelled(true);
+					
+					if (it == null || it.getType().equals(Material.GRAY_STAINED_GLASS_PANE) || it.getType().equals(Material.BARRIER)) {
+						return;
+					}
+					
+					Player player = (Player) event.getWhoClicked();
+					GamePlayer gamePlayer = plugin.game.getPlayer(player);
+					String nameSkylander = it.getItemMeta().getDisplayName().substring(2);
+					
+					if (it.getType().equals(Material.COMPASS)) {
+						// TODO : Choix aléatoire.
+					}
+					
+					gamePlayer.setSkylander(SkylanderConverter.convert(nameSkylander, player));
+					gamePlayer.getSkylander().sendDescription();
+					player.closeInventory();
+					return;
 				}
-				
-				gamePlayer.setSkylander(SkylanderConverter.convert(nameSkylander, player));
-				gamePlayer.getSkylander().sendDescription();
-				player.closeInventory();
-				return;
+				return;	
 			}
-			return;
 		}
 		catch (Exception e) {
 			Bukkit.broadcastMessage(Constants.prefixError + "(PluginListener, inventorySkylanderClick) : §7"+e.getMessage());	
@@ -158,22 +165,24 @@ public class PluginListener implements Listener {
 	@EventHandler
 	public void inventoryArenaClick(InventoryClickEvent event) {
 		try {
-			event.setCancelled(true);
-			
-			ItemStack it = event.getCurrentItem();
-			
-			if (event.getView().getTitle().equalsIgnoreCase(Constants.inventoryArenaName)) {
-				if (it == null || it.getType().equals(Material.GRAY_STAINED_GLASS_PANE)) {
+			if (plugin.game != null && plugin.game.isState(GameState.CHOOSING)) {
+				event.setCancelled(true);
+				
+				ItemStack it = event.getCurrentItem();
+				
+				if (event.getView().getTitle().equalsIgnoreCase(Constants.inventoryArenaName)) {
+					if (it == null || it.getType().equals(Material.GRAY_STAINED_GLASS_PANE)) {
+						return;
+					}
+					
+					Player player = (Player) event.getWhoClicked();
+					GamePlayer gamePlayer = plugin.game.getPlayer(player);
+					gamePlayer.setVotedArena(it.getItemMeta().getDisplayName());
+					player.closeInventory();
 					return;
 				}
-				
-				Player player = (Player) event.getWhoClicked();
-				GamePlayer gamePlayer = plugin.game.getPlayer(player);
-				gamePlayer.setVotedArena(it.getItemMeta().getDisplayName());
-				player.closeInventory();
-				return;
+				return;	
 			}
-			return;
 		}
 		catch (Exception e) {
 			Bukkit.broadcastMessage(Constants.prefixError + "(PluginListener, inventoryArenaClick) : §7"+e.getMessage());	

@@ -96,6 +96,19 @@ public class Game {
 		            team2.add(shuffledPlayers.get(i));
 		        }
 		    }
+		    
+		    String msgKaos = "";
+		    for (GamePlayer gamePlayer : team1) {
+		    	msgKaos += "| " + gamePlayer.getPlayer();
+		    }
+		    
+		    String msgEon = "";
+		    for (GamePlayer gamePlayer : team2) {
+		    	msgEon += "| " + gamePlayer.getPlayer();
+		    }
+		    
+		    Bukkit.broadcastMessage("TEAM KAOS " + msgKaos);
+		    Bukkit.broadcastMessage("TEAM EON " + msgEon);
 
 		    this.listTeams.add(new GameTeam("§cKaos", team1));
 		    this.listTeams.add(new GameTeam("§bEon", team2));

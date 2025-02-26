@@ -1,5 +1,6 @@
 package fr.kamael.skylandersfight.arena.entity;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -35,5 +36,11 @@ public class ArenaCorpse extends CustomEntity {
 		this.entity = as;
 		
 		return;
+	}
+	
+	public void onHit(Skylander skylander) {
+		// TODO - Mettre l'interaction avec le Skylander.
+		Bukkit.broadcastMessage("ArenaCorpse | onHit");
+		return; 
 	}
 }
