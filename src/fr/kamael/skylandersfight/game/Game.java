@@ -121,7 +121,31 @@ public class Game {
 			}
 		}
 		
-		playRound();
+		ArrayList<String> list = new ArrayList<>();
+		list.add("§fPoints : §6"+ config.getNbPointWin() +"§f points gagnant");
+		list.add("§fÉquipes " + (config.getActiveDeathmatch() ? "§aactivé" : "§cdésactivé"));
+		list.add("§fDeathmatch " + (config.getActiveDeathmatch() ? "§aactivé§f (§7"+ config.getTimerDM() +"min§f)" : "§cdésactivé"));
+		list.add("§fObjets " + (config.getActiveItem() ? "§aactivé" : "§cdésactivé"));
+		list.add("§fBlocs de soin " + (config.getActiveHeal() ? "§aactivé" : "§cdésactivé"));
+		
+		new BukkitRunnable() {
+			private Integer compteur = 0;
+			
+			@Override
+			public void run() {
+				if (compteur+1 > list.size()) {
+					playRound();
+					cancel();
+					return;
+				}
+				
+				for (GamePlayer gamePlayer : listPlayers) {
+					gamePlayer.getPlayer().sendTitle("§6SkylandersFight§f", list.get(compteur), 5, 20, 5);
+				}
+				
+				compteur++;
+			}
+		}.runTaskTimer(plugin, 0, 30);
 	}
 	
 	public void playRound() {
