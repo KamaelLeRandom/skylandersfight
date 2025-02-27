@@ -15,6 +15,7 @@ import org.bukkit.util.Vector;
 
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
+import fr.kamael.skylandersfight.game.GamePlayer;
 import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
@@ -39,6 +40,40 @@ public class SpellUtils {
 				player.setHealth(player.getHealth() + value);
 			}
 		}
+	}
+	
+	public static void invisibility(Plugin plugin, Skylander skylander, Integer ticks) {
+		Player player = skylander.getPlayer();
+		
+		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+			Player playerOther = gamePlayer.getPlayer();
+			
+			if (! playerOther.equals(player)) {
+				playerOther.hidePlayer(plugin, player);
+				playerOther.setPlayerListName(player.getName());
+			}
+		}
+		
+		skylander.addStatus(ticks, Status.INVISIBLE);
+		
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (! skylander.checkStatus(Status.INVISIBLE)) {
+					for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+						Player playerOther = gamePlayer.getPlayer();
+						
+						if (! playerOther.equals(player)) {
+							playerOther.showPlayer(plugin, player);
+							playerOther.setPlayerListName(player.getName());
+						}
+					}
+					
+					cancel();
+					return;
+				}
+			}
+		}.runTaskTimer(plugin, 0, 2);
 	}
 	
 	public static Skylander targetPlayer(Skylander skylander, Integer distance, ParticleRunnable particule) {
