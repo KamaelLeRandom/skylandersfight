@@ -1,17 +1,23 @@
 package fr.kamael.skylandersfight.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
@@ -19,6 +25,10 @@ import fr.kamael.skylandersfight.game.GamePlayer;
 import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
+import fr.kamael.skylandersfight.utils.manager.NPCManager;
+import fr.kamael.skylandersfight.utils.manager.NPCManager.Hand;
+import fr.kamael.skylandersfight.utils.manager.NPCManager.NPCMetaData;
+import fr.kamael.skylandersfight.utils.manager.NPCManager.SkinTextures;
 import fr.kamael.skylandersfight.utils.runnable.ParticleRunnable;
 import fr.kamael.skylandersfight.utils.runnable.SkylanderDamageRunnable;
 
@@ -50,7 +60,6 @@ public class SpellUtils {
 			
 			if (! playerOther.equals(player)) {
 				playerOther.hidePlayer(plugin, player);
-				playerOther.setPlayerListName(player.getName());
 			}
 		}
 		
@@ -65,7 +74,6 @@ public class SpellUtils {
 						
 						if (! playerOther.equals(player)) {
 							playerOther.showPlayer(plugin, player);
-							playerOther.setPlayerListName(player.getName());
 						}
 					}
 					
@@ -181,5 +189,49 @@ public class SpellUtils {
 				}
 			}
 		}.runTaskTimer(plugin, 0, 2);
+	}
+	
+	
+	
+	public static void createFakePlayer(Plugin plugin, Player player, Player playerTarget, Integer time) {
+		GameProfile gameProfile = ((CraftPlayer) player).getProfile();
+		Property property = gameProfile.getProperties().get("textures").iterator().next();
+		
+		@SuppressWarnings("unchecked")
+		Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
+		
+		NPCManager npc = new NPCManager(player.getLocation(), player.getDisplayName());
+		NPCMetaData meta = npc.getMetadata();
+		
+		meta.setGravity(false);
+		meta.setHand(Hand.RIGHT);
+		
+		npc.setSkin(new SkinTextures(property.getValue(), property.getSignature()));
+		npc.updateMetadata(players);
+		npc.spawnNPC(players);
+		
+		npc.setEquipment(players, NPCManager.ItemSlot.BOOTS, player.getInventory().getBoots().clone());
+		npc.setEquipment(players, NPCManager.ItemSlot.LEGGINGS, player.getInventory().getLeggings().clone());
+		npc.setEquipment(players, NPCManager.ItemSlot.CHESTPLATE, player.getInventory().getChestplate().clone());
+		npc.setEquipment(players, NPCManager.ItemSlot.HELMET, player.getInventory().getHelmet().clone());
+		npc.setEquipment(players, NPCManager.ItemSlot.MAIN_HAND, new ItemStack(Material.IRON_SWORD));
+		
+	    
+		new BukkitRunnable() {
+			private Integer timer = time;
+			@Override
+			public void run() {
+				// Condition d'arrêt.
+				if (timer == 0) {
+					npc.destroyNPC(players);
+					cancel();
+					return;
+				}
+				
+				npc.lookAtPlayer(playerTarget, playerTarget);
+				
+				timer--;
+			}
+		}.runTaskTimer(plugin, 0, 20);
 	}
 }

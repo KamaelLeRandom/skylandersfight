@@ -79,6 +79,7 @@ public class Game {
 	public void start() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			this.listPlayers.add(new GamePlayer(player));
+			player.closeInventory();
 		}
 		
 		// Mode : Equipe

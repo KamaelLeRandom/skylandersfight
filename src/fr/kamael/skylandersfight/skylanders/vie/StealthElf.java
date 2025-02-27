@@ -35,7 +35,7 @@ public class StealthElf extends Skylander {
 	public static final String nameSecondSpell = "§2Substitution";
 	public static final Integer timerSecondSpell = 30;
 	public static final Integer rangeSecondSpell = 10;
-	public static final Integer durationCloneSecondSpell = 5;
+	public static final Integer durationCloneSecondSpell = 3;
 
 	private Boolean applyPoison = false;
 	
@@ -86,6 +86,8 @@ public class StealthElf extends Skylander {
 				player.sendMessage(Constants.prefixMessage + "Aucun joueur trouvé.");
 			} else {
 				Player playerTarget = skylanderTarget.getPlayer();
+				
+				SpellUtils.createFakePlayer(plugin, player, playerTarget, durationCloneSecondSpell);
 				
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 				player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre "+ nameSecondSpell +"§f sur §a"+ playerTarget.getName() +"§f.");

@@ -172,6 +172,9 @@ public class GameListener implements Listener {
 						playerHit.setFireTicks(80);
 					
 					event.setDamage(damage);
+					
+					if (skylanderDamager.checkStatus(Status.INVISIBLE))
+						skylanderDamager.removeStatus(Status.INVISIBLE);
 				}
 			}
 		}
