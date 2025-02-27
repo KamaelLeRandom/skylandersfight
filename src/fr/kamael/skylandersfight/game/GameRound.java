@@ -160,10 +160,11 @@ public class GameRound {
 		arena.teleportAllPlayer();
 		arena.resetHeal();
 		arena.event();
-		
+
 		new BukkitRunnable() {
 			private ArrayList<GamePlayer> listPlayers = plugin.game.getPlayers();
 			private Integer timerItem = 15 + (plugin.random.nextInt(45)+1);
+			private Integer timerDeathmatch = plugin.game.getConfig().getTimerDM() * 60;
 			private Integer timer = 0;
 			
 			@Override
@@ -187,7 +188,26 @@ public class GameRound {
 					
 					updateScoreboard();
 					
-					if (timer == 5) {
+					if (
+						timerRound == timerDeathmatch-60 ||
+						timerRound == timerDeathmatch-30 ||
+						timerRound == timerDeathmatch-10
+					) {
+						if (plugin.game.getConfig().getActiveDeathmatch()) {
+							Integer sec = timerDeathmatch-timerRound;
+							Bukkit.broadcastMessage(Constants.prefixMessage + "Le §cDeathmatch§f commence dans §c"+ sec + "§f secondes !");
+						}
+					}
+					
+					if (timerRound.equals(timerDeathmatch)) {
+						if (plugin.game.getConfig().getActiveDeathmatch()) {
+							Bukkit.broadcastMessage(Constants.prefixMessage + "L'heure du §cDeathmatch§f a sonné ! Bon courage.");
+							arena.deathmatch();
+							arena.teleportAllPlayer();
+						}
+					}
+					
+					if (timerRound == 5) {
 						if (plugin.game.getConfig().getActiveBonusMap()) {
 							chooseElement();
 						}

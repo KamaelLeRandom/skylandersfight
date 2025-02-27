@@ -19,6 +19,7 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 public class Arena {
 	protected Plugin plugin = Plugin.plugin;
 	protected String name;
+	protected Boolean deathmatch = false;
 	protected ArrayList<Element> elements = new ArrayList<Element>();
 	protected ArrayList<Location> playerSpawns = new ArrayList<Location>();
 	protected ArrayList<Location> itemSpawns = new ArrayList<Location>();
@@ -138,6 +139,8 @@ public class Arena {
 	}
 
 	/// --- Méthodes à surcharger.
+	
+	public void deathmatch() { return; }
 	
 	public void event() { return; }
 }
