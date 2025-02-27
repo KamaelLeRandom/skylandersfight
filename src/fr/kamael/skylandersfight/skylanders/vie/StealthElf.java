@@ -25,7 +25,7 @@ import fr.kamael.skylandersfight.utils.manager.ItemManager;
 public class StealthElf extends Skylander {
 	public static final String name = "Stealth Elf";
 	
-	public static final Double pourcentHealPassif = 0.05;
+	public static final Double pourcentHealPassif = 0.1;
 	
 	public static final String nameFirstSpell = "§2Camouflage";
 	public static final Integer timerFirstSpell = 30;
@@ -67,7 +67,7 @@ public class StealthElf extends Skylander {
 	
 	public void firstSpell_Invi() {
 		if (checkCooldown(nameFirstSpell, true)) {
-			player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 1);
+			player.playSound(player.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 1, 1);
 			player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre "+ nameFirstSpell +"§f.");
 			applyPoison = true;
 			
@@ -96,10 +96,21 @@ public class StealthElf extends Skylander {
 		}
 	}
 	
-	
-	
-	
-	
+	public void sendDescription() {
+	    player.sendMessage("\n");
+	    player.sendMessage("===============");
+	    player.sendMessage("\n");
+	    player.sendMessage("   ▶ §2Stealth Elf§f ◀");
+	    player.sendMessage("\n");
+	    player.sendMessage("≫ §2Vol-Vie§f, vous êtes §asoigné§f d'un montant égal à §a" + pourcentHealPassif*100 + "%§f de vos §adégâts infligés§f.");
+	    player.sendMessage("\n");
+	    player.sendMessage("≫ §2Camouflage§f, vous devenez §ainvisible§f pendant §a" + durationInviFirstSpell + " secondes§f, votre §aprochaine attaque§f inflige un effet de §apoison§f de §a" + SkylanderConverter.convertTicks(tickPoisonFirstSpell) + " secondes§f à la cible. §b(" + timerFirstSpell + "s de recharge)");
+	    player.sendMessage("\n");
+	    player.sendMessage("≫ §2Substitution§f, vous êtes §atéléporté§f dans le §ados du joueur visé§f, vous laissez derrière vous un §aclone§f pendant §a" + durationCloneSecondSpell + " secondes§f. §b(" + timerSecondSpell + "s de recharge)");
+	    player.sendMessage("\n");
+	    player.sendMessage("===============");
+	    player.sendMessage("\n");
+	}
 	
 	public static ItemStack getSignatureItem() {
 		ArrayList<String> lore = new ArrayList<>();

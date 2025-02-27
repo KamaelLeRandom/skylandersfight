@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
+import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
 
 public class ConfigSkylander {
 	private HashMap<Element, ArrayList<ItemStack>> data;
@@ -27,6 +28,7 @@ public class ConfigSkylander {
 		
 		ArrayList<ItemStack> vie = new ArrayList<>();
 		// TODO : Remplir les Skylanders Vie.
+		vie.add(StealthElf.getSignatureItem());
 		this.data.put(Element.VIE, vie);
 		
 		ArrayList<ItemStack> mort = new ArrayList<>();

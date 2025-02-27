@@ -15,6 +15,7 @@ import fr.kamael.skylandersfight.game.Game;
 import fr.kamael.skylandersfight.game.GameListener;
 import fr.kamael.skylandersfight.skylanders.magie.listener.MagieListener;
 import fr.kamael.skylandersfight.skylanders.tech.listener.TechListener;
+import fr.kamael.skylandersfight.skylanders.vie.listener.VieListener;
 
 public class Plugin extends JavaPlugin {
 	public static Plugin plugin;
@@ -36,6 +37,7 @@ public class Plugin extends JavaPlugin {
 		
 		getServer().getPluginManager().registerEvents(new MagieListener(), this);
 		getServer().getPluginManager().registerEvents(new TechListener(), this);
+		getServer().getPluginManager().registerEvents(new VieListener(), this);
 		
 		System.out.println("[SkylandersFight] Plugin activé.");
 		
