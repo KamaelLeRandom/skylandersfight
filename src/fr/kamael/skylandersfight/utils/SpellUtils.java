@@ -25,6 +25,7 @@ import fr.kamael.skylandersfight.game.GamePlayer;
 import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
+import fr.kamael.skylandersfight.utils.manager.ItemManager;
 import fr.kamael.skylandersfight.utils.manager.NPCManager;
 import fr.kamael.skylandersfight.utils.manager.NPCManager.Hand;
 import fr.kamael.skylandersfight.utils.manager.NPCManager.NPCMetaData;
@@ -33,6 +34,18 @@ import fr.kamael.skylandersfight.utils.runnable.ParticleRunnable;
 import fr.kamael.skylandersfight.utils.runnable.SkylanderDamageRunnable;
 
 public class SpellUtils {
+	
+	public static Boolean changeLife(Skylander skylander, Double value) {
+		Player player = skylander.getPlayer();
+		Double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+		
+		if (maxHealth + value > 2.) {
+			player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth + value);
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	public static void heal(Skylander skylander, Double value) {
 		Player player = skylander.getPlayer();
@@ -50,6 +63,40 @@ public class SpellUtils {
 				player.setHealth(player.getHealth() + value);
 			}
 		}
+	}
+	
+	public static void invulnerability(Plugin plugin, Skylander skylander, Integer ticks) {
+		Player player = skylander.getPlayer();
+		ItemStack boots = player.getInventory().getBoots();
+		ItemStack leggi = player.getInventory().getLeggings();
+		ItemStack chest = player.getInventory().getChestplate();
+		ItemStack helme = player.getInventory().getHelmet();
+		
+		player.getInventory().setHelmet(ItemManager.makeBasicItem(Material.GOLDEN_HELMET, "", 1));
+		player.getInventory().setChestplate(ItemManager.makeBasicItem(Material.GOLDEN_CHESTPLATE, "", 1));
+		player.getInventory().setLeggings(ItemManager.makeBasicItem(Material.GOLDEN_LEGGINGS, "", 1));
+		player.getInventory().setBoots(ItemManager.makeBasicItem(Material.GOLDEN_BOOTS, "", 1));
+		
+		skylander.addStatus(null, Status.NOTAKEDAMAGE);
+		
+		new BukkitRunnable() {
+			private Integer timer = ticks;
+			@Override
+			public void run() {
+				// Condition d'arrêt.
+				if (timer == 0) {
+					player.getInventory().setHelmet(helme);
+					player.getInventory().setChestplate(chest);
+					player.getInventory().setLeggings(leggi);
+					player.getInventory().setBoots(boots);
+					skylander.removeStatus(Status.NOTAKEDAMAGE);
+					cancel();
+					return;
+				}
+				
+				timer--;
+			}
+		}.runTaskTimer(plugin, 0, 1);
 	}
 	
 	public static void invisibility(Plugin plugin, Skylander skylander, Integer ticks) {
