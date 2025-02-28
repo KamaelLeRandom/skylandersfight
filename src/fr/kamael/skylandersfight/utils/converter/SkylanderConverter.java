@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
+import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
 
@@ -34,6 +35,8 @@ public class SkylanderConverter {
 				return new TriggerHappy(player);
 			case StealthElf.name:
 				return new StealthElf(player);
+			case GhostRoaster.name:
+				return new GhostRoaster(player);
 				
 			default:
 				return null;

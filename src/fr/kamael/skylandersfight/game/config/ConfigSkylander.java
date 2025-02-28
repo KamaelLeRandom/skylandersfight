@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
+import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
 
@@ -33,6 +34,7 @@ public class ConfigSkylander {
 		
 		ArrayList<ItemStack> mort = new ArrayList<>();
 		// TODO : Remplir les Skylanders Mort.
+		mort.add(GhostRoaster.getSignatureItem());
 		this.data.put(Element.MORT, mort);
 		
 		ArrayList<ItemStack> bogda = new ArrayList<>();
