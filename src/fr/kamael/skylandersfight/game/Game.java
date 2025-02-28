@@ -140,7 +140,7 @@ public class Game {
 				}
 				
 				for (GamePlayer gamePlayer : listPlayers) {
-					gamePlayer.getPlayer().sendTitle("§6SkylandersFight§f", list.get(compteur), 5, 20, 5);
+					gamePlayer.getPlayer().sendTitle("§6Skylanders-Fight§f", list.get(compteur), 5, 20, 5);
 				}
 				
 				compteur++;

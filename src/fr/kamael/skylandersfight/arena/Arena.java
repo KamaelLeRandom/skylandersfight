@@ -61,7 +61,9 @@ public class Arena {
 	
 	public void removeAllArenaCorpse() {
 		for (ArenaCorpse corpse : this.corpse) {
-			corpse.removeEntity();
+			if (corpse.getEntity() != null) {
+				corpse.removeEntity();	
+			}
 		}
 		this.corpse.removeAll(this.corpse);
 		return;
@@ -82,7 +84,9 @@ public class Arena {
 	
 	public void removeAllArenaItem() {
 		for (ArenaItem items : this.items) {
-			items.removeEntity();
+			if (items.getEntity() != null) {
+				items.removeEntity();
+			}
 		}
 		this.items.removeAll(this.items);
 		return;
@@ -113,7 +117,9 @@ public class Arena {
 	
 	public void removeAllCustomEntities() {
 		for (CustomEntity customEntity : this.entites) {
-			customEntity.removeEntity();
+			if (customEntity.getEntity() != null) {
+				customEntity.removeEntity();
+			}
 		}
 		this.entites.removeAll(this.entites);
 		return;
