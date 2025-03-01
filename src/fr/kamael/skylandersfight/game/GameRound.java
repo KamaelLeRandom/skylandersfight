@@ -159,6 +159,8 @@ public class GameRound {
 			skylander.giveEquipement();
 			skylander.setFullHealth();
 			skylander.onStart();
+			
+			skylander.addMates(gamePlayer.getInitialTeam().getPlayers());
 		}
 		
 		arena.teleportAllPlayer();

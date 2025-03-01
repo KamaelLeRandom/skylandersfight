@@ -98,18 +98,22 @@ public class Game {
 		        }
 		    }
 		    
-		    String msgKaos = "";
+		    StringBuilder msgKaos = new StringBuilder("§8========= §c§lÉquipe KAOS §8=========\n");
+		    StringBuilder msgEon = new StringBuilder("§8========= §b§lÉquipe EON §8=========\n");
+
 		    for (GamePlayer gamePlayer : team1) {
-		    	msgKaos += "| " + gamePlayer.getPlayer();
+		        msgKaos.append("§7→ §f").append(gamePlayer.getPlayer().getName()).append("\n");
 		    }
-		    
-		    String msgEon = "";
+
 		    for (GamePlayer gamePlayer : team2) {
-		    	msgEon += "| " + gamePlayer.getPlayer();
+		        msgEon.append("§7→ §f").append(gamePlayer.getPlayer().getName()).append("\n");
 		    }
-		    
-		    Bukkit.broadcastMessage("TEAM KAOS " + msgKaos);
-		    Bukkit.broadcastMessage("TEAM EON " + msgEon);
+
+		    msgKaos.append("§8====================\n");
+		    msgEon.append("§8====================\n");
+
+		    Bukkit.broadcastMessage(msgKaos.toString());
+		    Bukkit.broadcastMessage(msgEon.toString());
 
 		    this.listTeams.add(new GameTeam("§cKaos", team1));
 		    this.listTeams.add(new GameTeam("§bEon", team2));

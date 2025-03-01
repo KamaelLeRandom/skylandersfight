@@ -10,6 +10,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.kamael.skylandersfight.Plugin;
+import fr.kamael.skylandersfight.game.GamePlayer;
 
 public class Skylander {
 	protected Plugin plugin = Plugin.plugin;
@@ -198,6 +199,12 @@ public class Skylander {
 	
 	public ArrayList<Skylander> getMates() {
 		return this.mates;
+	}
+	
+	public void addMates(ArrayList<GamePlayer> gamePlayers) {
+		for (GamePlayer gamePlayer : gamePlayers) {
+			this.mates.add(gamePlayer.getSkylander());
+		}
 	}
 	
 	public void setFullHealth() {
