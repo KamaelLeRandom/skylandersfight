@@ -114,7 +114,10 @@ public class GameListener implements Listener {
 						Skylander skylanderShooter = plugin.game.getPlayer(playerShooter).getSkylander();
 						
 						Double damage = event.getDamage();
-						
+												
+						if (playerHit.getNoDamageTicks() > 9) 
+							return;
+												
 						// Première possible condition d'annulation. (Status, Mates)
 						if (skylanderHit.checkStatus(Status.NOTAKEDAMAGE) || skylanderShooter.checkStatus(Status.NOMAKEDAMAGE) || skylanderShooter.getMates().contains(skylanderHit)) {
 							event.setCancelled(true);
@@ -160,6 +163,9 @@ public class GameListener implements Listener {
 					
 					Double damage = event.getDamage();
 					
+					if (playerHit.getNoDamageTicks() > 9) 
+						return;
+										
 					// Première possible condition d'annulation. (Status, Mates)
 					if (skylanderHit.checkStatus(Status.NOTAKEDAMAGE) || skylanderDamager.checkStatus(Status.NOMAKEDAMAGE) || skylanderDamager.getMates().contains(skylanderHit)) {
 						event.setCancelled(true);
