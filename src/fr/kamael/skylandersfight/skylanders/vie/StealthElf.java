@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -36,6 +38,7 @@ public class StealthElf extends Skylander {
 	public static final Integer timerSecondSpell = 30;
 	public static final Integer rangeSecondSpell = 10;
 	public static final Integer durationCloneSecondSpell = 3;
+	public static final Double damageCloneSecondSpell = 5.;
 
 	private Boolean applyPoison = false;
 	
@@ -60,7 +63,7 @@ public class StealthElf extends Skylander {
 			skylanderHit.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, tickPoisonFirstSpell, 1, false, false));
 		}
 		
-		SpellUtils.heal(this, damage * pourcentHealPassif);
+		SpellUtils.heal(this, damage * pourcentHealPassif, false);
 		
 		return damage; 
 	}
@@ -87,7 +90,24 @@ public class StealthElf extends Skylander {
 			} else {
 				Player playerTarget = skylanderTarget.getPlayer();
 				
-				SpellUtils.createFakePlayer(plugin, player, playerTarget, durationCloneSecondSpell);
+				Location oldLocation = player.getLocation().clone();
+				
+				SpellUtils.createFakePlayer(
+					plugin,
+					this,
+					playerTarget,
+					durationCloneSecondSpell,
+					(attacker, targer) -> {
+						for (Skylander skylanderHit : SpellUtils.skylanderAround(plugin, this, oldLocation, 5., 2., 5.)) {
+							Player playerHit = skylanderHit.getPlayer();
+							playerHit.playSound(playerHit.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+							playerHit.sendMessage(Constants.prefixMessage + "Vous venez d'être touché par l'explosion du clone de §f"+ player.getName() +"§f.");
+							playerHit.damage(damageCloneSecondSpell, player);
+						}
+						
+						oldLocation.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, oldLocation, 1, 0., 0., 0.);
+					}
+				);
 				
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 				player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre "+ nameSecondSpell +"§f sur §a"+ playerTarget.getName() +"§f.");
@@ -102,13 +122,13 @@ public class StealthElf extends Skylander {
 	    player.sendMessage("\n");
 	    player.sendMessage("===============");
 	    player.sendMessage("\n");
-	    player.sendMessage("   ▶ §2Stealth Elf§f ◀");
+	    player.sendMessage("   ▶ §2"+ name +"§f ◀");
 	    player.sendMessage("\n");
 	    player.sendMessage("≫ §2Vol-Vie§f, vous êtes §asoigné§f d'un montant égal à §a" + pourcentHealPassif*100 + "%§f de vos §adégâts infligés§f.");
 	    player.sendMessage("\n");
-	    player.sendMessage("≫ §2Camouflage§f, vous devenez §ainvisible§f pendant §a" + durationInviFirstSpell + " secondes§f, votre §aprochaine attaque§f inflige un effet de §apoison§f de §a" + SkylanderConverter.convertTicks(tickPoisonFirstSpell) + " secondes§f à la cible. §b(" + timerFirstSpell + "s de recharge)");
+	    player.sendMessage("≫ "+ nameFirstSpell +"§f, vous devenez §ainvisible§f pendant §a" + durationInviFirstSpell + " secondes§f, votre §aprochaine attaque§f inflige un effet de §apoison§f de §a" + SkylanderConverter.convertTicks(tickPoisonFirstSpell) + " secondes§f à la cible. §b(" + timerFirstSpell + "s de recharge)");
 	    player.sendMessage("\n");
-	    player.sendMessage("≫ §2Substitution§f, vous êtes §atéléporté§f dans le §ados du joueur visé§f, vous laissez derrière vous un §aclone§f pendant §a" + durationCloneSecondSpell + " secondes§f. §b(" + timerSecondSpell + "s de recharge)");
+	    player.sendMessage("≫ "+ nameSecondSpell +"§f, vous êtes §atéléporté§f dans le §ados du joueur visé§f, vous laissez derrière vous un §aclone§f pendant §a" + durationCloneSecondSpell + " secondes§f. §b(" + timerSecondSpell + "s de recharge)");
 	    player.sendMessage("\n");
 	    player.sendMessage("===============");
 	    player.sendMessage("\n");

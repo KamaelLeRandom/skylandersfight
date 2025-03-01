@@ -49,6 +49,9 @@ public class ArenaItem extends CustomEntity {
 		Player player = skylander.getPlayer();
 		player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 1);
 		player.getInventory().addItem(item);
+		
+		plugin.game.getPlayer(player).getStats().nbItem++;
+		
 		removeEntity();
 		return; 
 	}
@@ -105,7 +108,7 @@ public class ArenaItem extends CustomEntity {
 					return;
 				}
 				
-				SpellUtils.heal(skylander, 1.);
+				SpellUtils.heal(skylander, 1., true);
 				
 				time--;
 			}

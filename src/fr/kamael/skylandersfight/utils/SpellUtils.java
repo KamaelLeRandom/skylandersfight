@@ -47,20 +47,22 @@ public class SpellUtils {
 		}
 	}
 	
-	public static void heal(Skylander skylander, Double value) {
+	public static void heal(Skylander skylander, Double value, Boolean animation) {
 		Player player = skylander.getPlayer();
 		
 		if (skylander.checkStatus(Status.NOHEAL)) {
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
 			player.sendMessage(Constants.prefixMessage + "Vous êtes sous §cHémorragie§f, vous ne pouvez pas vous soigner pour le moment.");
 		} else {
-			player.getWorld().spawnParticle(Particle.HEART, player.getEyeLocation().getX(), player.getEyeLocation().getY() + 0.5, player.getEyeLocation().getZ(), 10, 0., 0., 0.);
-			player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EAT, 1, 1);
-
 			if (player.getHealth() + value >= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
 				player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 			} else {
 				player.setHealth(player.getHealth() + value);
+			}
+			
+			if (animation) {
+				player.getWorld().spawnParticle(Particle.HEART, player.getEyeLocation().getX(), player.getEyeLocation().getY() + 0.5, player.getEyeLocation().getZ(), 10, 0., 0., 0.);
+				player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EAT, 1, 1);
 			}
 		}
 	}
@@ -162,6 +164,23 @@ public class SpellUtils {
 		return null;
 	}
 	
+	public static ArrayList<Skylander> skylanderAround(Plugin plugin, Skylander skylander, Location location, Double x, Double y, Double z) {
+		ArrayList<Skylander> skylandersHit = new ArrayList<>();
+		
+		for (Entity entity : location.getWorld().getNearbyEntities(location, x, y, z)) {
+			if (entity instanceof Player && entity != skylander.getPlayer()) {
+				Player playerHit = (Player) entity;
+				Skylander skylanderHit = plugin.game.getPlayer(playerHit).getSkylander();
+				
+				if (skylanderHit.isAlive() && !skylander.getMates().contains(skylanderHit)) {
+					skylandersHit.add(skylanderHit);
+				}
+			}
+		}
+		
+		return skylandersHit;
+	}
+	
 	public static void dash(Skylander skylander, Double value, SkylanderDamageRunnable damageCallback, ParticleRunnable particleCallback) {
 		Plugin plugin = Plugin.plugin;
 		Player player = skylander.getPlayer();
@@ -240,7 +259,8 @@ public class SpellUtils {
 	
 	
 	
-	public static void createFakePlayer(Plugin plugin, Player player, Player playerTarget, Integer time) {
+	public static void createFakePlayer(Plugin plugin, Skylander skylander, Player playerTarget, Integer time, SkylanderDamageRunnable damage) {
+		Player player = skylander.getPlayer();
 		GameProfile gameProfile = ((CraftPlayer) player).getProfile();
 		Property property = gameProfile.getProperties().get("textures").iterator().next();
 		
@@ -270,6 +290,8 @@ public class SpellUtils {
 			public void run() {
 				// Condition d'arrêt.
 				if (timer == 0) {
+					damage.execute(null, null);
+					
 					npc.destroyNPC(players);
 					cancel();
 					return;
