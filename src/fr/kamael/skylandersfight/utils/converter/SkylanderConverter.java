@@ -6,6 +6,7 @@ import java.math.RoundingMode;
 import org.bukkit.entity.Player;
 
 import fr.kamael.skylandersfight.skylanders.Skylander;
+import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
@@ -37,6 +38,8 @@ public class SkylanderConverter {
 				return new StealthElf(player);
 			case GhostRoaster.name:
 				return new GhostRoaster(player);
+			case Eruptor.name:
+				return new Eruptor(player);
 				
 			default:
 				return null;

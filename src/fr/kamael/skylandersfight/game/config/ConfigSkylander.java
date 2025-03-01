@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.bukkit.inventory.ItemStack;
 
 import fr.kamael.skylandersfight.skylanders.Element;
+import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
@@ -43,6 +44,7 @@ public class ConfigSkylander {
 		
 		ArrayList<ItemStack> feu = new ArrayList<>();
 		// TODO : Remplir les Skylanders Feu.
+		feu.add(Eruptor.getSignatureItem());
 		this.data.put(Element.FEU, feu);
 		
 		ArrayList<ItemStack> eau = new ArrayList<>();
