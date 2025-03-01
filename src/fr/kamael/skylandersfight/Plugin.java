@@ -17,17 +17,20 @@ import fr.kamael.skylandersfight.skylanders.magie.listener.MagieListener;
 import fr.kamael.skylandersfight.skylanders.mort.listener.MortListener;
 import fr.kamael.skylandersfight.skylanders.tech.listener.TechListener;
 import fr.kamael.skylandersfight.skylanders.vie.listener.VieListener;
+import fr.kamael.skylandersfight.utils.StatistiqueUtils;
 
 public class Plugin extends JavaPlugin {
 	public static Plugin plugin;
 	public Random random;
 	public Game game;
+	public StatistiqueUtils statsUtils;
 	
 	/// --- Méthodes initial.
 	@Override
 	public void onEnable() {
 		plugin = this;
 		random = new Random();
+		statsUtils = new StatistiqueUtils();
 
         getCommand("skylander").setExecutor(new SkylanderCommand());
         getCommand("skylander").setTabCompleter(new SkylanderTabCompleter());

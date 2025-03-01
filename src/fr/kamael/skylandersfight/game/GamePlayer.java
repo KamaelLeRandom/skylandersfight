@@ -1,5 +1,7 @@
 package fr.kamael.skylandersfight.game;
 
+import java.util.HashMap;
+
 import org.bukkit.entity.Player;
 
 import fr.kamael.skylandersfight.skylanders.Skylander;
@@ -11,10 +13,14 @@ public class GamePlayer {
 	private Boolean ready;
 	private GameTeam initialTeam;
 	private GameTeam actualTeam;
+	private GameStats stats;
+	private HashMap<Skylander, Integer> timerLastDamageFromSkylander;
 	
 	public GamePlayer(Player player) {
 		this.player = player;
 		this.ready = false;
+		this.stats = new GameStats();
+		this.timerLastDamageFromSkylander = new HashMap<Skylander, Integer>();
 	}
 	
 	public Player getPlayer() {
@@ -64,5 +70,27 @@ public class GamePlayer {
 	public GameTeam setActualTeam(GameTeam newTeam) {
 		this.actualTeam = newTeam;
 		return this.actualTeam;
+	}
+	
+	public GameStats getStats() {
+		return this.stats;
+	}
+	
+	public void resetTimerLastDamage() {
+		for (Skylander skylander : timerLastDamageFromSkylander.keySet()) {
+			timerLastDamageFromSkylander.replace(skylander, -1);
+		}
+	}
+	
+	public HashMap<Skylander, Integer> getTimerLastDamage() {
+		return this.timerLastDamageFromSkylander;
+	}
+	
+	public void updateTimerLastDamage(Skylander attacker, Integer timer) {
+		if (this.timerLastDamageFromSkylander.containsKey(attacker)) {
+			this.timerLastDamageFromSkylander.replace(attacker, timer);
+		} else {
+			this.timerLastDamageFromSkylander.put(attacker, timer);
+		}
 	}
 }

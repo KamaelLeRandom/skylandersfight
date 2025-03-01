@@ -38,6 +38,10 @@ public class GameRound {
 		return this.arena;
 	}
 	
+	public Integer getTimer() {
+		return this.timerRound;
+	}
+	
 	public void chooseElement() {
 		Element element = this.arena.getRandomElement();
 		
@@ -245,6 +249,8 @@ public class GameRound {
 		this.arena.removeAllCustomEntities();
 		this.arena.removeAllArenaCorpse();
 		this.arena.removeAllArenaItem();
+		
+		plugin.statsUtils.updateDataAfterRound();
 		
 		for (GamePlayer gp : this.plugin.game.getPlayers()) {
 			gp.getPlayer().sendTitle("§cL'équipe §l" + gameTeam.getName(), "§ca gagné cette manche !", 5, 40, 5);

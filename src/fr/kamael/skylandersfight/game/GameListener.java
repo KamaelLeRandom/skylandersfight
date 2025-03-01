@@ -1,5 +1,7 @@
 package fr.kamael.skylandersfight.game;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -105,9 +107,12 @@ public class GameListener implements Listener {
 					
 					if (projectile.getShooter() instanceof Player) {
 						Player playerHit = (Player) event.getEntity();
+						GamePlayer gamePlayerHit = this.plugin.game.getPlayer(playerHit); 
+						Skylander skylanderHit = gamePlayerHit.getSkylander();
+						
 						Player playerShooter = (Player) projectile.getShooter();
-						Skylander skylanderHit = plugin.game.getPlayer(playerHit).getSkylander();
 						Skylander skylanderShooter = plugin.game.getPlayer(playerShooter).getSkylander();
+						
 						Double damage = event.getDamage();
 						
 						// Première possible condition d'annulation. (Status, Mates)
@@ -135,6 +140,11 @@ public class GameListener implements Listener {
 							playerHit.setFireTicks(80);
 						
 						event.setDamage(damage);
+						
+						gamePlayerHit.updateTimerLastDamage(skylanderShooter, plugin.game.getRound().getTimer());
+						
+						this.plugin.game.getPlayer(playerShooter).getStats().nbDamage += damage;
+						
 						return;
 					}
 					
@@ -142,9 +152,12 @@ public class GameListener implements Listener {
 				}
 				else if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
 					Player playerHit = (Player) event.getEntity();
+					GamePlayer gamePlayerHit = this.plugin.game.getPlayer(playerHit);
+					Skylander skylanderHit = gamePlayerHit.getSkylander();
+					
 					Player playerDamager = (Player) event.getDamager();
-					Skylander skylanderHit = plugin.game.getPlayer(playerHit).getSkylander();
 					Skylander skylanderDamager = plugin.game.getPlayer(playerDamager).getSkylander();
+					
 					Double damage = event.getDamage();
 					
 					// Première possible condition d'annulation. (Status, Mates)
@@ -170,11 +183,15 @@ public class GameListener implements Listener {
 					
 					if (skylanderDamager.getElement().equals(Element.FEU))
 						playerHit.setFireTicks(80);
+						
+					if (skylanderDamager.checkStatus(Status.INVISIBLE))
+						skylanderDamager.removeStatus(Status.INVISIBLE);
 					
 					event.setDamage(damage);
 					
-					if (skylanderDamager.checkStatus(Status.INVISIBLE))
-						skylanderDamager.removeStatus(Status.INVISIBLE);
+					gamePlayerHit.updateTimerLastDamage(skylanderDamager, plugin.game.getRound().getTimer());
+					
+					this.plugin.game.getPlayer(playerDamager).getStats().nbDamage += damage;
 				}
 			}
 		}
@@ -226,28 +243,43 @@ public class GameListener implements Listener {
 		try {
 			if (plugin.game != null && plugin.game.isState(GameState.FIGHTING)) {
 				Player playerDeath = event.getEntity();
-				Skylander skylanderDeath = this.plugin.game.getPlayer(playerDeath).getSkylander();
+				GamePlayer gamePlayerDeath = this.plugin.game.getPlayer(playerDeath);
+				Skylander skylanderDeath = gamePlayerDeath.getSkylander();
 				Location locationDeath = playerDeath.getLocation().clone();
 
 				if (playerDeath.getKiller() instanceof Player) {
 					Player playerKiller = playerDeath.getKiller();
-					Skylander skylanderKiller = this.plugin.game.getPlayer(playerKiller).getSkylander();
+					GamePlayer gamePlayerKiller = this.plugin.game.getPlayer(playerKiller); 
+					Skylander skylanderKiller = gamePlayerKiller.getSkylander();
 					
 					if (skylanderDeath.onDeath(skylanderKiller))
 						return;
 					
 					skylanderKiller.onKill(skylanderDeath);
 					
-					SpellUtils.heal(skylanderKiller, 20.);
+					gamePlayerKiller.getStats().nbKill++;
+					gamePlayerDeath.getStats().nbDeath++;
+					
+					HashMap<Skylander, Integer> timerLastDamage = gamePlayerDeath.getTimerLastDamage();
+					for (Skylander skylanderOther : timerLastDamage.keySet()) {
+						if (timerLastDamage.get(skylanderOther) >= this.plugin.game.getRound().getTimer() - Constants.secondsForAssist && !skylanderKiller.equals(skylanderOther)) {
+							Bukkit.broadcastMessage("Debug | PlayerOther = "+ skylanderOther.getPlayer().toString() +"; Timer = "+ timerLastDamage.get(skylanderOther) + " ; Condition = " + (this.plugin.game.getRound().getTimer() - Constants.secondsForAssist) + " ; Condition 2 = "+  !skylanderKiller.equals(skylanderOther));
+							this.plugin.game.getPlayer(skylanderOther.getPlayer()).getStats().nbAssist++;
+						}
+					}
+					
+					SpellUtils.heal(skylanderKiller, 20., true);
 					
 					event.setDeathMessage(Constants.prefixMessage + "§e§l" + playerDeath.getName() + "§f§r (§7" + skylanderDeath.getName() + "§f) a été éliminé par §e§l"+ playerKiller.getName() +"§f§r.");
 				} else {
 					if (skylanderDeath.onDeath(null))
 						return;
 					
-					event.setDeathMessage(Constants.prefixMessage + "§e§l" + playerDeath.getName() + "§f§r (§7" + skylanderDeath.getName() + "§f) est mort.");
+					gamePlayerDeath.getStats().nbDeath++;
+					
+					event.setDeathMessage(Constants.prefixMessage + "§e§l" + playerDeath.getName() + "§f§r (§7" + skylanderDeath.getName() + "§f) est mort tout seul comme un grand garçon.");
 				}
-
+				
 				ItemManager.clearPlayer(playerDeath);
 				skylanderDeath.setAlive(false);
 				playerDeath.spigot().respawn();
@@ -413,12 +445,15 @@ public class GameListener implements Listener {
 			if (plugin.game != null && plugin.game.isState(GameState.FIGHTING)) {
 				Block clickedBlock = event.getClickedBlock();
 				Player player = event.getPlayer();
-				Skylander skylander = this.plugin.game.getPlayer(player).getSkylander();
+				GamePlayer gamePlayer = this.plugin.game.getPlayer(player);
+				Skylander skylander = gamePlayer.getSkylander();
 				
 				if (skylander.isAlive() && player.getGameMode().equals(GameMode.ADVENTURE) && clickedBlock != null && clickedBlock.getType().equals(Material.EMERALD_BLOCK)) {
 				
 					if (this.plugin.game.getConfig().getActiveHeal()) {
-						SpellUtils.heal(skylander, Constants.valueHeal);
+						SpellUtils.heal(skylander, Constants.valueHeal, true);
+						
+						gamePlayer.getStats().nbHeal++;
 						
 						clickedBlock.setType(Material.BEDROCK);
 						

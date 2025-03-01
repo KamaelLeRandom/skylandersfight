@@ -32,4 +32,5 @@ public class Constants {
 	public final static Location spawnLocation = new Location(Bukkit.getWorld("world"), -920, 62 , -483);
 	public final static Double valueHeal = 5.;
 
+	public final static Integer secondsForAssist = 15;
 }
