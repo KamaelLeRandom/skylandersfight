@@ -148,6 +148,12 @@ public class GhostRoaster extends Skylander {
 		if (checkCooldown(nameSecondSpell, true)) {
 			
 			if (SpellUtils.changeLife(this, -removeHealSecondSpell)) {
+				if (checkStatus(Status.NOTELEPORT)) {
+					player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+					player.sendMessage(Constants.prefixMessage + "Vous venez ne pouvez §cpas utiliser§f de compétence de §ctéléportation§f pour le moment.");
+					return;
+				}
+				
 				Location oldLocation = player.getLocation();
 				
 				player.playSound(player.getLocation(), Sound.ENTITY_PHANTOM_FLAP, 1, 1);
