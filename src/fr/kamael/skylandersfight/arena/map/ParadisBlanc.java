@@ -21,9 +21,9 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class ParadisBlanc extends Arena {
-	public static String nameArena = "§bParadis Blanc";
-	public static String nameSnowball = "§bMarquage";
-	public static Integer timerSnowball = 30;
+	public static final String nameArena = "§bParadis Blanc";
+	public static final String nameSnowball = "§bMarquage";
+	public static final Integer timerSnowball = 30;
 	
 	public ParadisBlanc() {
 		World w = Bukkit.getWorld("world");
@@ -80,7 +80,7 @@ public class ParadisBlanc extends Arena {
 		Bukkit.getWorld("world").setTime(1000);
 		
 		if (plugin.game.getConfig().getActiveEventMap()) {
-			Bukkit.broadcastMessage(Constants.prefixMessage + "L'événement "+ nameSnowball +" est activé, toutes les "+ timerSnowball +" secondes vous gagnez une boule de neige qui vous téléporte à l'endroit où elle tombe.");
+			Bukkit.broadcastMessage(Constants.prefixMessage + "L'événement "+ nameSnowball +"§f est activé, toutes les "+ timerSnowball +" secondes vous gagnez une boule de neige qui vous téléporte à l'endroit où elle tombe.");
 			
 			for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
 				gamePlayer.getPlayer().getInventory().addItem(ItemManager.makeBasicItem(Material.SNOWBALL, nameSnowball, 1));
