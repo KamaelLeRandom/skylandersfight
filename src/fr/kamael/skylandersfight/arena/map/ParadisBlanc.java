@@ -10,15 +10,20 @@ import org.bukkit.World;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.arena.Arena;
 import fr.kamael.skylandersfight.game.GamePlayer;
+import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Element;
+import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class ParadisBlanc extends Arena {
 	public static String nameArena = "§bParadis Blanc";
 	public static String nameSnowball = "§bMarquage";
+	public static Integer timerSnowball = 30;
 	
 	public ParadisBlanc() {
 		World w = Bukkit.getWorld("world");
@@ -75,12 +80,34 @@ public class ParadisBlanc extends Arena {
 		Bukkit.getWorld("world").setTime(1000);
 		
 		if (plugin.game.getConfig().getActiveEventMap()) {
-			Bukkit.broadcastMessage("§bMarquage§f est activé, toutes les 30s vous gagnez une boule de neige qui vous téléporte à l'endroit où elle tombe.");
+			Bukkit.broadcastMessage(Constants.prefixMessage + "L'événement "+ nameSnowball +" est activé, toutes les "+ timerSnowball +" secondes vous gagnez une boule de neige qui vous téléporte à l'endroit où elle tombe.");
 			
 			for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
 				gamePlayer.getPlayer().getInventory().addItem(ItemManager.makeBasicItem(Material.SNOWBALL, nameSnowball, 1));
 			}
 		}
+	}
+	
+	public void waitingTimeSnowball(Skylander skylander) {
+		new BukkitRunnable() {
+			private Integer timer = timerSnowball;
+			
+			@Override
+			public void run() {
+				if (!skylander.isAlive() || !plugin.game.isState(GameState.FIGHTING)) {
+					cancel();
+					return;
+				}
+				
+				if (timer == 0) {
+					skylander.getPlayer().getInventory().addItem(ItemManager.makeBasicItem(Material.SNOWBALL, nameSnowball, 1));
+					cancel();
+					return;
+				}
+			
+				timer--;
+			}
+		}.runTaskTimer(plugin, 0, 20);
 	}
 	
 	public static ItemStack getItem() {
