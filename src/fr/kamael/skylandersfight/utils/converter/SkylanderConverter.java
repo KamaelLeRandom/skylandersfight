@@ -6,6 +6,7 @@ import java.math.RoundingMode;
 import org.bukkit.entity.Player;
 
 import fr.kamael.skylandersfight.skylanders.Skylander;
+import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
@@ -40,6 +41,8 @@ public class SkylanderConverter {
 				return new GhostRoaster(player);
 			case Eruptor.name:
 				return new Eruptor(player);
+			case SlamBam.name:
+				return new SlamBam(player);
 				
 			default:
 				return null;
