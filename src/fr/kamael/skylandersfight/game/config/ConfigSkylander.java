@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.bukkit.inventory.ItemStack;
 
 import fr.kamael.skylandersfight.skylanders.Element;
+import fr.kamael.skylandersfight.skylanders.air.LightningRod;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
@@ -61,6 +62,7 @@ public class ConfigSkylander {
 		
 		ArrayList<ItemStack> air = new ArrayList<>();
 		// TODO : Remplir les Skylanders Air.
+		air.add(LightningRod.getSignatureItem());
 		this.data.put(Element.AIR, air);
 	}
 	

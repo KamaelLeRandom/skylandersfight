@@ -6,6 +6,7 @@ import java.math.RoundingMode;
 import org.bukkit.entity.Player;
 
 import fr.kamael.skylandersfight.skylanders.Skylander;
+import fr.kamael.skylandersfight.skylanders.air.LightningRod;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
@@ -46,6 +47,8 @@ public class SkylanderConverter {
 				return new SlamBam(player);
 			case Terrafin.name: 
 				return new Terrafin(player);
+			case LightningRod.name: 
+				return new LightningRod(player);
 				
 			default:
 				return null;

@@ -13,6 +13,7 @@ import fr.kamael.skylandersfight.command.SkylanderCommand;
 import fr.kamael.skylandersfight.command.SkylanderTabCompleter;
 import fr.kamael.skylandersfight.game.Game;
 import fr.kamael.skylandersfight.game.GameListener;
+import fr.kamael.skylandersfight.skylanders.air.listener.AirListener;
 import fr.kamael.skylandersfight.skylanders.eau.listener.EauListener;
 import fr.kamael.skylandersfight.skylanders.feu.listener.FeuListener;
 import fr.kamael.skylandersfight.skylanders.magie.listener.MagieListener;
@@ -49,6 +50,7 @@ public class Plugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FeuListener(), this);
 		getServer().getPluginManager().registerEvents(new EauListener(), this);
 		getServer().getPluginManager().registerEvents(new TerreListener(), this);
+		getServer().getPluginManager().registerEvents(new AirListener(), this);
 		
 		System.out.println("[SkylandersFight] Plugin activé.");
 		
