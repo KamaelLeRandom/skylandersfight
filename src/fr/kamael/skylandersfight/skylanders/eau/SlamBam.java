@@ -26,11 +26,11 @@ public class SlamBam extends Skylander {
 	public static final String name = "Slam Bam";
 	
 	public static final String namePassif = "§9Poing de Yéti";
-	public static final Double damagePassif = 2.;
+	public static final Double damagePassif = 1.5;
 	
 	public static final String nameFirstSpell = "§9Stéroïdes";
 	public static final Integer timerFirstSpell = 30;
-	public static final Integer numberHitPassif = 10;
+	public static final Integer numberHitPassif = 12;
 	
 	public static final String nameSecondSpell = "§9Gonflette";
 	public static final Integer timerSecondSpell = 30;
