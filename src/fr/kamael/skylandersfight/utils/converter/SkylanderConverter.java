@@ -11,6 +11,7 @@ import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
+import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
 
 public class SkylanderConverter {
@@ -43,6 +44,8 @@ public class SkylanderConverter {
 				return new Eruptor(player);
 			case SlamBam.name:
 				return new SlamBam(player);
+			case Terrafin.name: 
+				return new Terrafin(player);
 				
 			default:
 				return null;

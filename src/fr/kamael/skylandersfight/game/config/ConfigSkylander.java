@@ -11,6 +11,7 @@ import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
+import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
 
 public class ConfigSkylander {
@@ -55,6 +56,7 @@ public class ConfigSkylander {
 		
 		ArrayList<ItemStack> terre = new ArrayList<>();
 		// TODO : Remplir les Skylanders Terre.
+		terre.add(Terrafin.getSignatureItem());
 		this.data.put(Element.TERRE, terre);
 		
 		ArrayList<ItemStack> air = new ArrayList<>();

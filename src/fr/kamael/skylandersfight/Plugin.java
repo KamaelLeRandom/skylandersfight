@@ -18,6 +18,7 @@ import fr.kamael.skylandersfight.skylanders.feu.listener.FeuListener;
 import fr.kamael.skylandersfight.skylanders.magie.listener.MagieListener;
 import fr.kamael.skylandersfight.skylanders.mort.listener.MortListener;
 import fr.kamael.skylandersfight.skylanders.tech.listener.TechListener;
+import fr.kamael.skylandersfight.skylanders.terre.listener.TerreListener;
 import fr.kamael.skylandersfight.skylanders.vie.listener.VieListener;
 import fr.kamael.skylandersfight.utils.StatistiqueUtils;
 
@@ -47,6 +48,7 @@ public class Plugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MortListener(), this);
 		getServer().getPluginManager().registerEvents(new FeuListener(), this);
 		getServer().getPluginManager().registerEvents(new EauListener(), this);
+		getServer().getPluginManager().registerEvents(new TerreListener(), this);
 		
 		System.out.println("[SkylandersFight] Plugin activé.");
 		
