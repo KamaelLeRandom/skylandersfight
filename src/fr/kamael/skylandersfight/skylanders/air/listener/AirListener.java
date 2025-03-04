@@ -20,6 +20,7 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.air.JetVac;
 import fr.kamael.skylandersfight.skylanders.air.LightningRod;
+import fr.kamael.skylandersfight.skylanders.air.Scratch;
 
 public class AirListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -44,6 +45,8 @@ public class AirListener implements Listener {
             	handleLightningRod((LightningRod) skylander, action, nameItem);
             } else if (skylander instanceof JetVac) {
             	handleJetVac((JetVac) skylander, action, nameItem);
+            } else if (skylander instanceof Scratch) {
+            	handleScratch((Scratch) skylander, action, nameItem);
             }
 		}
 		catch (Exception e) {
@@ -66,6 +69,16 @@ public class AirListener implements Listener {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(JetVac.nameFirstSpell, skylander::firstSpell_Damage);
         actions.put(JetVac.nameSecondSpell, skylander::secondSpell_Tornado);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleScratch(Scratch skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(Scratch.nameFirstSpell, skylander::firstSpell_Buff);
+        actions.put(Scratch.nameSecondSpell, skylander::secondSpell_Root);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();
