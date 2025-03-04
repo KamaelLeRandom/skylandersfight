@@ -21,10 +21,8 @@ import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
-import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.utils.ParticleUtils;
 import fr.kamael.skylandersfight.utils.SpellUtils;
-import fr.kamael.skylandersfight.utils.converter.SkylanderConverter;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class JetVac extends Skylander {
@@ -34,11 +32,10 @@ public class JetVac extends Skylander {
 	public static final Integer windNeedPunchPassif = 50;
 	public static final Integer windNeedJumpPassif = 20;
 
-	public static final String nameFirstSpell = "§Rafale de Vent";
+	public static final String nameFirstSpell = "§3Rafale de Vent";
 	public static final Integer timerFirstSpell = 30;
 	public static final Integer windNeedFirstSpell = 40;
 	public static final Integer rangeFirstSpell = 10;
-	public static final Integer tickImmoFirstSpell = 30;
 	public static final Double damageFirstSpell = 4.;
 	
 	public static final String nameSecondSpell = "§3Tornade";
@@ -53,12 +50,15 @@ public class JetVac extends Skylander {
 	
 	public JetVac(Player player) {
 		super(player, Element.AIR, name);
+		windLevel = 100;
 	}
 	
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
 		ItemManager.giveColorArmor(player, Color.WHITE);
 						
+		player.setLevel(windLevel);
+		
 		bow = getItemWeapon();
 		
 		Inventory inv = player.getInventory();
@@ -76,6 +76,8 @@ public class JetVac extends Skylander {
 				bow.removeEnchantment(Enchantment.ARROW_KNOCKBACK);
 				player.updateInventory();
 			}
+			
+			player.setLevel(windLevel);
 			
 			return true;
 		} else {
@@ -127,11 +129,11 @@ public class JetVac extends Skylander {
 					return;
 				} else {
 					Player playerTarget = skylanderTarget.getPlayer();
-					skylanderTarget.addStatus(tickImmoFirstSpell, Status.NOMOVE);
+
 					playerTarget.playSound(playerTarget.getLocation(), Sound.BLOCK_POWDER_SNOW_BREAK, 1, 1);
 					playerTarget.sendMessage(Constants.prefixMessage+ "Vous venez d'être toucher par la compétence "+ nameFirstSpell +"§f de §3"+ player.getName() +"§f.");
-					playerTarget.sendTitle(nameFirstSpell, "Vous êtes immobilisé pendant "+ SkylanderConverter.convertTicks(tickImmoFirstSpell) +"s.", 1, tickImmoFirstSpell, 1);
 					playerTarget.damage(damageFirstSpell, player);
+					playerTarget.setVelocity(player.getLocation().getDirection().clone().multiply(2.));
 					
 					player.playSound(player.getLocation(), Sound.BLOCK_POWDER_SNOW_BREAK, 1, 1);
 					player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre compétence "+ nameFirstSpell +"§f sur §3"+ playerTarget.getName() +"§f.");
@@ -187,7 +189,7 @@ public class JetVac extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("≫ "+ namePassif +"§f, vous avez un §eniveau d'air§f présent dans votre barre d'exp, vous pouvez utiliser §e"+ windNeedJumpPassif +" points d'air§f pour effectuer un §edouble saut§f. En plus, lorsque vous êtes au dessus de §e"+ windNeedPunchPassif +" points d'air§f vous gagnez l'effet §ePunch§f sur votre arc.");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameFirstSpell + "§f, vous infligez §e"+ damageFirstSpell +" dégats§f et §eimmobilisé§f le joueur ciblé pendant "+ SkylanderConverter.convertTicks(tickImmoFirstSpell) +" secondes, cette compétence demande §e"+ windNeedFirstSpell +" points d'air§f. §b(" + timerFirstSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, vous infligez §e"+ damageFirstSpell +" dégats§f et renvoie en arrière le joueur ciblé, cette compétence demande §e"+ windNeedFirstSpell +" points d'air§f. §b(" + timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("≫ " + nameSecondSpell + "§f, vous propulsez en l'air le joueur ciblé, celui-ci obtient un effet Nauséa pendant "+ tickNauseaSecondSpell +", cette compétence demande §e"+ windNeedSecondSpell +" points d'air§f. §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
@@ -213,7 +215,7 @@ public class JetVac extends Skylander {
 	}
 	
 	public static ItemStack getItemFirstSpell() {
-		List<String> lore = Arrays.asList("§fVous infligez "+ damageFirstSpell +" dégats et immobilisé le joueur ciblé pendant "+ tickImmoFirstSpell +".");
+		List<String> lore = Arrays.asList("§fVous infligez "+ damageFirstSpell +" dégats et renvoyer en arrière le joueur ciblé.");
 		
 		ItemStack item = new ItemStack(Material.WHITE_DYE, 1);
 		ItemMeta meta = item.getItemMeta();
