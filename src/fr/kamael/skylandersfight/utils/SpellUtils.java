@@ -217,6 +217,32 @@ public class SpellUtils {
 			}
 		}.runTaskTimer(plugin, 0, 2);
 	}
+	
+	public static void tornado(Plugin plugin, Skylander...skylandersHit) {
+	    new BukkitRunnable() {
+	    	private Integer timer = 20;
+	    	
+	    	@Override
+	        public void run() {
+	    		if (timer == 0) {
+	    			cancel();
+	    			return;
+	    		}
+	    		
+	    		for (Skylander skylanderHit : skylandersHit) {
+	                double t = System.currentTimeMillis() % 2000 / 1000.0 * Math.PI * 2;
+	                double radius = 0.5;
+	                double x = radius * Math.cos(t);
+	                double z = radius * Math.sin(t);
+	                double y = 0.4;
+
+	                skylanderHit.getPlayer().setVelocity(new Vector(x, y, z));
+	    		}
+	    		
+	    		timer--;
+	    	}
+	    }.runTaskTimer(plugin, 0, 2);
+	}
 
 	public static void fly(Skylander skylander, Double range, SkylanderDamageRunnable damageCallback, ParticleRunnable particleCallback) {
 		Plugin plugin = Plugin.plugin;
