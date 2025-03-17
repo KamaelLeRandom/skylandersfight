@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
@@ -22,6 +23,7 @@ import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
+import fr.kamael.skylandersfight.utils.ParticleUtils;
 import fr.kamael.skylandersfight.utils.SpellUtils;
 import fr.kamael.skylandersfight.utils.converter.SkylanderConverter;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
@@ -76,6 +78,8 @@ public class LightningRod extends Skylander {
 	}
 	
 	public void passif(Projectile projectile) {
+		ParticleUtils.sphereParticule(plugin, projectile.getLocation().clone().subtract(0, 1, 0), Particle.ELECTRIC_SPARK, rangePassif);
+		
 		for (Skylander skylanderHit : SpellUtils.skylanderAround(plugin, this, projectile.getLocation(), rangePassif, rangePassif, rangePassif)) {
 			skylanderHit.getPlayer().damage(damagePassif, projectile);
 		}

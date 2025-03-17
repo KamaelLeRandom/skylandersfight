@@ -9,6 +9,7 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.air.JetVac;
 import fr.kamael.skylandersfight.skylanders.air.LightningRod;
 import fr.kamael.skylandersfight.skylanders.air.Scratch;
+import fr.kamael.skylandersfight.skylanders.air.Warnado;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
@@ -51,6 +52,8 @@ public class SkylanderConverter {
 				return new Terrafin(player);
 			case LightningRod.name: 
 				return new LightningRod(player);
+			case Warnado.name: 
+				return new Warnado(player);
 			case JetVac.name:
 				return new JetVac(player);
 			case Scratch.name:

@@ -53,7 +53,7 @@ public class Plugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new AirListener(), this);
 		
 		System.out.println("[SkylandersFight] Plugin activé.");
-		
+
 		clearAllArmorStand();
 	}
 	

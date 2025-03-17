@@ -133,7 +133,7 @@ public class SpellUtils {
 		}.runTaskTimer(plugin, 0, 2);
 	}
 	
-	public static Skylander targetPlayer(Skylander skylander, Integer distance, ParticleRunnable particule) {
+	public static Skylander targetPlayer(Skylander skylander, Integer distance, Double range, ParticleRunnable particule) {
 		Player player = skylander.getPlayer();
 		Location eyeLocation = player.getEyeLocation();
 	    Vector direction = eyeLocation.getDirection();
@@ -146,7 +146,7 @@ public class SpellUtils {
 	        }
 			
 			if (TraversableBlocksUtils.isTraversableBlock(player.getWorld().getBlockAt(checkLocation).getType())) {
-				for (Entity entity : player.getWorld().getNearbyEntities(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(i)), 0.75, 0.75, 0.75)) {
+				for (Entity entity : player.getWorld().getNearbyEntities(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(i)), range, range, range)) {
 					if (entity instanceof Player && entity != player) {
 						Player playerTarget = (Player) entity;
 						Skylander skylanderTarget = Plugin.plugin.game.getPlayer(playerTarget).getSkylander();

@@ -28,7 +28,7 @@ public class Scratch extends Skylander {
 	
 	public static final String namePassif = "§3";
 	public static final Integer nbHitPassif = 2;
-	public static final Double pourcentSpeedPassif = 0.05;
+	public static final Double pourcentSpeedPassif = 0.1;
 	
 	public static final String nameFirstSpell = "§3Conversion";
 	public static final Integer timerFirstSpell = 30;

@@ -82,7 +82,7 @@ public class StealthElf extends Skylander {
 	
 	public void secondSpell_Dash() {
 		if (checkCooldown(nameSecondSpell, true)) {
-			Skylander skylanderTarget = SpellUtils.targetPlayer(this, rangeSecondSpell, null);
+			Skylander skylanderTarget = SpellUtils.targetPlayer(this, rangeSecondSpell, 0.75, null);
 			
 			if (skylanderTarget == null) {
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);

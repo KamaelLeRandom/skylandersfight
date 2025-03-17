@@ -225,7 +225,7 @@ public class GameListener implements Listener {
 				if (event.getCause().equals(DamageCause.FALL)) {
 					skylander.onFall();
 					
-					if (skylander.checkStatus(Status.NOFALL)) {
+					if (skylander.checkStatus(Status.NOFALL) || skylander.getElement().equals(Element.AIR)) {
 						event.setCancelled(true);
 					} else if (skylander.checkStatus(Status.ONEFALL)) {
 						event.setCancelled(true);

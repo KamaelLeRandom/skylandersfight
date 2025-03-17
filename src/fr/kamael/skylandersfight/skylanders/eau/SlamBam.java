@@ -26,14 +26,14 @@ public class SlamBam extends Skylander {
 	public static final String name = "Slam Bam";
 	
 	public static final String namePassif = "§9Poing de Yéti";
-	public static final Double damagePassif = 1.5;
+	public static final Double damagePassif = 2.5;
 	
 	public static final String nameFirstSpell = "§9Stéroïdes";
-	public static final Integer timerFirstSpell = 30;
+	public static final Integer timerFirstSpell = 20;
 	public static final Integer numberHitPassif = 12;
 	
 	public static final String nameSecondSpell = "§9Gonflette";
-	public static final Integer timerSecondSpell = 30;
+	public static final Integer timerSecondSpell = 20;
 	public static final Integer durationSecondSpell = 8;
 	public static final Double pourcentResisSecondSpell = 0.25;
 	
@@ -88,6 +88,7 @@ public class SlamBam extends Skylander {
 			
 			player.playSound(player.getLocation(), Sound.ITEM_HONEY_BOTTLE_DRINK, 1, 1);
 			player.sendMessage(Constants.prefixMessage+ "Vous venez d'utiliser votre compétence "+ nameFirstSpell +"§f.");
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 8 * 20, 0, false, false));
 			player.setLevel(nbHitPassif);
 			
 			addCooldown(nameFirstSpell, timerFirstSpell);

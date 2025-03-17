@@ -226,7 +226,7 @@ public class ArenaItem extends CustomEntity {
 	}
 	
 	public static Boolean spellKaos(Plugin plugin, Skylander skylander) {
-		Skylander skylanderTarget = SpellUtils.targetPlayer(skylander, 15, null);
+		Skylander skylanderTarget = SpellUtils.targetPlayer(skylander, 15, 0.75, null);
 		Player player = skylander.getPlayer();
 		
 		if (skylanderTarget == null) {
@@ -262,7 +262,7 @@ public class ArenaItem extends CustomEntity {
 	}
 	
 	public static Boolean spellGlum(Plugin plugin, Skylander skylander) {
-		Skylander skylanderTarget = SpellUtils.targetPlayer(skylander, 15, null);
+		Skylander skylanderTarget = SpellUtils.targetPlayer(skylander, 15, 0.75, null);
 		Player player = skylander.getPlayer();
 		
 		if (skylanderTarget == null) {

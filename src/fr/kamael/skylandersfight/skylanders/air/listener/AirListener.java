@@ -4,13 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.kamael.skylandersfight.Constants;
@@ -21,6 +19,7 @@ import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.air.JetVac;
 import fr.kamael.skylandersfight.skylanders.air.LightningRod;
 import fr.kamael.skylandersfight.skylanders.air.Scratch;
+import fr.kamael.skylandersfight.skylanders.air.Warnado;
 
 public class AirListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -43,6 +42,8 @@ public class AirListener implements Listener {
 
             if (skylander instanceof LightningRod) {
             	handleLightningRod((LightningRod) skylander, action, nameItem);
+            } else if (skylander instanceof Warnado) {
+            	handleWarnado((Warnado) skylander, action, nameItem);
             } else if (skylander instanceof JetVac) {
             	handleJetVac((JetVac) skylander, action, nameItem);
             } else if (skylander instanceof Scratch) {
@@ -60,6 +61,17 @@ public class AirListener implements Listener {
         actions.put(LightningRod.nameFirstSpell, skylander::firstSpell_Stun);
         actions.put(LightningRod.nameSecondSpell, skylander::secondSpell_Fly);
 
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleWarnado(Warnado skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(Warnado.nameFirstSpell, skylander::firstSpell_Tempest);
+        actions.put(Warnado.nameSecondSpell, skylander::secondSpell_Counter);
+        actions.put(Warnado.nameWeapon, skylander::passif_Dash);
+        
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();
         }
@@ -87,28 +99,5 @@ public class AirListener implements Listener {
 	
     private boolean isRightClick(Action action) {
         return action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK;
-    }
-    
-    @EventHandler
-    public void jetvacDoubleJump(PlayerToggleFlightEvent event) {
-		try {
-			if (plugin.game == null || !plugin.game.isState(GameState.FIGHTING))
-				return;
-			
-			Player player = event.getPlayer();
-			
-	        if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR))
-	            return;
-	        
-	        Skylander skylander = plugin.game.getPlayer(player).getSkylander();
-	        
-	        if (skylander.isAlive() && skylander instanceof JetVac) {
-	        	((JetVac) skylander).passif_DoubleJump();
-	        }
-		}
-		catch (Exception e) {
-			Bukkit.broadcastMessage(Constants.prefixError + "(AirListener, playerInteractAir) : §7"+e.getMessage());	
-			return;
-		}
     }
 }

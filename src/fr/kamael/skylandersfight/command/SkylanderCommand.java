@@ -25,7 +25,7 @@ public class SkylanderCommand implements CommandExecutor {
 					if (args.length == 1) {
 						
 						// < /skylander help >
-						if (args[0].equalsIgnoreCase("help")) {
+						if (args[0].equalsIgnoreCase("help")) {							
 							String message = "§6§l===== Informations Skylander =====" + '\n' +
 					                 "§eListe des commandes disponibles : " + '\n' +
 					                 "§b- §f/skylander game §7→ Gérer les paramètres du jeu" + '\n' +

@@ -131,6 +131,7 @@ public class TriggerHappy extends Skylander {
 			Skylander skylanderTarget = SpellUtils.targetPlayer(
 				this, 
 				15,
+				0.75,
 				(location) -> {
 			        location.getWorld().spawnParticle(
 			        	Particle.BLOCK_CRACK, 

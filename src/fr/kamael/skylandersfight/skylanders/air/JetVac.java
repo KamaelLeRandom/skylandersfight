@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -29,21 +30,18 @@ public class JetVac extends Skylander {
 	public static final String name = "Jet-Vac";
 	
 	public static final String namePassif = "§3Bobine d'air";
-	public static final Integer windNeedPunchPassif = 50;
-	public static final Integer windNeedJumpPassif = 20;
+	public static final Integer windNeedFly = 2;
 
 	public static final String nameFirstSpell = "§3Rafale de Vent";
-	public static final Integer timerFirstSpell = 30;
-	public static final Integer windNeedFirstSpell = 40;
-	public static final Integer rangeFirstSpell = 10;
+	public static final Integer timerFirstSpell = 10;
+	public static final Integer windNeedFirstSpell = 25;
+	public static final Integer rangeFirstSpell = 15;
 	public static final Double damageFirstSpell = 4.;
 	
-	public static final String nameSecondSpell = "§3Tornade";
-	public static final Integer timerSecondSpell = 15;
-	public static final Integer windNeedSecondSpell = 30;
-	public static final Integer rangeSecondSpell = 10;
-	public static final Integer tickNauseaSecondSpell = 100;
-	public static final Double powerVectorSecondSpell = 1.5;
+	public static final String nameSecondSpell = "§3Tourbillon";
+	public static final Integer timerSecondSpell = 10;
+	public static final Integer windNeedSecondSpell = 25;
+	public static final Integer rangeSecondSpell = 15;
 	
 	private ItemStack bow;
 	private Integer windLevel;
@@ -58,6 +56,7 @@ public class JetVac extends Skylander {
 		ItemManager.giveColorArmor(player, Color.WHITE);
 						
 		player.setLevel(windLevel);
+		player.setAllowFlight(true);
 		
 		bow = getItemWeapon();
 		
@@ -71,21 +70,40 @@ public class JetVac extends Skylander {
 	private Boolean updateWindLevel(Integer value) {
 		if (windLevel + value >= 0) {
 			windLevel += value;
-			
-			if (windLevel <= windNeedPunchPassif && bow.containsEnchantment(Enchantment.ARROW_KNOCKBACK)) {
-				bow.removeEnchantment(Enchantment.ARROW_KNOCKBACK);
-				player.updateInventory();
-			}
-			
 			player.setLevel(windLevel);
-			
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
+	public void onStart() { 
+		new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				if (!alive || !plugin.game.isState(GameState.FIGHTING)) {
+					cancel();
+					return;
+				}
+				
+				if (player.isFlying()) {
+					windLevel -= windNeedFly;
+					if (windLevel <= 0) {
+						windLevel = 0;
+						player.setAllowFlight(false);
+					}
+					player.setLevel(windLevel);
+				}
+			}
+		}.runTaskTimer(plugin, 0, 1);
+		
+		return; 
+	}
+	
 	public void onSneak() { 
+		player.setAllowFlight(true);
+		
 		new BukkitRunnable() {
 			
 			@Override
@@ -95,11 +113,8 @@ public class JetVac extends Skylander {
 					return;
 				}
 				
-				player.setLevel(++windLevel);
-				
-				if (windLevel == windNeedPunchPassif) {
-					bow.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
-					player.updateInventory();
+				if (player.isFlying() == false) {
+					player.setLevel(++windLevel);	
 				}
 			}
 		}.runTaskTimer(plugin, 0, 2);
@@ -107,40 +122,38 @@ public class JetVac extends Skylander {
 		return; 
 	}
 	
-	public void passif_DoubleJump() {
-		if (updateWindLevel(- windNeedJumpPassif)) {
-	        Vector jump = player.getLocation().getDirection().multiply(1.2).setY(1);
-	        
-	        player.setVelocity(jump);
-		} else {
-			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-			player.sendMessage(Constants.prefixMessage + "Vous n'avez pas assez d'air pour utiliser votre §3Double Saut§f.");
-		}
-	}
-	
 	public void firstSpell_Damage() {
 		if (checkCooldown(nameFirstSpell, true)) {
 			if (updateWindLevel(- windNeedFirstSpell)) {
-				Skylander skylanderTarget = SpellUtils.targetPlayer(this, rangeFirstSpell, null);
+				Skylander skylanderTarget = SpellUtils.targetPlayer(this, rangeFirstSpell, 1.5, 
+					(location) -> {
+				        location.getWorld().spawnParticle(
+					        Particle.EXPLOSION_LARGE, 
+					        location, 
+					        2, 
+					        0.05, 0.05, 0.05,
+					        0
+				        );
+					}
+				);
 				
 				if (skylanderTarget == null ) {
 					player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-					player.sendMessage(Constants.prefixMessage + "Aucun joueur trouvé.");
-					return;
+					player.sendMessage(Constants.prefixMessage + "Vous n'avez touché personne avec votre "+ nameFirstSpell +"§f.");
 				} else {
 					Player playerTarget = skylanderTarget.getPlayer();
 
 					playerTarget.playSound(playerTarget.getLocation(), Sound.BLOCK_POWDER_SNOW_BREAK, 1, 1);
 					playerTarget.sendMessage(Constants.prefixMessage+ "Vous venez d'être toucher par la compétence "+ nameFirstSpell +"§f de §3"+ player.getName() +"§f.");
 					playerTarget.damage(damageFirstSpell, player);
-					playerTarget.setVelocity(player.getLocation().getDirection().clone().multiply(2.));
+					playerTarget.setVelocity(player.getLocation().getDirection().clone().add(new Vector(0., 0.2, 0.)).multiply(2.));
 					
 					player.playSound(player.getLocation(), Sound.BLOCK_POWDER_SNOW_BREAK, 1, 1);
 					player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre compétence "+ nameFirstSpell +"§f sur §3"+ playerTarget.getName() +"§f.");
-					
-					addCooldown(nameFirstSpell, timerFirstSpell);
-					return;
 				}
+				
+				addCooldown(nameFirstSpell, timerFirstSpell);
+				return;
 			} else {
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
 				player.sendMessage(Constants.prefixMessage + "Vous n'avez pas assez d'air pour utiliser " + nameFirstSpell + "§f.");
@@ -152,27 +165,60 @@ public class JetVac extends Skylander {
 	public void secondSpell_Tornado() {
 		if (checkCooldown(nameSecondSpell, true)) {
 			if (updateWindLevel(- windNeedSecondSpell)) {
-				Skylander skylanderTarget = SpellUtils.targetPlayer(this, rangeSecondSpell, null);
+				Skylander skylanderTarget = SpellUtils.targetPlayer(this, rangeSecondSpell, 1., 
+					(location) -> {
+						location.getWorld().spawnParticle(
+							Particle.EXPLOSION_NORMAL, 
+							location, 
+						    1, 
+						    0., 0., 0.,
+						    0
+					    );
+					}
+				);
 				
 				if (skylanderTarget == null ) {
 					player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-					player.sendMessage(Constants.prefixMessage + "Aucun joueur trouvé.");
-					return;
+					player.sendMessage(Constants.prefixMessage + "Vous n'avez touché personne avec votre "+ nameSecondSpell + "§f.");
 				} else {
 					Player playerTarget = skylanderTarget.getPlayer();
 					
-					ParticleUtils.tornadoParticule(playerTarget.getLocation(), Particle.SMOKE_NORMAL);
-					SpellUtils.tornado(plugin, skylanderTarget);
-					
 					playerTarget.playSound(playerTarget.getLocation(), Sound.BLOCK_POWDER_SNOW_BREAK, 1, 1);
-					playerTarget.sendMessage(Constants.prefixMessage+ "Vous venez d'être toucher par la compétence "+ nameFirstSpell +"§f de §3"+ player.getName() +"§f.");
+					playerTarget.sendMessage(Constants.prefixMessage+ "Vous venez d'être toucher par la compétence "+ nameSecondSpell +"§f de §3"+ player.getName() +"§f.");
 					
 					player.playSound(player.getLocation(), Sound.BLOCK_POWDER_SNOW_BREAK, 1, 1);
 					player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre compétence "+ nameSecondSpell +"§f sur §3"+ playerTarget.getName() +"§f.");
 					
-					addCooldown(nameSecondSpell, timerSecondSpell);
-					return;
+					ParticleUtils.tornadoParticule(playerTarget.getLocation(), Particle.EXPLOSION_NORMAL);
+					
+					new BukkitRunnable() {
+						private Integer timer = 100;
+						private float yaw = 0;
+						private double yOffset = 0;
+						 
+						@Override
+						public void run() {
+							if (!plugin.game.isState(GameState.FIGHTING) || !alive || timer == 0) {
+								cancel();
+								return;
+							}
+							
+							yOffset += 0.003;
+				            yaw += 10;
+				            if (yaw >= 360) yaw -= 360;
+				            
+				            Location loc = playerTarget.getLocation();
+				            loc.setYaw(yaw);
+				            loc.setY(loc.getY() + yOffset);
+				            playerTarget.teleport(loc);
+							
+							timer--;
+						}
+					}.runTaskTimer(plugin, 0, 1);
 				}
+				
+				addCooldown(nameSecondSpell, timerSecondSpell);
+				return;
 			} else {
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
 				player.sendMessage(Constants.prefixMessage + "Vous n'avez pas assez d'air pour utiliser " + nameSecondSpell + "§f.");
@@ -187,11 +233,11 @@ public class JetVac extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("   ▶§3" + name + "§f◀");
 		player.sendMessage("\n");
-		player.sendMessage("≫ "+ namePassif +"§f, vous avez un §eniveau d'air§f présent dans votre barre d'exp, vous pouvez utiliser §e"+ windNeedJumpPassif +" points d'air§f pour effectuer un §edouble saut§f. En plus, lorsque vous êtes au dessus de §e"+ windNeedPunchPassif +" points d'air§f vous gagnez l'effet §ePunch§f sur votre arc.");
+		player.sendMessage("≫ "+ namePassif +"§f, vous avez un §eniveau d'air§f présent dans votre barre d'exp, vous pouvez voler en consummant votre air.");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameFirstSpell + "§f, vous infligez §e"+ damageFirstSpell +" dégats§f et renvoie en arrière le joueur ciblé, cette compétence demande §e"+ windNeedFirstSpell +" points d'air§f. §b(" + timerFirstSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, vous §eéjectez en arrière§f le joueur sur la trajectoire de votre regard, de plus le joueur touché subit §e"+ damageFirstSpell +" dégats§f, cette compétence demande §e"+ windNeedFirstSpell +" points d'air§f. §b(" + timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameSecondSpell + "§f, vous propulsez en l'air le joueur ciblé, celui-ci obtient un effet Nauséa pendant "+ tickNauseaSecondSpell +", cette compétence demande §e"+ windNeedSecondSpell +" points d'air§f. §b(" + timerSecondSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameSecondSpell + "§f, vous §eenvoyez en l'air§f le joueur sur la trajection de votre regard, cette compétence demande §e"+ windNeedSecondSpell +" points d'air§f. §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");
@@ -256,7 +302,6 @@ public class JetVac extends Skylander {
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		item.setItemMeta(meta);
 		item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
-		item.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
 		
 		return item;
 	}
