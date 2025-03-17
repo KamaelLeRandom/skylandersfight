@@ -8,6 +8,3 @@ commands:
     description: "Commande principale du plugin Skylander"
     permission: skylander.use
     aliases: [s]
-    
-depend:
-  - LibsDisguises
