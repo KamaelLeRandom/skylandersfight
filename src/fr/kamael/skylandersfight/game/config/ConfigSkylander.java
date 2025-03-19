@@ -13,6 +13,7 @@ import fr.kamael.skylandersfight.skylanders.air.Warnado;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
+import fr.kamael.skylandersfight.skylanders.magie.Voodood;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
@@ -27,6 +28,7 @@ public class ConfigSkylander {
 		ArrayList<ItemStack> magie = new ArrayList<>();
 		// TODO : Remplir les Skylanders Magie.
 		magie.add(Spyro.getSignatureItem());
+		magie.add(Voodood.getSignatureItem());
 		this.data.put(Element.MAGIE, magie);
 
 		ArrayList<ItemStack> tech = new ArrayList<>();

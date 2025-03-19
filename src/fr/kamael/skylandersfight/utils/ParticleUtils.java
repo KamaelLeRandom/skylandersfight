@@ -1,5 +1,6 @@
 package fr.kamael.skylandersfight.utils;
 
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -7,6 +8,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import fr.kamael.skylandersfight.Plugin;
 
 public class ParticleUtils {
+	public static void teleportationParticule(Location loc) {
+		for (int i = 0; i <= 4; i++) {
+			loc.getWorld().playEffect(loc, Effect.ENDER_SIGNAL, 0);
+		}
+	}
+	
 	public static void tornadoParticule(Location loc, Particle p) {
 		Float y = (float) loc.getY();
 		Float radius = 0f;

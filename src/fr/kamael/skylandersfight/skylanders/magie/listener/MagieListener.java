@@ -17,6 +17,7 @@ import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
+import fr.kamael.skylandersfight.skylanders.magie.Voodood;
 
 public class MagieListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -39,6 +40,8 @@ public class MagieListener implements Listener {
 
             if (skylander instanceof Spyro) {
             	handleSpyro((Spyro) skylander, action, nameItem);
+            } else if (skylander instanceof Voodood) {
+            	handleVoodood((Voodood) skylander, action, nameItem);
             }
 		}
 		catch (Exception e) {
@@ -51,6 +54,16 @@ public class MagieListener implements Listener {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(Spyro.nameFirstSpell, skylander::firstSpell_Dash);
         actions.put(Spyro.nameSecondSpell, skylander::secondSpell_Fly);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleVoodood(Voodood skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(Voodood.nameFirstSpell, skylander::firstSpell_Stun);
+        actions.put(Voodood.nameSecondSpell, skylander::secondSpell_Teleportation);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();
