@@ -15,6 +15,7 @@ import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
+import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy;
 import net.minecraft.network.protocol.game.PacketPlayOutNamedEntitySpawn;
@@ -25,36 +26,42 @@ import net.minecraft.server.network.PlayerConnection;
 public class PlayerUtils {
 	private Plugin plugin = Plugin.plugin;
 	private HashMap<Player, String> nicked = new HashMap<Player, String>();
-	
+	private HashMap<Player, String> disguised = new HashMap<Player, String>();
+		
     public Boolean isNicked(Player player) {
-        if (nicked.containsKey(player)) {
-            return true;
-        }
-        return false;
+    	try {
+    		if (nicked.containsKey(player)) {
+                return true;
+            }
+            return false;
+    	} catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(PlayerUtils, isNicked) : §7"+e.getMessage());	
+    		return false;
+    	}
     }
 	
     public void nickPlayer(Player player, String name) {
-        if (!isNicked(player)) {
-            String s = player.getName();
-            try {
+    	try {
+            if (!isNicked(player)) {
+                String s = player.getName();
+                
                 GameProfile playerProfile = ((CraftPlayer) player).getHandle().getProfile();
                 Field ff = playerProfile.getClass().getDeclaredField("name");
                 ff.setAccessible(true);
                 ff.set(playerProfile, name);
                 player.setPlayerListName(name);
-            } catch (Exception e) {
-                e.printStackTrace();
+                
+                nicked.put(player, s);
+                
+                for (Player pl : Bukkit.getOnlinePlayers()) {
+                    pl.hidePlayer(plugin, player);
+                    pl.showPlayer(plugin, player);
+                }
             }
-            
-            nicked.put(player, s);
-            
-            for (Player pl : Bukkit.getOnlinePlayers()) {
-                pl.hidePlayer(plugin, player);
-                pl.showPlayer(plugin, player);
-            }
-
-            changeSkin(player, name);
-        }
+    	} catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(PlayerUtils, nickPlayer) : §7"+e.getMessage());	
+			return;
+    	}
     }
 
     public void unnickPlayer(Player player) {
@@ -82,50 +89,94 @@ public class PlayerUtils {
         }
     }
     
-    public static void changeSkin(Player player, String skinname) {
-        if (player == null) return;
+	public void unnickAllPlayer() {
+		try {
+			for (Player player : nicked.keySet()) {
+				unnickPlayer(player);
+			}
+			return;
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(PlayerUtils, unnickAllPlayer) : §7"+e.getMessage());	
+			return;
+		}
+	}
+    
+	public Boolean isDisguised(Player player) {
+		try {
+			if (disguised.containsKey(player) ) {
+				return true;
+			}
+			return false;
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(PlayerUtils, isDisguised) : §7"+e.getMessage());	
+			return false;
+		}
+	}
+	
+    public void changeSkin(Player player, String skinname) {
+    	try {
+    		if (player == null || skinname == null || skinname.isEmpty() || skinname.isBlank())
+    			throw new Exception("Les attributs ne peuvent pas être nul.");
+    		
+            CraftPlayer craftPlayer = (CraftPlayer) player;
+            EntityPlayer entityPlayer = craftPlayer.getHandle();
+            GameProfile gameProfile = entityPlayer.getProfile();
+            
+            Bukkit.getOnlinePlayers().stream()
+            	.filter(p -> p != player)
+            	.forEach(onlinePlayer -> {
+            		CraftPlayer onlineCraftPlayer = (CraftPlayer) onlinePlayer;
+            		PlayerConnection onlineConnection = onlineCraftPlayer.getHandle().b;
 
-        CraftPlayer craftPlayer = (CraftPlayer) player;
-        EntityPlayer entityPlayer = craftPlayer.getHandle();
-        GameProfile gameProfile = entityPlayer.getProfile();
-
-        Bukkit.getOnlinePlayers().stream()
-                .filter(p -> p != player)
-                .forEach(onlinePlayer -> {
-                    CraftPlayer onlineCraftPlayer = (CraftPlayer) onlinePlayer;
-                    PlayerConnection onlineConnection = onlineCraftPlayer.getHandle().b;
-
-                    // Supprime le joueur pour les autres joueurs
-                    onlineConnection.sendPacket(new PacketPlayOutPlayerInfo(
-                            PacketPlayOutPlayerInfo.EnumPlayerInfoAction.d, // REMOVE_PLAYER en 1.17
-                            entityPlayer
+            		// Packet pour supprimer le joueur pour les autres joueurs.
+            		onlineConnection.sendPacket(new PacketPlayOutPlayerInfo(
+                        PacketPlayOutPlayerInfo.EnumPlayerInfoAction.d,
+                        entityPlayer
                     ));
 
-                    // Mise à jour des textures
-                    gameProfile.getProperties().removeAll("textures");
-                    gameProfile.getProperties().put("textures", getTexturesProperty(skinname));
+            		// Mise à jour des textures
+            		gameProfile.getProperties().removeAll("textures");
+            		gameProfile.getProperties().put("textures", getTexturesProperty(skinname));
 
-                    // Réajoute le joueur avec la nouvelle skin
-                    onlineConnection.sendPacket(new PacketPlayOutPlayerInfo(
-                            PacketPlayOutPlayerInfo.EnumPlayerInfoAction.a, // ADD_PLAYER en 1.17
-                            entityPlayer
-                    ));
+            		// Packet pour réajouter le joueur avec la nouvelle skin
+            		onlineConnection.sendPacket(new PacketPlayOutPlayerInfo(
+                        PacketPlayOutPlayerInfo.EnumPlayerInfoAction.a, // ADD_PLAYER en 1.17
+                        entityPlayer
+            		));
 
-                    int entityId = entityPlayer.getId();
-                    
-                    onlineConnection.sendPacket(new PacketPlayOutEntityDestroy(entityId));
-                    onlineConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(entityPlayer));
-                });
+            		int entityId = entityPlayer.getId();
+                
+            		onlineConnection.sendPacket(new PacketPlayOutEntityDestroy(entityId));
+            		onlineConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(entityPlayer));
+            	}
+            );
+    	}
+    	catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(PlayerUtils, changeSkin) : §7"+e.getMessage());	
+			return;
+    	}
     }
 
-    public static Property getTexturesProperty(String playerName) {
+    public void revertSkin(Player player) {
+    	try {
+
+            
+            return;
+    	}
+    	catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(PlayerUtils, revertSkin) : §7"+e.getMessage());	
+    		return;
+    	}
+    }
+    
+	public Property getTexturesProperty(String playerName) {
         try {
             // 1. Récupérer l'UUID du joueur
             String uuid = getUUIDFromName(playerName);
-            if (uuid == null) {
-                System.out.println("⚠️ Impossible de récupérer l'UUID pour le joueur: " + playerName);
-                return null;
-            }
+            if (uuid == null) 
+            	throw new Exception("UUID is null.");
 
             // 2. Récupérer les textures à partir de l'UUID
             URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
@@ -134,18 +185,14 @@ public class PlayerUtils {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
 
-            if (connection.getResponseCode() != 200) {
-                System.out.println("⚠️ Erreur Mojang API: Code " + connection.getResponseCode());
-                return null;
-            }
+            if (connection.getResponseCode() != 200)
+            	throw new Exception("Error Mojang API: Code "+ connection.getResponseCode());
 
             InputStreamReader reader = new InputStreamReader(connection.getInputStream());
             JsonObject json = new JsonParser().parse(reader).getAsJsonObject();
 
-            if (!json.has("properties") || json.getAsJsonArray("properties").size() == 0) {
-                System.out.println("⚠️ Aucune propriété trouvée pour " + playerName);
-                return null;
-            }
+            if (!json.has("properties") || json.getAsJsonArray("properties").size() == 0)
+            	throw new Exception("No Properties find for "+ playerName);
 
             // 3. Extraire la texture et sa signature
             JsonObject properties = json.getAsJsonArray("properties").get(0).getAsJsonObject();
@@ -154,12 +201,29 @@ public class PlayerUtils {
 
             return new Property("textures", texture, signature);
         } catch (Exception e) {
-            e.printStackTrace();
+			Bukkit.broadcastMessage(Constants.prefixError + "(PlayerUtils, getTexturesProperty) : §7"+e.getMessage());	
             return null;
         }
     }
+	
+	public Property getTexturesProperty(Player player) {
+		try {
+            CraftPlayer craftPlayer = (CraftPlayer) player;
+            EntityPlayer entityPlayer = craftPlayer.getHandle();
+            GameProfile gameProfile = entityPlayer.getProfile();
+            
+            if (gameProfile.getProperties().containsKey("textures"))
+            	return gameProfile.getProperties().get("textures").iterator().next();
+            else
+            	throw new Exception("No Texture find for "+ player.getName());
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(PlayerUtils, getTexturesProperty) : §7"+e.getMessage());	
+            return null;
+		}
+	}
 
-    public static String getUUIDFromName(String playerName) {
+    private String getUUIDFromName(String playerName) {
         try {
             URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
