@@ -32,10 +32,10 @@ import fr.kamael.skylandersfight.utils.manager.ItemManager;
 public class StarStrike extends Skylander {
 	public static final String name = "Star Strike";
 	
-	public static final String nameWeapon = "§5";
+	public static final String nameWeapon = "§5Étoile";
 	
-	public static final String namePassif = "§5Étoile";
-	public static final Integer delayMissPassif = 5;
+	public static final String namePassif = "§5Enchaînement";
+	public static final Integer delayMissPassif = 8;
 	
 	public static final String nameFirstSpell = "§5Chute de Météores";
 	public static final Integer timerFirstSpell = 30;
@@ -62,20 +62,24 @@ public class StarStrike extends Skylander {
 		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());
-		inv.setItem(1, getItemWeapon(2));
+		inv.setItem(1, getItemWeapon(1));
 		inv.setItem(2, getItemSecondSpell());
 		inv.setItem(9, new ItemStack(Material.ARROW));
 	}
 	
 	public Boolean onHitBow(Skylander skylanderDamager) { 
-		stackPassif--;
-		player.setLevel(stackPassif);
-		return false;
+		if (stackPassif > 0) {
+			stackPassif--;
+			player.setLevel(stackPassif);
+		}
+		return false; 
 	}
 	
 	public Boolean onHitSword(Skylander skylanderDamager) { 
-		stackPassif--;
-		player.setLevel(stackPassif);
+		if (stackPassif > 0) {
+			stackPassif--;
+			player.setLevel(stackPassif);
+		}
 		return false; 
 	}
 	
@@ -87,9 +91,14 @@ public class StarStrike extends Skylander {
 
 		return false;
 	}
+	
+	public Boolean onDamageSword(Skylander skylanderHit) { 
+		passif_Reset();
+		return false; 
+	}
 
 	public Double addDamage(Double damage, Skylander skylanderHit) { 
-		return damage + 2 + stackPassif; 
+		return damage + stackPassif; 
 	}
 	
 	public void firstSpell_Meteor() {
@@ -99,10 +108,10 @@ public class StarStrike extends Skylander {
 			
 			Location location = player.getLocation().clone();
 			new StarStrikeFireball(this, location.clone().add(0, 10, 0));
-			new StarStrikeFireball(this, location.clone().add(2.5, 10, 2.5));
-			new StarStrikeFireball(this, location.clone().add(-2.5, 10, 2.5));
-			new StarStrikeFireball(this, location.clone().add(2.5, 10, -2.5));
-			new StarStrikeFireball(this, location.clone().add(-2.5, 10, -2.5));
+			new StarStrikeFireball(this, location.clone().add(4.5, 10, 4.5));
+			new StarStrikeFireball(this, location.clone().add(-4.5, 10, 4.5));
+			new StarStrikeFireball(this, location.clone().add(4.5, 10, -4.5));
+			new StarStrikeFireball(this, location.clone().add(-4.5, 10, -4.5));
 			
 			addCooldown(nameFirstSpell, timerFirstSpell);
 			return;
@@ -143,7 +152,7 @@ public class StarStrike extends Skylander {
 							Player playerAround = skylanderAround.getPlayer();
 							
 							if (playerAround.getLocation().distance(player.getLocation()) <= rangeSecondSpell) {
-								ParticleUtils.lineParticule(Particle.FIREWORKS_SPARK, player.getLocation(), playerAround.getLocation());
+								ParticleUtils.lineParticule(Particle.FIREWORKS_SPARK, player.getLocation().clone().add(0, 1., 0), playerAround.getLocation().clone().add(0, 1., 0));
 							} else {
 								listSkylanderRemove.add(skylanderAround);
 							}
@@ -160,13 +169,18 @@ public class StarStrike extends Skylander {
 		}
 	}
 	
+ 	public void passif_Reset() {
+ 		stackPassif = 0;
+ 		player.setLevel(stackPassif);
+ 	}
+ 	
 	public void sendDescription() {
 		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");
 		player.sendMessage("   ▶§5" + name + "§f◀");
 		player.sendMessage("\n");
-		player.sendMessage("≫ §5" + namePassif + "§f, .");
+		player.sendMessage("≫ §5" + namePassif + "§f, lorsque vous touchez avec votre " + nameWeapon + " vous §dgagnez 1 dégats supplémentaires§f sur la prochaine (pas de limite) et vous §drécupérez direcement§f votre "+ nameWeapon +"§f, dans le cas contraire vous §cperdez vos dégats supplémentaires§f et devez §cattendre "+ delayMissPassif +" secondes§f pour récuperer votre "+ nameWeapon +"§f.");
 		player.sendMessage("\n");
 		player.sendMessage("≫ §5" + nameFirstSpell + "§f, vous invoquez des météores qui tombe du ciel, lorsque les météores touchent le sol, les §djoueurs proche§f (" + rangeFireballFirstSpell + " blocs) sont §détoudit§f pendant §d" + SkylanderConverter.convertTicks(tickStunFirstSpell) + "§f et subira §d" + damageFireballFirstSpell + " dégats§f. §b(" + timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
@@ -196,7 +210,7 @@ public class StarStrike extends Skylander {
 	public static ItemStack getItemFirstSpell() {
 		List<String> lore = Arrays.asList("§fVous invoquez une pluie de météore qui étourdit et inflige des dégats aux joueurs proche.");
 		
-		ItemStack item = new ItemStack(Material.BLAZE_ROD, 1);
+		ItemStack item = new ItemStack(Material.FIRE_CHARGE, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameFirstSpell);
 		meta.setUnbreakable(true);
@@ -212,7 +226,7 @@ public class StarStrike extends Skylander {
 	public static ItemStack getItemSecondSpell() {
 		List<String> lore = Arrays.asList("§fVous devenez invulnérable pendant "+ SkylanderConverter.convertTicks(tickImmoSecondSpell) +"s, vous créez un lien etre vous et les joueurs proche,", "qui immobilise les joueurs liées.");
 		
-		ItemStack item = new ItemStack(Material.PURPLE_DYE, 1);
+		ItemStack item = new ItemStack(Material.GLOWSTONE, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameSecondSpell);
 		meta.setUnbreakable(true);

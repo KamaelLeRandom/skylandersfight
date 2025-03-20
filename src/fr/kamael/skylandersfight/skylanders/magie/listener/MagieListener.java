@@ -37,13 +37,14 @@ public class MagieListener implements Listener {
             Player player = (Player) projectile.getShooter();
             Skylander skylander = plugin.game.getPlayer(player).getSkylander();
             
-            if (skylander instanceof StarStrike && skylander.isAlive()) {
+            if (skylander instanceof StarStrike && skylander.isAlive() && ((Snowball) projectile).getItem().getItemMeta().getDisplayName().equals(StarStrike.nameWeapon)) {
                 if (event.getHitEntity() instanceof Player) {
                 	player.getInventory().addItem(StarStrike.getItemWeapon(1));
                 } else {
                     new BukkitRunnable() {                    	
                         @Override
                         public void run() {
+                        	((StarStrike) skylander).passif_Reset();
                         	player.getInventory().addItem(StarStrike.getItemWeapon(1));
                         	cancel();
                         	return;
