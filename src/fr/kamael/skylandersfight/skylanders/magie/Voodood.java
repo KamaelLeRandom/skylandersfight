@@ -124,7 +124,7 @@ public class Voodood extends Skylander {
 				return;
 			}
 			
-			if (lastSkylanderHit.isAlive()) {
+			if (!lastSkylanderHit.isAlive()) {
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
 				player.sendMessage(Constants.prefixMessage + "Le joueur " + lastSkylanderHit.getPlayer().getName() + " a été éliminé.");
 				lastSkylanderHit = null;
