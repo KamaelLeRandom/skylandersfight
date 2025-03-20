@@ -13,6 +13,7 @@ import fr.kamael.skylandersfight.skylanders.air.Warnado;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
+import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
@@ -41,6 +42,8 @@ public class SkylanderConverter {
 				return new Spyro(player);
 			case Voodood.name:
 				return new Voodood(player);
+			case StarStrike.name:
+				return new StarStrike(player);
 			case TriggerHappy.name:
 				return new TriggerHappy(player);
 			case StealthElf.name:

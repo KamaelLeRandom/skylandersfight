@@ -53,4 +53,18 @@ public class ParticleUtils {
 			}
 		}.runTaskTimer(plugin, 0, 1);
 	}
+	
+	public static void lineParticule(Particle p, Location locationStart, Location locationEnd) {
+        double distance = locationStart.distance(locationEnd);
+        int particleCount = (int) (distance * 1.5);
+        double deltaX = (locationEnd.getX() - locationStart.getX()) / particleCount;
+        double deltaY = (locationEnd.getY() - locationStart.getY()) / particleCount;
+        double deltaZ = (locationEnd.getZ() - locationStart.getZ()) / particleCount;
+        for (int i = 0; i <= particleCount; i++) {
+            double x = locationStart.getX() + deltaX * i;
+            double y = locationStart.getY() + deltaY * i;
+            double z = locationStart.getZ() + deltaZ * i;
+            locationStart.getWorld().spawnParticle(p, x, y, z, 0, 0, 0, 0, 0);
+        }
+	}
 }
