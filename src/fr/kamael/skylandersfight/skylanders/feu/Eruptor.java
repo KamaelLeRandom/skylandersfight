@@ -23,6 +23,7 @@ import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.feu.entity.EruptorFireball;
+import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class Eruptor  extends Skylander {
@@ -154,7 +155,19 @@ public class Eruptor  extends Skylander {
 	}
 	
 	public void sendDescription() {
-
+		player.sendMessage("\n");
+		player.sendMessage("===============");
+		player.sendMessage("\n");
+		player.sendMessage("   ▶" + element.getColor() + name + "§f◀");
+		player.sendMessage("\n");
+		player.sendMessage("≫ " + namePassif +"§f, .");
+		player.sendMessage("\n");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, . §b(" + Spyro.timerFirstSpell + "s de recharge)");
+		player.sendMessage("\n");
+		player.sendMessage("≫ " + nameSecondSpell + "§f, . §b(" + Spyro.timerSecondSpell + "s de recharge)");
+		player.sendMessage("\n");
+		player.sendMessage("===============");
+		player.sendMessage("\n");
 	}
 	
 	public static ItemStack getSignatureItem() {

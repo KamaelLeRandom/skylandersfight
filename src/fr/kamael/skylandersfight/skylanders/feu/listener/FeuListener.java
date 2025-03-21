@@ -17,6 +17,7 @@ import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
+import fr.kamael.skylandersfight.skylanders.feu.Sunburn;
 
 public class FeuListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -39,6 +40,8 @@ public class FeuListener implements Listener {
 
             if (skylander instanceof Eruptor) {
             	handleEruptor((Eruptor) skylander, action, nameItem);
+            } else if (skylander instanceof Sunburn) {
+            	handleSunburn((Sunburn) skylander, action, nameItem);
             }
 		}
 		catch (Exception e) {
@@ -51,6 +54,16 @@ public class FeuListener implements Listener {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(Eruptor.nameFirstSpell, skylander::firstSpell_Fireball);
         actions.put(Eruptor.nameSecondSpell, skylander::secondSpell_Lava);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleSunburn(Sunburn skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(Sunburn.nameFirstSpell, skylander::firstSpell_Fire);
+        actions.put(Sunburn.nameSecondSpell, skylander::secondSpell_Teleportation);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();

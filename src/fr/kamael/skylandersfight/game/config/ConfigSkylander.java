@@ -12,6 +12,7 @@ import fr.kamael.skylandersfight.skylanders.air.Scratch;
 import fr.kamael.skylandersfight.skylanders.air.Warnado;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
+import fr.kamael.skylandersfight.skylanders.feu.Sunburn;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
@@ -55,6 +56,7 @@ public class ConfigSkylander {
 		ArrayList<ItemStack> feu = new ArrayList<>();
 		// TODO : Remplir les Skylanders Feu.
 		feu.add(Eruptor.getSignatureItem());
+		feu.add(Sunburn.getSignatureItem());
 		this.data.put(Element.FEU, feu);
 		
 		ArrayList<ItemStack> eau = new ArrayList<>();
