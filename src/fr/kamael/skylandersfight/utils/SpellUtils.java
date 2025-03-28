@@ -47,6 +47,14 @@ public class SpellUtils {
 		}
 	}
 	
+	public static void damage(Skylander skylander, Double value) {
+		Player player = skylander.getPlayer();
+		
+		if (player.getHealth() - value > 0) {
+			player.setHealth(player.getHealth() - value);
+		}
+	}
+	
 	public static void heal(Skylander skylander, Double value, Boolean animation) {
 		Player player = skylander.getPlayer();
 		

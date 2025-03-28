@@ -12,6 +12,7 @@ import fr.kamael.skylandersfight.skylanders.air.Scratch;
 import fr.kamael.skylandersfight.skylanders.air.Warnado;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
+import fr.kamael.skylandersfight.skylanders.feu.Smolderdash;
 import fr.kamael.skylandersfight.skylanders.feu.Sunburn;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
@@ -55,6 +56,8 @@ public class SkylanderConverter {
 				return new Eruptor(player);
 			case Sunburn.name:
 				return new Sunburn(player);
+			case Smolderdash.name: 
+				return new Smolderdash(player);
 			case SlamBam.name:
 				return new SlamBam(player);
 			case Terrafin.name: 
