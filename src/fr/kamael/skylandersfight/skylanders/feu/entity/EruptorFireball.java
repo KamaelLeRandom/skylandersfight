@@ -1,5 +1,7 @@
 package fr.kamael.skylandersfight.skylanders.feu.entity;
 
+import java.util.ArrayList;
+
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -16,7 +18,7 @@ import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.utils.SpellUtils;
 
 public class EruptorFireball extends CustomEntity {
-	public static final Double rangeFireballExplosion = 5.; 
+	public static final Double rangeFireballExplosion = 3.; 
 
 	public EruptorFireball(Eruptor eruptor, Location location) {
 		super(eruptor, location);
@@ -33,25 +35,27 @@ public class EruptorFireball extends CustomEntity {
 			private int timer = 60;
 			
 			@Override
-			public void run() {
-				if (timer == 0 || !skylander.isAlive() || !plugin.game.isState(GameState.FIGHTING)) {
-					removeEntity();
-					cancel();
-					return;
-				}
+			public void run() {				
+				ArrayList<Skylander> listSkylanders = SpellUtils.skylanderAround(plugin, skylander, fireball.getLocation(), rangeFireballExplosion, 2.5, rangeFireballExplosion);
 				
-				if (fireball.isOnGround()) {
-					fireball.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, fireball.getLocation(), 1, 0., 0., 0.);
-					
-					for (Skylander skylanderHit : SpellUtils.skylanderAround(plugin, skylander, fireball.getLocation(), rangeFireballExplosion, 2.5, rangeFireballExplosion)) {
+				if (!listSkylanders.isEmpty()) {
+					for (Skylander skylanderHit : listSkylanders) {
 						Player playerHit = skylanderHit.getPlayer();
 						
 						playerHit.playSound(fireball.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
 						playerHit.sendMessage(Constants.prefixMessage+ "Vous venez d'être touché par l'explosion de la compétence "+ Eruptor.nameFirstSpell + "§f de §4"+ player.getName() +"§f.");
 						playerHit.damage(Eruptor.damageFirstSpell, player);
 						playerHit.setFireTicks(8 * 20);
+						fireball.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, fireball.getLocation(), 1, 0., 0., 0.);
+
 					}
 					
+					removeEntity();
+					cancel();
+					return;
+				}
+				
+				if (timer == 0 || fireball.isDead() || !skylander.isAlive() || !plugin.game.isState(GameState.FIGHTING)) {
 					removeEntity();
 					cancel();
 					return;
@@ -82,7 +86,7 @@ public class EruptorFireball extends CustomEntity {
 			playerHit.setFireTicks(8 * 20);
 		}
 		
-		removeEntity();
+		this.entity.remove();
 		return;
 	}
 }

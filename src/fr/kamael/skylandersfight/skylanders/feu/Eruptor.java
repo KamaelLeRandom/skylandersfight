@@ -23,7 +23,6 @@ import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.feu.entity.EruptorFireball;
-import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class Eruptor  extends Skylander {
@@ -160,11 +159,11 @@ public class Eruptor  extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("   ▶" + element.getColor() + name + "§f◀");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + namePassif +"§f, .");
+		player.sendMessage("≫ " + namePassif +"§f, lorsque vous lancez une compétence, vous gagnez §6"+ pourcentResisPassif*100 +"%§f de §6Résistance§f pendant "+ durationPassif +" secondes.");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameFirstSpell + "§f, . §b(" + Spyro.timerFirstSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, vous lancez une §6boule de feu§f qui explose si elle se trouve proche d'un joueur infligeant "+ damageFirstSpell +". §b(" + timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameSecondSpell + "§f, . §b(" + Spyro.timerSecondSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameSecondSpell + "§f, vous entrez en éruption créant une zone de §6lave§f autour de vous. §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");
@@ -222,7 +221,7 @@ public class Eruptor  extends Skylander {
 	public static ItemStack getItemWeapon() {
 		ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName("§2Lave");
+		meta.setDisplayName("§4Lave");
 		meta.setUnbreakable(true);
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
