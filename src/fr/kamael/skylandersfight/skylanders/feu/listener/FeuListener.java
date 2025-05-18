@@ -91,7 +91,6 @@ public class FeuListener implements Listener {
         try {
             if (plugin.game == null || !plugin.game.isState(GameState.FIGHTING))
                 return;
-            
             if (event.getState() == PlayerFishEvent.State.REEL_IN || event.getState() == PlayerFishEvent.State.IN_GROUND) {
                 Location hookLocation = event.getHook().getLocation();
                 Player player = event.getPlayer();

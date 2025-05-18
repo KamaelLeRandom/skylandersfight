@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -113,10 +114,19 @@ public class LightningRod extends Skylander {
 			player.setAllowFlight(true);
 			
 			new BukkitRunnable() {
-				private Integer timer = durationSecondSpell;
+				private Integer timer = durationSecondSpell * 2;
 				
 				@Override
 				public void run() {
+				    Location footLocation = player.getLocation().clone().subtract(0, 0.1, 0);
+				    player.getWorld().spawnParticle(
+				        Particle.CLOUD,
+				        footLocation,
+				        15,
+				        0.3, 0.05, 0.3,
+				        0.01
+				    );
+					
 					if (timer == 0 || !alive || !plugin.game.isState(GameState.FIGHTING)) {
 						player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_ELYTRA, 1, 1);
 						player.sendMessage(Constants.prefixMessage + "Votre compétence "+ nameFirstSpell +"§f vient de prendre fin.");
@@ -128,7 +138,7 @@ public class LightningRod extends Skylander {
 				
 					timer--;
 				}
-			}.runTaskTimer(plugin, 0, 20);
+			}.runTaskTimer(plugin, 0, 10);
 			
 			addCooldown(nameSecondSpell, timerSecondSpell);
 		}

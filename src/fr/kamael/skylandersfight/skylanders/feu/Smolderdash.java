@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -44,7 +45,7 @@ public class Smolderdash extends Skylander {
 	public static final String nameSecondSpell = "§4Combustion";
 	public static final Integer timerSecondSpell = 30;
 	public static final Double bonusForceSecondSpell = 0.2;
-	public static final Double autoDamageSecondSpell = 2.;
+	public static final Double autoDamageSecondSpell = 1.;
 	public static final Integer tickAutoDamageSecondSpell = 15;
 	
 	private Boolean isSecondSpellActive = false;
@@ -68,12 +69,15 @@ public class Smolderdash extends Skylander {
 	
 	public void passif_Jump(Location hookLocation) {
 		if (checkCooldown(namePassif, false)) {
-			// PARTICULES ????
+		    Particle.DustOptions dust = new Particle.DustOptions(Color.fromRGB(255, 100, 0), 1.5f);
+		    player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation().add(0, 0.1, 0), 15, 0.3, 0.1, 0.3, dust);
+		    player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation().add(0, 0.1, 0), 20, 0.3, 0.1, 0.3, 0.02);
+		    player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, player.getLocation().add(0, 0.1, 0), 5, 0.2, 0.1, 0.2, 0.05);
 			
 	        Location playerLocation = player.getLocation();
 	        Vector direction = hookLocation.toVector().subtract(playerLocation.toVector()).normalize();
-	        direction.multiply(1.5);
-	        direction.setY(0.4);
+	        direction.multiply(1.8);
+	        direction.setY(0.5);
 	        player.setVelocity(direction);
 	        
 	        addStatus(null, Status.ONEFALL);
@@ -106,12 +110,24 @@ public class Smolderdash extends Skylander {
 			force += bonusForceSecondSpell;
 			
 			new BukkitRunnable() {
+				private Integer timer = 0;
 				
 				@Override
 				public void run() {
 					if (!isSecondSpellActive || !alive || !plugin.game.isState(GameState.FIGHTING)) {
 						
-						// AJOUTER DES PARTICULES COMME SI LE JOUYEUR S'ETAIT ETEINT.
+				        for (int i = 0; i < 10; i++) {
+				            double xOffset = (plugin.random.nextDouble() * 2 - 1) * 1.2;
+				            double yOffset = (plugin.random.nextDouble() * 2);            
+				            double zOffset = (plugin.random.nextDouble() * 2 - 1) * 1.2;
+
+				            Location particleLocation =  player.getLocation().clone().add(xOffset, yOffset, zOffset);
+
+				            player.getWorld().spawnParticle(Particle.SMOKE_NORMAL, particleLocation, 0, 0, 0, 0, 0);
+				            if (plugin.random.nextDouble() < 0.2) {
+				                player.getWorld().spawnParticle(Particle.WATER_SPLASH, particleLocation, 0, 0, 0, 0, 0);
+				            }
+				        }
 						
 						player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
 						player.sendMessage(Constants.prefixMessage + "Vous venez de §cdésactiver§f votre compétence " + nameSecondSpell + "§f.");
@@ -123,15 +139,30 @@ public class Smolderdash extends Skylander {
 						return;
 					}
 					
-					if (player.getHealth() - autoDamageSecondSpell > 0) {
-						player.setHealth(player.getHealth() - autoDamageSecondSpell);
-					} else {
-						isSecondSpellActive = false;
+					if (timer % tickAutoDamageSecondSpell == 0) {
+						if (player.getHealth() - autoDamageSecondSpell > 0) {
+							player.setHealth(player.getHealth() - autoDamageSecondSpell);
+						} else {
+							isSecondSpellActive = false;
+						}
+						
+				        for (int i = 0; i < 10; i++) {
+				            double xOffset = (plugin.random.nextDouble() * 2 - 1) * 1.2;
+				            double yOffset = (plugin.random.nextDouble() * 2);            
+				            double zOffset = (plugin.random.nextDouble() * 2 - 1) * 1.2;
+
+				            Location particleLocation =  player.getLocation().clone().add(xOffset, yOffset, zOffset);
+
+				            player.getWorld().spawnParticle(Particle.FLAME, particleLocation, 0, 0, 0, 0, 0);
+				            if (plugin.random.nextDouble() < 0.2) {
+				                player.getWorld().spawnParticle(Particle.LAVA, particleLocation, 0, 0, 0, 0, 0);
+				            }
+				        }
 					}
-					
-					// AJOUTER DES PARTICULES DE FEU COMME SI LE JOUEUR BRULE
+
+					timer++;
 				}
-			}.runTaskTimer(plugin, 0, tickAutoDamageSecondSpell);
+			}.runTaskTimer(plugin, 0, 1);
 			
 			return;
 		}

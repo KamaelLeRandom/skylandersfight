@@ -33,7 +33,7 @@ public class Warnado extends Skylander {
 	public static final String nameWeapon = "§3Piques";
 	
 	public static final String namePassif = "§3Roulade";
-	public static final Integer nbMaxPassif = 3;
+	public static final Integer nbMaxPassif = 2;
 	public static final Double damagePassif = 3.;
 	
 	public static final String nameFirstSpell = "§3Tempête";

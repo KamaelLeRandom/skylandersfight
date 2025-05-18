@@ -77,7 +77,6 @@ public class Arena {
 	}
 	
 	public void removeArenaItem(ArenaItem item) {
-		item.removeEntity();
 		this.items.remove(item);
 		return;
 	}

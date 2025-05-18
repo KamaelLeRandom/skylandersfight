@@ -48,14 +48,14 @@ public class SmolderdashFireball extends CustomEntity {
 				
 		        t += Math.PI / 16;
 		        double radius = 1.0;
+	            double fireballX = fireball.getLocation().getX();
+	            double fireballY = fireball.getLocation().getY();
+	            double fireballZ = fireball.getLocation().getZ();
+		        
 		        for (int i = 0; i < 8; i++) {
 		            double angle = i * (Math.PI / 4) + t;
 		            double x = radius * Math.cos(angle);
 		            double z = radius * Math.sin(angle);
-
-		            double fireballX = fireball.getLocation().getX();
-		            double fireballY = fireball.getLocation().getY();
-		            double fireballZ = fireball.getLocation().getZ();
 
 		            fireball.getWorld().spawnParticle(
 		                Particle.FLAME,
@@ -64,6 +64,8 @@ public class SmolderdashFireball extends CustomEntity {
 		        }
 			}
 		}.runTaskTimer(plugin, 0, 1);
+		
+		this.entity = fireball;
 	}
 	
 	@Override
@@ -76,6 +78,7 @@ public class SmolderdashFireball extends CustomEntity {
 			entity.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, entity.getLocation(), 1, 0., 0., 0.);
 			entity.remove();
 		} else {
+			entity.getWorld().spawnParticle(Particle.SMOKE_LARGE, entity.getLocation(), 0, 0, 0, 0, 0);
 			entity.remove();
 		}
 	}

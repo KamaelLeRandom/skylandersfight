@@ -18,7 +18,7 @@ public class CustomEntity {
 		
 		summon();
 		
-		// TODO : Ajouter l'entité dans les attributs de l'Arena.
+		plugin.game.getRound().getArena().addCustomEntity(this);
 	}
 	
 	public Skylander getSkylander() {
@@ -30,8 +30,6 @@ public class CustomEntity {
 	}
 	
 	public void removeEntity() {
-		// TODO : Retirer l'entité dans les attributs de l'Arena.
-
 		entity.remove();
 		entity = null;		
 	}
