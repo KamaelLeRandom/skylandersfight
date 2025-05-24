@@ -19,6 +19,7 @@ import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
+import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
 
@@ -62,6 +63,8 @@ public class SkylanderConverter {
 				return new SlamBam(player);
 			case Terrafin.name: 
 				return new Terrafin(player);
+			case PrismBreak.name: 
+				return new PrismBreak(player);
 			case LightningRod.name: 
 				return new LightningRod(player);
 			case Warnado.name: 

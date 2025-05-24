@@ -16,6 +16,7 @@ import fr.kamael.skylandersfight.Plugin;
 import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
+import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
 
 public class TerreListener implements Listener {
@@ -39,6 +40,8 @@ public class TerreListener implements Listener {
 
             if (skylander instanceof Terrafin) {
             	handleTerrafin((Terrafin) skylander, action, nameItem);
+            } else if (skylander instanceof PrismBreak) {
+            	handlePrismBreak((PrismBreak) skylander, action, nameItem);
             }
 		}
 		catch (Exception e) {
@@ -51,6 +54,16 @@ public class TerreListener implements Listener {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(Terrafin.nameFirstSpell, skylander::firstSpell_Jump);
         actions.put(Terrafin.nameSecondSpell, skylander::secondSpell_Spectral);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handlePrismBreak(PrismBreak skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(PrismBreak.nameFirstSpell, skylander::firstSpell_Rayon);
+        actions.put(PrismBreak.nameSecondSpell, skylander::secondSpell_PowerUp);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();

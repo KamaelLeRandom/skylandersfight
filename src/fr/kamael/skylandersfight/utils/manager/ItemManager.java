@@ -48,11 +48,26 @@ public class ItemManager {
 		}
 	}
 	
+	public static void giveDiamondArmor(Player player) {
+		player.getInventory().setHelmet(makeArmor(Material.DIAMOND_HELMET));
+		player.getInventory().setChestplate(makeArmor(Material.DIAMOND_CHESTPLATE));
+		player.getInventory().setLeggings(makeArmor(Material.DIAMOND_LEGGINGS));
+		player.getInventory().setBoots(makeArmor(Material.DIAMOND_BOOTS));
+	}
+	
 	public static void giveColorArmor(Player player, Color color) {
 		player.getInventory().setHelmet(makeColorArmor(Material.LEATHER_HELMET, color));
 		player.getInventory().setChestplate(makeColorArmor(Material.LEATHER_CHESTPLATE, color));
 		player.getInventory().setLeggings(makeColorArmor(Material.LEATHER_LEGGINGS, color));
 		player.getInventory().setBoots(makeColorArmor(Material.LEATHER_BOOTS, color));
+	}
+	
+	public static ItemStack makeArmor(Material material) {
+		ItemStack it = new ItemStack(material, 1);
+		ItemMeta itM = it.getItemMeta();
+		itM.setUnbreakable(true);
+		it.setItemMeta(itM);
+		return it;
 	}
 	
 	public static ItemStack makeColorArmor(Material material, Color color) {
