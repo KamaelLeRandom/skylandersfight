@@ -30,7 +30,8 @@ public class CustomEntity {
 	}
 	
 	public void removeEntity() {
-		entity.remove();
+		if (entity != null)
+			entity.remove();
 		entity = null;		
 	}
 	

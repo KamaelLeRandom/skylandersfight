@@ -76,6 +76,10 @@ public class SpellUtils {
 		}
 	}
 	
+	public static Double getPourcentLife(Skylander skylander) {
+		return skylander.getPlayer().getHealth() / skylander.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+	}
+	
 	public static void invulnerability(Plugin plugin, Skylander skylander, Integer ticks) {
 		Player player = skylander.getPlayer();
 		ItemStack boots = player.getInventory().getBoots();

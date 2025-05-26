@@ -79,6 +79,13 @@ public class Sunburn extends Skylander {
 		return false; 
 	}
 	
+	public void passif(Skylander skylander) {
+		nbStackPassif++;
+		player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
+		player.sendMessage(Constants.prefixMessage + "Vous venez de récupérer les §4cendres§f de §6" + skylander.getPlayer().getName() + "§f.");
+		player.setLevel(nbStackPassif);
+	}
+	
 	public void firstSpell_Fire() {
 		if (checkCooldown(nameFirstSpell, true)) {
 			Skylander skylanderTarget = SpellUtils.targetPlayer(

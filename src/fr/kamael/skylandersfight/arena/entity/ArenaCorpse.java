@@ -1,6 +1,5 @@
 package fr.kamael.skylandersfight.arena.entity;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -11,6 +10,7 @@ import org.bukkit.util.EulerAngle;
 
 import fr.kamael.skylandersfight.game.CustomEntity;
 import fr.kamael.skylandersfight.skylanders.Skylander;
+import fr.kamael.skylandersfight.skylanders.feu.Sunburn;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class ArenaCorpse extends CustomEntity {
@@ -39,8 +39,10 @@ public class ArenaCorpse extends CustomEntity {
 	}
 	
 	public void onHit(Skylander skylander) {
-		// TODO - Mettre l'interaction avec le Skylander.
-		Bukkit.broadcastMessage("ArenaCorpse | onHit");
+		if (skylander instanceof Sunburn) 
+			((Sunburn) skylander).passif(skylander);
+		
+		removeEntity();
 		return; 
 	}
 }
