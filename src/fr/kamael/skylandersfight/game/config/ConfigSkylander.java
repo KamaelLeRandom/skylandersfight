@@ -19,6 +19,7 @@ import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
+import fr.kamael.skylandersfight.skylanders.mort.GrimCreeper;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
 import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
@@ -50,6 +51,7 @@ public class ConfigSkylander {
 		ArrayList<ItemStack> mort = new ArrayList<>();
 		// TODO : Remplir les Skylanders Mort.
 		mort.add(GhostRoaster.getSignatureItem());
+		mort.add(GrimCreeper.getSignatureItem());
 		this.data.put(Element.MORT, mort);
 		
 		ArrayList<ItemStack> bogda = new ArrayList<>();

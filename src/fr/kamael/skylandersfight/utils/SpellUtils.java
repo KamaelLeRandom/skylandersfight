@@ -219,7 +219,7 @@ public class SpellUtils {
 		return skylandersHit;
 	}
 	
-	public static void dash(Skylander skylander, Double value, SkylanderDamageRunnable damageCallback, ParticleRunnable particleCallback) {
+	public static void dash(Skylander skylander, Double value, Double range, Integer timerDamage, SkylanderDamageRunnable damageCallback, ParticleRunnable particleCallback) {
 		Plugin plugin = Plugin.plugin;
 		Player player = skylander.getPlayer();
 		
@@ -228,14 +228,14 @@ public class SpellUtils {
 		player.setVelocity(dashVector);
 		
 		new BukkitRunnable() {
-			private Integer timer = 10;
+			private Integer timer = timerDamage;
 			private ArrayList<Player> listPlayer = new ArrayList<Player>();
 
 			@Override
 			public void run() {
 				particleCallback.execute(player.getLocation());
 				
-				for (Entity entity : player.getNearbyEntities(3, 2, 3)) {
+				for (Entity entity : player.getNearbyEntities(range, 2, range)) {
 					if (entity instanceof Player && entity != player && !listPlayer.contains(entity)) {
 						Player playerHit = (Player) entity;
 						Skylander skylanderHit = plugin.game.getPlayer(playerHit).getSkylander();
@@ -253,7 +253,7 @@ public class SpellUtils {
 				
 				timer--;
 			}
-		}.runTaskTimer(plugin, 0, 2);
+		}.runTaskTimer(plugin, 0, 1);
 	}
 	
 	public static void tornado(Plugin plugin, Skylander...skylandersHit) {

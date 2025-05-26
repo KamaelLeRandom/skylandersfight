@@ -19,6 +19,7 @@ import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
+import fr.kamael.skylandersfight.skylanders.mort.GrimCreeper;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
 import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
@@ -56,6 +57,8 @@ public class SkylanderConverter {
 				return new StealthElf(player);
 			case GhostRoaster.name:
 				return new GhostRoaster(player);
+			case GrimCreeper.name:
+				return new GrimCreeper(player);
 			case Eruptor.name:
 				return new Eruptor(player);
 			case Sunburn.name:

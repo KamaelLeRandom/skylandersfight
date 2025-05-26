@@ -17,6 +17,7 @@ import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
+import fr.kamael.skylandersfight.skylanders.mort.GrimCreeper;
 
 public class MortListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -39,6 +40,8 @@ public class MortListener implements Listener {
 
             if (skylander instanceof GhostRoaster) {
             	handleGhostRoaster((GhostRoaster) skylander, action, nameItem);
+            } else if (skylander instanceof GrimCreeper) {
+            	handleGrimCreeper((GrimCreeper) skylander, action, nameItem);
             }
 		}
 		catch (Exception e) {
@@ -51,6 +54,16 @@ public class MortListener implements Listener {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(GhostRoaster.nameFirstSpell, skylander::firstSpell_Invul);
         actions.put(GhostRoaster.nameSecondSpell, skylander::secondSpell_Spectral);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleGrimCreeper(GrimCreeper skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(GrimCreeper.nameFirstSpell, skylander::firstSpell_Dash);
+        actions.put(GrimCreeper.nameSecondSpell, skylander::secondSpell_Separation);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();

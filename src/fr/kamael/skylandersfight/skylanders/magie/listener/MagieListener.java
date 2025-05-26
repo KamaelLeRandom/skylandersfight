@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
@@ -11,8 +12,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.kamael.skylandersfight.Constants;
@@ -104,7 +107,7 @@ public class MagieListener implements Listener {
 	
 	private void handleDoubleTrouble(DoubleTrouble skylander, Action action, String name) {
         Map<String, Runnable> actions = new HashMap<>();
-        actions.put(DoubleTrouble.namePassif, skylander::passif);
+        actions.put(DoubleTrouble.nameWeapon, skylander::passif);
         actions.put(DoubleTrouble.nameFirstSpell, skylander::firstSpell_Invocation);
         actions.put(DoubleTrouble.nameSecondSpell, skylander::secondSpell_Metamorphose);
 
@@ -123,8 +126,6 @@ public class MagieListener implements Listener {
         }
 	}
 	
-	
-	
 	private void handleStarStrike(StarStrike skylander, Action action, String name) {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(StarStrike.nameFirstSpell, skylander::firstSpell_Meteor);
@@ -138,4 +139,29 @@ public class MagieListener implements Listener {
     private boolean isRightClick(Action action) {
         return action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK;
     }
+    
+	@EventHandler
+	public void inventoryClickMagie(InventoryClickEvent event) {
+		try {
+			if (event.getCurrentItem() == null || plugin.game == null || !plugin.game.isState(GameState.FIGHTING))
+				return;
+			
+			Player player = (Player) event.getWhoClicked();
+			Skylander skylander = plugin.game.getPlayer(player).getSkylander();
+			ItemStack it = event.getCurrentItem();
+
+			if (event.getView().getTitle().equalsIgnoreCase(DoubleTrouble.nameSecondSpell) && it.getType().equals(Material.PLAYER_HEAD) && skylander instanceof DoubleTrouble) {
+				event.setCancelled(true);
+				
+				SkullMeta itM = (SkullMeta) it.getItemMeta();
+				((DoubleTrouble) skylander).secondSpell_Transform(itM.getOwningPlayer().getPlayer());
+				
+				player.closeInventory();
+				return;
+			}
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage("§c[Error]§f (MagieListener, inventoryClickMagie) : §7"+e.getMessage());	
+		}
+	}
 }

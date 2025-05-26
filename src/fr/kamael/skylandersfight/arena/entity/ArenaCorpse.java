@@ -1,5 +1,6 @@
 package fr.kamael.skylandersfight.arena.entity;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -20,6 +21,7 @@ public class ArenaCorpse extends CustomEntity {
 	}
 	
 	public void summon() { 
+		Bukkit.broadcastMessage("DEBUG : summon");
 		Player player = skylander.getPlayer();
 		
 		ArmorStand as = (ArmorStand) player.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);

@@ -96,6 +96,8 @@ public class Warnado extends Skylander {
 			SpellUtils.dash(
 				this, 
 				powerVectorFirstSpell, 
+				2.5,
+				20,
 				(attacker, target) -> {
 					Player playerTarget = target.getPlayer();
 					playerTarget.damage(damagePassif);

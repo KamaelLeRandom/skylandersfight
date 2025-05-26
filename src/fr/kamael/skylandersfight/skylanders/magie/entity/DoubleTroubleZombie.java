@@ -28,7 +28,7 @@ public class DoubleTroubleZombie extends CustomEntity {
 		
 		Zombie zombie = (Zombie) player.getWorld().spawnEntity(location, EntityType.ZOMBIE);
 		zombie.setBaby();
-		zombie.setHealth(10);
+		zombie.setHealth(5);
 		zombie.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
 		zombie.getEquipment().setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
 		zombie.getEquipment().setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));

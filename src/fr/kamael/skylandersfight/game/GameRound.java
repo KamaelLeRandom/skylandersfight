@@ -219,9 +219,11 @@ public class GameRound {
 						}
 					}
 					
-					if (timerItem == 0) {
-						arena.summonArenaItem();
-						timerItem = 15 + (plugin.random.nextInt(45)+1);
+					if (plugin.game.getConfig().getActiveItem()) {
+						if (timerItem == 0) {
+							arena.summonArenaItem();
+							timerItem = 15 + (plugin.random.nextInt(45)+1);
+						}
 					}
 				}
 								

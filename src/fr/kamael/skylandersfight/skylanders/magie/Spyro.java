@@ -76,7 +76,9 @@ public class Spyro extends Skylander {
 			
 			SpellUtils.dash(
 				this, 
-				vectorPowerFirstSpell, 
+				vectorPowerFirstSpell,
+				2.5,
+				20,
 				(attacker, target) -> {
 					Player playerTarget = target.getPlayer();
 					playerTarget.damage(damageFirstSpell);
