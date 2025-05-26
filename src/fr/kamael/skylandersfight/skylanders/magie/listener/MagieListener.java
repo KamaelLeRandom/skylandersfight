@@ -20,6 +20,7 @@ import fr.kamael.skylandersfight.Plugin;
 import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
+import fr.kamael.skylandersfight.skylanders.magie.DoubleTrouble;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
@@ -77,6 +78,8 @@ public class MagieListener implements Listener {
 
             if (skylander instanceof Spyro) {
             	handleSpyro((Spyro) skylander, action, nameItem);
+            } else if (skylander instanceof DoubleTrouble) {
+            	handleDoubleTrouble((DoubleTrouble) skylander, action, nameItem);
             } else if (skylander instanceof Voodood) {
             	handleVoodood((Voodood) skylander, action, nameItem);
             } else if (skylander instanceof StarStrike) {
@@ -93,6 +96,17 @@ public class MagieListener implements Listener {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(Spyro.nameFirstSpell, skylander::firstSpell_Dash);
         actions.put(Spyro.nameSecondSpell, skylander::secondSpell_Fly);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleDoubleTrouble(DoubleTrouble skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(DoubleTrouble.namePassif, skylander::passif);
+        actions.put(DoubleTrouble.nameFirstSpell, skylander::firstSpell_Invocation);
+        actions.put(DoubleTrouble.nameSecondSpell, skylander::secondSpell_Metamorphose);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();

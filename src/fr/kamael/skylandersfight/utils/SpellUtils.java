@@ -2,6 +2,7 @@ package fr.kamael.skylandersfight.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -140,6 +141,31 @@ public class SpellUtils {
 			}
 		}.runTaskTimer(plugin, 0, 2);
 	}
+	
+	public static Skylander nearClosePlayer(Plugin plugin, Entity entity, Double maxRange) {
+	    List<Entity> entities = entity.getNearbyEntities(maxRange, 10, maxRange);
+	    entities.removeIf(e -> !(e instanceof Player));
+
+	    if (!entities.isEmpty()) {
+	        Skylander nearest = null;
+	        Double closestDistance = Double.MAX_VALUE;
+
+	        for (Entity e : entities) {
+	            Double distance = e.getLocation().distance(entity.getLocation());
+	            Skylander skylander = plugin.game.getPlayer((Player) e).getSkylander();
+	            
+	            if (skylander.isAlive() && distance < closestDistance) {
+	                closestDistance = distance;
+	                nearest = skylander;
+	            }
+	        }
+
+	        return nearest;
+	    }
+
+	    return null;
+	}
+
 	
 	public static Skylander targetPlayer(Skylander skylander, Integer distance, Double range, ParticleRunnable particule) {
 		Player player = skylander.getPlayer();

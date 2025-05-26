@@ -14,6 +14,7 @@ import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.feu.Smolderdash;
 import fr.kamael.skylandersfight.skylanders.feu.Sunburn;
+import fr.kamael.skylandersfight.skylanders.magie.DoubleTrouble;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
@@ -30,8 +31,8 @@ public class ConfigSkylander {
 		this.data = new HashMap<Element, ArrayList<ItemStack>>();
 		
 		ArrayList<ItemStack> magie = new ArrayList<>();
-		// TODO : Remplir les Skylanders Magie.
 		magie.add(Spyro.getSignatureItem());
+		magie.add(DoubleTrouble.getSignatureItem());
 		magie.add(Voodood.getSignatureItem());
 		magie.add(StarStrike.getSignatureItem());
 		this.data.put(Element.MAGIE, magie);

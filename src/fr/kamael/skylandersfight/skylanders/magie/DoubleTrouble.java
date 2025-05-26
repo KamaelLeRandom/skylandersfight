@@ -9,7 +9,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -21,9 +20,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.game.GamePlayer;
 import fr.kamael.skylandersfight.game.GameState;
+import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
+import fr.kamael.skylandersfight.skylanders.magie.entity.DoubleTroubleZombie;
 import fr.kamael.skylandersfight.utils.SpellUtils;
-import fr.kamael.skylandersfight.utils.converter.SkylanderConverter;
+import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class DoubleTrouble extends Skylander {
 	public static final String name = "Double Trouble";
@@ -42,6 +43,22 @@ public class DoubleTrouble extends Skylander {
 	public static final Integer timerSecondSpell = 30;
 	
 	private Boolean canUsePassif = true;
+	
+	public DoubleTrouble(Player player) {
+		super(player, Element.MAGIE, name);
+		this.force = 1.10;
+	}
+	
+	public void giveEquipement() {
+		ItemManager.clearPlayer(player);
+		ItemManager.giveColorArmor(player, Color.PURPLE);
+		
+		Inventory inv = player.getInventory();
+		inv.setItem(0, getItemFirstSpell());
+		inv.setItem(1, getItemWeapon());
+		inv.setItem(2, getItemSecondSpell());
+		inv.setItem(9, new ItemStack(Material.ARROW));
+	}
 	
 	public void passif() {
 		if (canUsePassif) {
@@ -92,7 +109,7 @@ public class DoubleTrouble extends Skylander {
 				player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre "+ nameFirstSpell +" sur §6"+ skylanderTarget.getPlayer().getName() +"§f.");
 				
 				for (int i = 0; i < numberInvocFirstSpell; i++)
-					
+					new DoubleTroubleZombie(this, skylanderTarget.getPlayer().getLocation());
 				
 				addCooldown(nameFirstSpell, timerFirstSpell);
 				return;

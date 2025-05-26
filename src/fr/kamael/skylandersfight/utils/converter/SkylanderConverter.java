@@ -14,6 +14,7 @@ import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.feu.Smolderdash;
 import fr.kamael.skylandersfight.skylanders.feu.Sunburn;
+import fr.kamael.skylandersfight.skylanders.magie.DoubleTrouble;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
@@ -43,6 +44,8 @@ public class SkylanderConverter {
 		switch (name) {
 			case Spyro.name:
 				return new Spyro(player);
+			case DoubleTrouble.name:
+				return new DoubleTrouble(player);
 			case Voodood.name:
 				return new Voodood(player);
 			case StarStrike.name:
