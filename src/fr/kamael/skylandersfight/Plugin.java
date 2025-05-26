@@ -21,6 +21,7 @@ import fr.kamael.skylandersfight.skylanders.mort.listener.MortListener;
 import fr.kamael.skylandersfight.skylanders.tech.listener.TechListener;
 import fr.kamael.skylandersfight.skylanders.terre.listener.TerreListener;
 import fr.kamael.skylandersfight.skylanders.vie.listener.VieListener;
+import fr.kamael.skylandersfight.utils.PlayerUtils;
 import fr.kamael.skylandersfight.utils.StatistiqueUtils;
 
 public class Plugin extends JavaPlugin {
@@ -28,6 +29,7 @@ public class Plugin extends JavaPlugin {
 	public Random random;
 	public Game game;
 	public StatistiqueUtils statsUtils;
+	public PlayerUtils playerUtils;
 	
 	/// --- Méthodes initial.
 	@Override
@@ -35,6 +37,7 @@ public class Plugin extends JavaPlugin {
 		plugin = this;
 		random = new Random();
 		statsUtils = new StatistiqueUtils();
+		playerUtils = new PlayerUtils();
 
         getCommand("skylander").setExecutor(new SkylanderCommand());
         getCommand("skylander").setTabCompleter(new SkylanderTabCompleter());
