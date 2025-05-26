@@ -31,6 +31,7 @@ public class GrimCreeper extends Skylander {
 	public static final String nameWeapon = "§7Faux des Âmes";
 	public static final String namePassif = "§7Faucheur des Âmes";
 	public static final Integer nbHitFirstBonusPassif = 10;
+	public static final Integer timerSlowFirstBonusPassif = 5;
 	public static final Integer nbHitSecondBonusPassif = 25;
 	public static final Double pourcentExecSecondBonusPassif = 0.2;
 	public static final Integer nbHitThirdBonusPassif = 50;
@@ -68,8 +69,15 @@ public class GrimCreeper extends Skylander {
 		nbHitPassif++;
 		player.setLevel(nbHitPassif);
 		
+		if (nbHitPassif == nbHitFirstBonusPassif)
+			player.sendMessage(Constants.prefixMessage + "Vous avez recolté " + nbHitFirstBonusPassif + " Âmes, vous infligez maintenant l'effet Lenteur pendant " + timerSlowFirstBonusPassif + " seconde à chaque coup que vous infligez.");
+		if (nbHitPassif == nbHitSecondBonusPassif)
+			player.sendMessage(Constants.prefixMessage + "Vous avez recolté " + nbHitSecondBonusPassif + " Âmes, vous executez les adversaires lorsqu'ils ont moins de " + pourcentExecSecondBonusPassif*100 + "% de leur vie.");
+		if (nbHitPassif == nbHitThirdBonusPassif)
+			player.sendMessage(Constants.prefixMessage + "Vous avez recolté " + nbHitThirdBonusPassif + " Âmes, vous retirez de manière permanents les dégats que vous infligez.");
+		
 		if (nbHitPassif > nbHitFirstBonusPassif)
-			skylanderHit.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 0, false, false));
+			skylanderHit.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, timerSlowFirstBonusPassif*20, 0, false, false));
 		
 		return false; 
 	}
