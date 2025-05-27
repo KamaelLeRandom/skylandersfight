@@ -41,6 +41,8 @@ public class CustomEntity {
 	
 	public void summon() { return; }
 	
+	public Integer modifyDamage() { return 3; }
+	
 	public void onHit(Skylander skylander) { return; }
 	
 	public void onDamage(Skylander skylander) { return; }

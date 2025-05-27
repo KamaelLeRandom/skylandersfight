@@ -64,6 +64,7 @@ public class GameListener implements Listener {
 					
 					if (customEntity != null && skylander != null) {
 						customEntity.onDamage(skylander);
+						event.setDamage(customEntity.modifyDamage());
 					}
 					
 					return;
