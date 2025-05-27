@@ -38,7 +38,7 @@ public class SprocketSilverfish extends CustomEntity {
 					return;
 				}
 				
-				silverfish.setTarget(SpellUtils.nearClosePlayer(plugin, silverfish, 30.).getPlayer());
+				silverfish.setTarget(SpellUtils.nearClosePlayer(plugin, skylander, silverfish, 30.).getPlayer());
 			}
 		}.runTaskTimer(plugin, 0, 10);
 		

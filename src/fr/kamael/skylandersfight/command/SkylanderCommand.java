@@ -23,6 +23,11 @@ public class SkylanderCommand implements CommandExecutor {
 				
 				if (cmd.getName().equalsIgnoreCase("skylander") || cmd.getName().equalsIgnoreCase("s")) {
 					if (args.length == 1) {				
+						
+						if (args[0].equalsIgnoreCase("test")) {
+
+						}
+						
 						// < /skylander help >
 						if (args[0].equalsIgnoreCase("help")) {								
 							String message = "§6§l===== Informations Skylander =====" + '\n' +

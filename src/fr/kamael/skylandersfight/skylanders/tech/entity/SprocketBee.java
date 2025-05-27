@@ -25,6 +25,7 @@ public class SprocketBee extends CustomEntity {
 		
 		Bee bee = (Bee) player.getWorld().spawnEntity(location, EntityType.BEE);
 		bee.setHealth(3);
+		bee.setAnger(Integer.MAX_VALUE);
 		bee.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false, false));
 		
 		new BukkitRunnable() {
@@ -36,7 +37,7 @@ public class SprocketBee extends CustomEntity {
 					return;
 				}
 				
-				bee.setTarget(SpellUtils.nearClosePlayer(plugin, bee, 30.).getPlayer());
+				bee.setTarget(SpellUtils.nearClosePlayer(plugin, skylander, bee, 30.).getPlayer());
 			}
 		}.runTaskTimer(plugin, 0, 10);
 		

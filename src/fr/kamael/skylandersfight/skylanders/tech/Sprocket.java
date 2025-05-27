@@ -5,9 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -17,20 +18,25 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.kamael.skylandersfight.Constants;
+import fr.kamael.skylandersfight.game.CustomEntity;
+import fr.kamael.skylandersfight.game.GameState;
+import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.tech.entity.SprocketBee;
 import fr.kamael.skylandersfight.skylanders.tech.entity.SprocketGolem;
+import fr.kamael.skylandersfight.skylanders.tech.entity.SprocketMinecart;
 import fr.kamael.skylandersfight.skylanders.tech.entity.SprocketSilverfish;
-import fr.kamael.skylandersfight.utils.converter.SkylanderConverter;
+import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class Sprocket extends Skylander {
 	public static final String name = "Sprocket";
 	
 	public static final String nameWeapon = "§e";
 	public static final String namePassif = "§e";
+	public static final Double bonusResisPassif = 0.2;
 	
 	public static final String nameFirstSpell = "§eChar d'assault";
-	public static final Integer durationFirstSpell = 5;
+	public static final Integer durationTickFirstSpell = 100;
 	public static final Integer timerFirstSpell = 30;
 	
 	public static final String nameSecondSpell = "§eConstruction";
@@ -50,8 +56,87 @@ public class Sprocket extends Skylander {
 	public static final Integer damageExplosionThirdMob = 20;
 	
 	private Inventory invSecondSpell = getSecondSpellInventory();
+	private Boolean secondSpellActive = false;
+	private ArrayList<CustomEntity> mobs = new ArrayList<CustomEntity>(); 
+	
+	public Sprocket(Player player) {
+		super(player, Element.TECH, name);
+		this.force = 1.05;
+		this.resis = 0.95;
+	}
+	
+	public void giveEquipement() {
+		ItemManager.clearPlayer(player);
+		ItemManager.giveColorArmor(player, Color.YELLOW);
+		
+		Inventory inv = player.getInventory();
+		inv.setItem(0, getItemFirstSpell());
+		inv.setItem(1, getItemWeapon());
+		inv.setItem(2, getItemSecondSpell());
+		inv.setItem(9, new ItemStack(Material.ARROW));
+	}
+	
+	public Boolean onHitBow(Skylander skylanderDamager) { 
+		if (secondSpellActive) {
+			secondSpellActive = false;
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+			player.sendMessage(Constants.prefixMessage + "Votre " + nameSecondSpell + "§f a été §cannulé§f car vous avez subi des dégats.");
+		}
+		return false; 
+	}
+	
+	public Boolean onHitSword(Skylander skylanderDamager) { 
+		if (secondSpellActive) {
+			secondSpellActive = false;
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+			player.sendMessage(Constants.prefixMessage + "Votre " + nameSecondSpell + "§f a été §cannulé§f car vous avez subi des dégats.");
+		}
+		return false; 
+	}
+	
+	public void onStart() { 
+		new BukkitRunnable() {
+			private Boolean hasBonus = false;
+			
+			@Override
+			public void run() {
+				if (!plugin.game.isState(GameState.FIGHTING) || !alive) {
+					cancel();
+					return;
+				}
+				
+				mobs.removeIf(e -> e.getEntity() == null);
+				
+				if (mobs.size() > 1)
+					if (!hasBonus)
+						resis -= bonusResisPassif;
+				else
+					if (hasBonus)
+						resis += bonusResisPassif;
+			}
+		}.runTaskTimer(plugin, 0, 10);
+		
+		return; 
+	}
+	
+	public void firstSpell_Minecart() {
+		if (checkCooldown(nameFirstSpell, true)) {
+			player.playSound(player.getLocation(), Sound.ENTITY_MINECART_INSIDE, 1, 1);
+			player.sendMessage("Vous venez d'utiliser votre compétence " + nameFirstSpell + "§f.");
+			new SprocketMinecart(this, this.player.getLocation().clone().add(0, 0.5, 0));
+			addCooldown(nameFirstSpell, timerFirstSpell);
+			return;
+		}
+	}
 	
 	public void secondSpell_Inventory() {
+		if (secondSpellActive) {
+			secondSpellActive = false;
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+			player.sendMessage(Constants.prefixMessage + "Votre " + nameSecondSpell + "§f a été §cannulé§f par vous même.");
+			return;
+		}
+		
 		if (checkCooldown(nameSecondMob, true)) {
 			player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1, 1);
 			player.sendMessage("Vous venez d'ouvrir votre menu de " + nameSecondSpell + "§f.");
@@ -78,16 +163,27 @@ public class Sprocket extends Skylander {
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 99999, 200, false, false));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 99999, 200, false, false));
 				
+			secondSpellActive = true;
+			
 			new BukkitRunnable() {
 				private Integer timer = timerBuild;
 				@Override
 				public void run() {
+					if (secondSpellActive == false) {
+						player.removePotionEffect(PotionEffectType.SLOW);
+						player.removePotionEffect(PotionEffectType.JUMP);
+						cancel();
+						return;
+					}
+					
 					if (timer == 0) {
+						secondSpellActive = false;
 						player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
 						player.sendMessage(Constants.prefixMessage + "Vous venez de finir la construction de votre " + itName + "§f.");
 						player.removePotionEffect(PotionEffectType.SLOW);
 						player.removePotionEffect(PotionEffectType.JUMP);
 						summonMob(itName);
+						addCooldown(nameSecondSpell, timerSecondSpell);
 						cancel();
 						return;
 					}
@@ -100,9 +196,9 @@ public class Sprocket extends Skylander {
 	
 	private void summonMob(String itName) {
 	    switch (itName) {
-	        case nameFirstMob -> new SprocketBee(this, player.getLocation());
-	        case nameSecondMob -> new SprocketSilverfish(this, player.getLocation());
-	        case nameThirdMob -> new SprocketGolem(this, player.getLocation());
+	        case nameFirstMob -> mobs.add(new SprocketBee(this, player.getLocation()));
+	        case nameSecondMob -> mobs.add(new SprocketSilverfish(this, player.getLocation()));
+	        case nameThirdMob -> mobs.add(new SprocketGolem(this, player.getLocation()));
 	    }
 	}
 	

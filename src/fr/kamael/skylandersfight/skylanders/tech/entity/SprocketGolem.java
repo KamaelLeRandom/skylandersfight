@@ -26,7 +26,7 @@ public class SprocketGolem extends CustomEntity {
 		Player player = skylander.getPlayer();
 		
 		IronGolem golem = (IronGolem) player.getWorld().spawnEntity(location, EntityType.IRON_GOLEM);
-		golem.setHealth(10);
+		golem.setHealth(20);
 		golem.setPlayerCreated(false);
 		
 		new BukkitRunnable() {
@@ -38,7 +38,7 @@ public class SprocketGolem extends CustomEntity {
 					return;
 				}
 				
-				golem.setTarget(SpellUtils.nearClosePlayer(plugin, golem, 30.).getPlayer());
+				golem.setTarget(SpellUtils.nearClosePlayer(plugin, skylander, golem, 30.).getPlayer());
 			}
 		}.runTaskTimer(plugin, 0, 10);
 		

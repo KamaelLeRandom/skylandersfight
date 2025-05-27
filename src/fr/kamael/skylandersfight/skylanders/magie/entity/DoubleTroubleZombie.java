@@ -43,7 +43,7 @@ public class DoubleTroubleZombie extends CustomEntity {
 					return;
 				}
 				
-				zombie.setTarget(SpellUtils.nearClosePlayer(plugin, zombie, 30.).getPlayer());
+				zombie.setTarget(SpellUtils.nearClosePlayer(plugin, skylander, zombie, 30.).getPlayer());
 			}
 		}.runTaskTimer(plugin, 0, 10);
 		

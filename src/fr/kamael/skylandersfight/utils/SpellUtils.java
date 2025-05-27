@@ -146,7 +146,7 @@ public class SpellUtils {
 		}.runTaskTimer(plugin, 0, 2);
 	}
 	
-	public static Skylander nearClosePlayer(Plugin plugin, Entity entity, Double maxRange) {
+	public static Skylander nearClosePlayer(Plugin plugin, Skylander skylander, Entity entity, Double maxRange) {
 	    List<Entity> entities = entity.getNearbyEntities(maxRange, 10, maxRange);
 	    entities.removeIf(e -> !(e instanceof Player));
 
@@ -156,11 +156,11 @@ public class SpellUtils {
 
 	        for (Entity e : entities) {
 	            Double distance = e.getLocation().distance(entity.getLocation());
-	            Skylander skylander = plugin.game.getPlayer((Player) e).getSkylander();
+	            Skylander skylanderCheck = plugin.game.getPlayer((Player) e).getSkylander();
 	            
-	            if (skylander.isAlive() && distance < closestDistance) {
+	            if (skylander.isAlive() && skylander != skylanderCheck && !skylander.getMates().contains(skylanderCheck) && distance < closestDistance) {
 	                closestDistance = distance;
-	                nearest = skylander;
+	                nearest = skylanderCheck;
 	            }
 	        }
 

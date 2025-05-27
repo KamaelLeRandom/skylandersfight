@@ -20,6 +20,7 @@ import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.mort.GrimCreeper;
+import fr.kamael.skylandersfight.skylanders.tech.Sprocket;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
 import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
@@ -41,6 +42,7 @@ public class ConfigSkylander {
 		ArrayList<ItemStack> tech = new ArrayList<>();
 		// TODO : Remplir les Skylanders Tech.
 		tech.add(TriggerHappy.getSignatureItem());
+		tech.add(Sprocket.getSignatureItem());
 		this.data.put(Element.TECH, tech);
 		
 		ArrayList<ItemStack> vie = new ArrayList<>();

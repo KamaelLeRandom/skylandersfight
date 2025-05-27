@@ -20,6 +20,7 @@ import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.mort.GrimCreeper;
+import fr.kamael.skylandersfight.skylanders.tech.Sprocket;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
 import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
@@ -53,6 +54,8 @@ public class SkylanderConverter {
 				return new StarStrike(player);
 			case TriggerHappy.name:
 				return new TriggerHappy(player);
+			case Sprocket.name:
+				return new Sprocket(player);
 			case StealthElf.name:
 				return new StealthElf(player);
 			case GhostRoaster.name:
