@@ -64,6 +64,7 @@ public class TechListener implements Listener {
 	
 	private void handleSprocket(Sprocket skylander, Action action, String name) {
         Map<String, Runnable> actions = new HashMap<>();
+        actions.put(Sprocket.nameWeapon, skylander::passif_Teleport);
         actions.put(Sprocket.nameFirstSpell, skylander::firstSpell_Minecart);
         actions.put(Sprocket.nameSecondSpell, skylander::secondSpell_Inventory);
 

@@ -46,14 +46,14 @@ public class Plugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new GameListener(), this);
 		getServer().getPluginManager().registerEvents(new ArenaListener(), this);
 		
-		getServer().getPluginManager().registerEvents(new MagieListener(), this);
-		getServer().getPluginManager().registerEvents(new TechListener(), this);
-		getServer().getPluginManager().registerEvents(new VieListener(), this);
-		getServer().getPluginManager().registerEvents(new MortListener(), this);
-		getServer().getPluginManager().registerEvents(new FeuListener(), this);
-		getServer().getPluginManager().registerEvents(new EauListener(), this);
-		getServer().getPluginManager().registerEvents(new TerreListener(), this);
-		getServer().getPluginManager().registerEvents(new AirListener(), this);
+        getServer().getPluginManager().registerEvents(new MagieListener(), this);
+        getServer().getPluginManager().registerEvents(new TechListener(), this);
+     	getServer().getPluginManager().registerEvents(new VieListener(), this);
+     	getServer().getPluginManager().registerEvents(new MortListener(), this);
+     	getServer().getPluginManager().registerEvents(new FeuListener(), this);
+     	getServer().getPluginManager().registerEvents(new EauListener(), this);
+     	getServer().getPluginManager().registerEvents(new TerreListener(), this);
+     	getServer().getPluginManager().registerEvents(new AirListener(), this);
 		
 		System.out.println("[SkylandersFight] Plugin activé.");
 

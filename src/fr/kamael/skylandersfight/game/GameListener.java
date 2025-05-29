@@ -89,6 +89,7 @@ public class GameListener implements Listener {
 				
 				if (customEntity != null) {
 					customEntity.onDeath();
+					customEntity.removeEntity();
 				}
 			}
 		}

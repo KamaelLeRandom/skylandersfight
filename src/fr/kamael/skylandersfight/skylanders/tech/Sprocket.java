@@ -26,6 +26,7 @@ import fr.kamael.skylandersfight.skylanders.tech.entity.SprocketBee;
 import fr.kamael.skylandersfight.skylanders.tech.entity.SprocketGolem;
 import fr.kamael.skylandersfight.skylanders.tech.entity.SprocketMinecart;
 import fr.kamael.skylandersfight.skylanders.tech.entity.SprocketSilverfish;
+import fr.kamael.skylandersfight.utils.converter.SkylanderConverter;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class Sprocket extends Skylander {
@@ -44,15 +45,17 @@ public class Sprocket extends Skylander {
 	
 	public static final String nameFirstMob = "§eEXP01 - Abeille Empoisonnée";
 	public static final Integer timerBuildFirstMob = 5;
-	public static final Integer damageFirstMob = 5;
+	public static final Integer numberOfFirstMob = 3;
+	public static final Integer damageFirstMob = 4;
 	
 	public static final String nameSecondMob = "§eEXP02 - Rat Furtif";
 	public static final Integer timerBuildSecondMob = 10;
-	public static final Integer damageSecondMob = 4;
+	public static final Integer numberOfSecondMob = 2;
+	public static final Integer damageSecondMob = 2;
 
 	public static final String nameThirdMob = "§eEXP03 - Golem Explosif";
 	public static final Integer timerBuildThirdMob = 15;
-	public static final Integer damageThirdMob = 6;
+	public static final Integer damageThirdMob = 8;
 	public static final Integer damageExplosionThirdMob = 20;
 	
 	private Inventory invSecondSpell = getSecondSpellInventory();
@@ -107,22 +110,36 @@ public class Sprocket extends Skylander {
 				
 				mobs.removeIf(e -> e.getEntity() == null);
 				
-				if (mobs.size() > 1)
-					if (!hasBonus)
-						resis -= bonusResisPassif;
-				else
-					if (hasBonus)
-						resis += bonusResisPassif;
+	            if (mobs.size() >= 1 && !hasBonus) {
+	                resis -= bonusResisPassif;
+	                hasBonus = true;
+	            }
+
+	            if (mobs.size() == 0 && hasBonus) {
+	                resis += bonusResisPassif;
+	                hasBonus = false;
+	            }
 			}
 		}.runTaskTimer(plugin, 0, 10);
 		
 		return; 
 	}
 	
+	public void passif_Teleport() {
+		mobs.removeIf(e -> e.getEntity() == null);
+
+		for (CustomEntity mob : mobs) {
+			mob.getEntity().teleport(player.getLocation());
+		}
+		
+		player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+		player.sendMessage(Constants.prefixMessage + "Vous venez de retéléportez vos " + nameSecondSpell + "§f sur vous.");
+	}
+	
 	public void firstSpell_Minecart() {
 		if (checkCooldown(nameFirstSpell, true)) {
 			player.playSound(player.getLocation(), Sound.ENTITY_MINECART_INSIDE, 1, 1);
-			player.sendMessage("Vous venez d'utiliser votre compétence " + nameFirstSpell + "§f.");
+			player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre compétence " + nameFirstSpell + "§f.");
 			new SprocketMinecart(this, this.player.getLocation().clone().add(0, 0.5, 0));
 			addCooldown(nameFirstSpell, timerFirstSpell);
 			return;
@@ -139,7 +156,7 @@ public class Sprocket extends Skylander {
 		
 		if (checkCooldown(nameSecondMob, true)) {
 			player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1, 1);
-			player.sendMessage("Vous venez d'ouvrir votre menu de " + nameSecondSpell + "§f.");
+			player.sendMessage(Constants.prefixMessage + "Vous venez d'ouvrir votre menu de " + nameSecondSpell + "§f.");
 			player.openInventory(invSecondSpell);
 			return;
 		}
@@ -187,7 +204,8 @@ public class Sprocket extends Skylander {
 						cancel();
 						return;
 					}
-					player.sendTitle(itName, "Temps restant : " + (timerBuild - timer) + "s.", 1, 20, 1);
+					
+					player.sendTitle(itName, "Temps restant : §6" + timer + "s§f.", 1, 20, 1);
 					timer--;
 				}
 			}.runTaskTimer(plugin, 0, 20);
@@ -196,17 +214,33 @@ public class Sprocket extends Skylander {
 	
 	private void summonMob(String itName) {
 	    switch (itName) {
-	        case nameFirstMob -> mobs.add(new SprocketBee(this, player.getLocation()));
-	        case nameSecondMob -> mobs.add(new SprocketSilverfish(this, player.getLocation()));
+	        case nameFirstMob -> { for (int i = 0; i < numberOfFirstMob; i++) mobs.add(new SprocketBee(this, player.getLocation())); }
+	        case nameSecondMob -> { for (int i = 0; i < numberOfSecondMob; i++) mobs.add(new SprocketSilverfish(this, player.getLocation())); }
 	        case nameThirdMob -> mobs.add(new SprocketGolem(this, player.getLocation()));
 	    }
 	}
 	
+	public void sendDescription() {
+	    player.sendMessage("\n");
+	    player.sendMessage("===============");
+	    player.sendMessage("\n");
+	    player.sendMessage("   ▶" + element.getColor() + name + "§f◀");
+	    player.sendMessage("\n");
+	    player.sendMessage("≫ "+ namePassif +"§f, vous gagnez §6"+ bonusResisPassif*100 +"% de Résistance§f si vous avez une " + nameSecondSpell + "§f encore en vie. Vous pouvez téléporter toutes vos " + nameSecondSpell + "sur vous en fesant un clic sur votre" + nameWeapon + "§f.");
+	    player.sendMessage("\n");
+	    player.sendMessage("≫ "+ nameFirstSpell +"§f, vous montez dans un §ewagon qui vous permet de vous déplacer très facilement pendant §e" + SkylanderConverter.convertTicks(durationTickFirstSpell) + " secondes§f. §b("+ timerFirstSpell +"s de recharge)");
+	    player.sendMessage("\n");
+	    player.sendMessage("≫ "+ nameSecondSpell +"§f, vous ouvrez un §einventaire§f avec vos expériences que vous pouvez contruire. §b("+ timerSecondSpell +"s de recharge)");
+	    player.sendMessage("\n");
+	    player.sendMessage("===============");
+	    player.sendMessage("\n");
+	}
+	
 	public static ItemStack getSignatureItem() {
 		ArrayList<String> lore = new ArrayList<>();
-		lore.add("§5"+ name +"§f est un Skylander §cmélée§f capable de construire");
+		lore.add("§e"+ name +"§f est un Skylander §cmélée§f capable de construire");
 		lore.add("§fdiverses machines pour l'aider.");
-		ItemStack item = new ItemStack(Material.LIGHTNING_ROD, 1);
+		ItemStack item = new ItemStack(Material.SHEARS, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName("§e"+name);
 		meta.setUnbreakable(true);
@@ -292,7 +326,7 @@ public class Sprocket extends Skylander {
 	
 	public static ItemStack getBeeEgg() {
 		List<String> lore = Arrays.asList(
-			nameFirstMob + "§f est un groupe de trois abeilles", 
+			nameFirstMob + "§f est un groupe de "+ numberOfFirstMob +" abeilles", 
 			"§fqui empoisonne le joueur lorsqu'il est attaqué.",
 			"§c/!\\§f Temps de construction : §c" + timerBuildFirstMob + " secondes§f."
 		);
@@ -310,8 +344,8 @@ public class Sprocket extends Skylander {
 	
 	public static ItemStack getSilverfishEgg() {
 		List<String> lore = Arrays.asList(
-			nameSecondMob + "§f est un groupe de cinq rats", 
-			"§fqui sont invisible tant qu'ils n'ont pas attaqué.",
+			nameSecondMob + "§f est un groupe de "+ numberOfSecondMob +" rats", 
+			"§fqui sont très rapide et très aggressive.",
 			"§c/!\\§f Temps de construction : §c" + timerBuildSecondMob + " secondes§f."
 		);
 		ItemStack item = new ItemStack(Material.SILVERFISH_SPAWN_EGG);

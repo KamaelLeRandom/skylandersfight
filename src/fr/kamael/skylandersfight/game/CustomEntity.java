@@ -1,6 +1,5 @@
 package fr.kamael.skylandersfight.game;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
@@ -14,7 +13,6 @@ public class CustomEntity {
 	protected Entity entity;
 	
 	public CustomEntity(Skylander skylander, Location location) {
-		Bukkit.broadcastMessage("DEBUG : constructor");
 		this.skylander = skylander;
 		this.location = location;
 		

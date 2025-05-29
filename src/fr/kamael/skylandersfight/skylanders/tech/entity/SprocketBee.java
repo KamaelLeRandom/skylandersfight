@@ -1,17 +1,18 @@
 package fr.kamael.skylandersfight.skylanders.tech.entity;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Bee;
-import org.bukkit.entity.EntityType;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.kamael.skylandersfight.entity.AggressiveBee;
 import fr.kamael.skylandersfight.game.CustomEntity;
 import fr.kamael.skylandersfight.game.GameState;
+import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.tech.Sprocket;
-import fr.kamael.skylandersfight.utils.SpellUtils;
+import net.minecraft.server.level.WorldServer;
 
 public class SprocketBee extends CustomEntity {
 	
@@ -23,28 +24,30 @@ public class SprocketBee extends CustomEntity {
 	public void summon() {
 		Player player = skylander.getPlayer();
 		
-		Bee bee = (Bee) player.getWorld().spawnEntity(location, EntityType.BEE);
-		bee.setHealth(3);
-		bee.setAnger(Integer.MAX_VALUE);
-		bee.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false, false));
+		AggressiveBee bee = new AggressiveBee(player.getLocation(), Sprocket.nameFirstMob, 10, skylander);
+		WorldServer world = ((CraftWorld) player.getWorld()).getHandle();
+		world.addEntity(bee);
 		
 		new BukkitRunnable() {
 			
 			@Override
 			public void run() {
-				if (bee == null || !bee.isDead() || !plugin.game.isState(GameState.FIGHTING)) {
+				if (bee == null || !bee.getBukkitEntity().isDead() || !plugin.game.isState(GameState.FIGHTING)) {
 					cancel();
 					return;
 				}
-				
-				bee.setTarget(SpellUtils.nearClosePlayer(plugin, skylander, bee, 30.).getPlayer());
 			}
 		}.runTaskTimer(plugin, 0, 10);
 		
-		this.entity = bee;
+		this.entity = bee.getBukkitEntity();
 	}
 	
 	public Integer modifyDamage() { 
 		return Sprocket.damageFirstMob; 
+	}
+	
+	public void onDamage(Skylander skylander) { 
+		skylander.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, 100, 0, false, false));
+		return; 
 	}
 }
