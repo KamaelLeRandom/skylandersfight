@@ -17,6 +17,7 @@ import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
+import fr.kamael.skylandersfight.skylanders.vie.ZooLou;
 
 public class VieListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -39,6 +40,8 @@ public class VieListener implements Listener {
 
             if (skylander instanceof StealthElf) {
             	handleStealthElf((StealthElf) skylander, action, nameItem);
+            } else if (skylander instanceof ZooLou) {
+            	handleZooLou((ZooLou) skylander, action, nameItem);
             }
 		}
 		catch (Exception e) {
@@ -52,9 +55,18 @@ public class VieListener implements Listener {
         actions.put(StealthElf.nameFirstSpell, skylander::firstSpell_Invi);
         actions.put(StealthElf.nameSecondSpell, skylander::secondSpell_Dash);
 
-        if (isRightClick(action) && actions.containsKey(name)) {
+        if (isRightClick(action) && actions.containsKey(name))
         	actions.get(name).run();
-        }
+	}
+	
+	private void handleZooLou(ZooLou skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(ZooLou.nameWeapon, skylander::passif_Chicken);
+        actions.put(ZooLou.nameFirstSpell, skylander::firstSpell_Wolf);
+        actions.put(ZooLou.nameSecondSpell, skylander::secondSpell_Pig);
+
+        if (isRightClick(action) && actions.containsKey(name))
+        	actions.get(name).run();
 	}
 	
     private boolean isRightClick(Action action) {
