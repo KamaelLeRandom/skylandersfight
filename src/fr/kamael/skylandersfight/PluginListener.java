@@ -29,6 +29,8 @@ public class PluginListener implements Listener {
 			player.setFoodLevel(20);
 			
 			plugin.statsUtils.tryInitializaJSONPlayer(player);
+			if (plugin.playerUtils.isNicked(player))
+				plugin.playerUtils.unnickPlayer(player);
 			
 			String msg = Constants.prefixMessage + "→ §b" + player.getName() + " §f" + Constants.welcomeMessage.get(plugin.random.nextInt(Constants.welcomeMessage.size()));
 			

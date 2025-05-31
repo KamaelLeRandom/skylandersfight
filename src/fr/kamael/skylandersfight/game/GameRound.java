@@ -195,6 +195,7 @@ public class GameRound {
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999, 200, false, false));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 200, false, false));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 9999, 0, false, false));
+			plugin.playerUtils.nickPlayer(player, gamePlayer.getInitialTeam().getPrefixName() + player.getName());
 		}
 		
 		arena.teleportAllPlayer();
@@ -358,7 +359,7 @@ public class GameRound {
 	        objective.getScore(" ").setScore(6);
 	        objective.getScore("§cDurée : §6" + timerRound + "s").setScore(5);
 	        objective.getScore("§8----------------").setScore(4);
-	        objective.getScore("§fSkylander : " + skylander.getName()).setScore(3);
+	        objective.getScore("§fSkylander : " + skylander.getElement().getColor() + skylander.getName()).setScore(3);
 	        objective.getScore("§fÉlément : " + skylander.getElement().getName()).setScore(2);     
 	        objective.getScore("§f🗡 Force : §6" + SkylanderConverter.convertForce(skylander.getForce()) + "%").setScore(1);
 	        objective.getScore("§f🛡 Résistance : §6" + SkylanderConverter.convertResis(skylander.getResis()) + "%").setScore(0);

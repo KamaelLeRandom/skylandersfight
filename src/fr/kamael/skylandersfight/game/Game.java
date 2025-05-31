@@ -80,6 +80,7 @@ public class Game {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			this.listPlayers.add(new GamePlayer(player));
 			player.closeInventory();
+			plugin.playerUtils.unnickAllPlayer();
 		}
 		
 		// Mode : Equipe
@@ -115,8 +116,8 @@ public class Game {
 		    Bukkit.broadcastMessage(msgKaos.toString());
 		    Bukkit.broadcastMessage(msgEon.toString());
 
-		    this.listTeams.add(new GameTeam("§cKaos", team1));
-		    this.listTeams.add(new GameTeam("§bEon", team2));
+		    this.listTeams.add(new GameTeam("§cKaos", team1, "§c"));
+		    this.listTeams.add(new GameTeam("§bEon", team2, "§b"));
 		} 
 		// Mode : Solo
 		else {
@@ -127,7 +128,7 @@ public class Game {
 		
 		ArrayList<String> list = new ArrayList<>();
 		list.add("§fPoints : §6"+ config.getNbPointWin() +"§f points gagnant");
-		list.add("§fÉquipes " + (config.getActiveDeathmatch() ? "§aactivé" : "§cdésactivé"));
+		list.add("§fÉquipes " + (config.getActiveTeam() ? "§aactivé" : "§cdésactivé"));
 		list.add("§fDeathmatch " + (config.getActiveDeathmatch() ? "§aactivé§f (§7"+ config.getTimerDM() +"min§f)" : "§cdésactivé"));
 		list.add("§fObjets " + (config.getActiveItem() ? "§aactivé" : "§cdésactivé"));
 		list.add("§fBlocs de soin " + (config.getActiveHeal() ? "§aactivé" : "§cdésactivé"));

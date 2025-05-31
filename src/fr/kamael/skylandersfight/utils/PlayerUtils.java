@@ -49,14 +49,15 @@ public class PlayerUtils {
                 Field ff = playerProfile.getClass().getDeclaredField("name");
                 ff.setAccessible(true);
                 ff.set(playerProfile, name);
-                player.setPlayerListName(name);
                 
                 nicked.put(player, s);
                 
                 for (Player pl : Bukkit.getOnlinePlayers()) {
-                    pl.hidePlayer(plugin, player);
-                    pl.showPlayer(plugin, player);
-                }
+                	if (!pl.equals(player)) {
+                        pl.hidePlayer(plugin, player);
+                        pl.showPlayer(plugin, player);
+                	}
+                }                
             }
     	} catch (Exception e) {
 			Bukkit.broadcastMessage(Constants.prefixError + "(PlayerUtils, nickPlayer) : §7"+e.getMessage());	

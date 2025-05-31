@@ -7,12 +7,14 @@ public class GameTeam {
 	private Integer nbPoint;
 	private Integer nbKill;
 	private ArrayList<GamePlayer> players;
+	private String prefixName;
 	
-	public GameTeam(String name, ArrayList<GamePlayer> players) {
+	public GameTeam(String name, ArrayList<GamePlayer> players, String prefixName) {
 		this.name = name;
 		this.nbPoint = 0;
 		this.nbKill = 0;
 		this.players = players;
+		this.prefixName = prefixName;
 		
 		for (GamePlayer player : players) {
 			player.setInitialTeam(this);
@@ -35,6 +37,10 @@ public class GameTeam {
 	
 	public Integer getNbPoint() {
 		return this.nbPoint;
+	}
+	
+	public String getPrefixName() {
+		return this.prefixName;
 	}
 	
 	public Integer updateNbPoint(Integer value) {
