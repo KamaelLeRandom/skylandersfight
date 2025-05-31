@@ -26,8 +26,7 @@ import fr.kamael.skylandersfight.utils.manager.ItemManager;
 public class ZooLou extends Skylander {
 	public static final String name = "Zoo Lou";
 	
-	public static final String nameWeapon = "§2";
-	
+	public static final String nameWeapon = "§2Sceptre Magique";
 	public static final String namePassif = "§2Appel d'Oiseau";
 	public static final Integer timerPassif = 2;
 	public static final Integer damagePassif = 4;
@@ -35,7 +34,7 @@ public class ZooLou extends Skylander {
 	public static final String nameFirstSpell = "§2Ode aux Loups";
 	public static final Integer timerFirstSpell = 15;
 	public static final Integer healthWolfFirstSpell = 5;
-	public static final Double healFirstSpell = 3.;
+	public static final Double healFirstSpell = 1.;
 	public static final Integer numberOfWolfFirstSpell = 3;
 	public static final Double damageWolfFirstSpell = 4.;
 	
@@ -45,6 +44,7 @@ public class ZooLou extends Skylander {
 	
 	private Boolean canUsePassif = true;
 	private ArrayList<CustomEntity> listWolf = new ArrayList<CustomEntity>();
+	private ZooLouPig pig = null;
 	
 	public ZooLou(Player player) {
 		super(player, Element.VIE, name);
@@ -72,7 +72,6 @@ public class ZooLou extends Skylander {
 				@Override
 				public void run() {
 					canUsePassif = true;
-					player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
 					cancel();
 					return;
 				}
@@ -100,15 +99,24 @@ public class ZooLou extends Skylander {
 	}
 	
 	public void secondSpell_Pig() {
+		if (pig != null) {
+			pig.jump();
+			return;
+		}
+		
 		if (checkCooldown(nameSecondSpell, true)) {
 			player.playSound(player.getLocation(), Sound.ENTITY_PIG_SADDLE, 1, 1);
 			player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre compétence " + nameSecondSpell + "§f.");
 		
-			new ZooLouPig(this, player.getLocation());
+			pig = new ZooLouPig(this, player.getLocation());
 			
 			addCooldown(nameSecondSpell, timerSecondSpell);
 			return;
 		}
+	}
+	
+	public void secondSpell_Reset() {
+		pig = null;
 	}
 	
 	public void sendDescription() {

@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -74,6 +75,25 @@ public class GameListener implements Listener {
 		}
 		catch (Exception e) {
 			Bukkit.broadcastMessage(Constants.prefixError + "(GameListener, entityFight) : §7"+e.getMessage());	
+			return;
+		}
+	}
+	
+	@EventHandler
+	public void entityDamage(EntityDamageEvent event) {
+		try {
+			if (plugin.game != null && plugin.game.isState(GameState.FIGHTING) && !(event.getEntity() instanceof Player) && event.getEntity() instanceof LivingEntity) {
+				Entity entity = event.getEntity();
+				CustomEntity customEntity = plugin.game.getRound().getArena().isCustomEntity(entity);
+
+				if (event.getCause().equals(DamageCause.FALL)) {
+					event.setCancelled(customEntity.onFall());
+					return;
+				}
+			}
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(GameListener, entityDamage) : §7"+e.getMessage());	
 			return;
 		}
 	}

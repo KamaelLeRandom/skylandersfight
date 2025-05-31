@@ -32,7 +32,7 @@ public class ZooLouWolf extends CustomEntity {
 	}
 	
 	public void onDamage(Skylander skylander) {
-		SpellUtils.heal(skylander, ZooLou.healFirstSpell, true);
+		SpellUtils.heal(this.skylander, ZooLou.healFirstSpell, true);
 		return; 
 	}
 }

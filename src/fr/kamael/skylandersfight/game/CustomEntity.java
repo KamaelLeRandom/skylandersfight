@@ -46,4 +46,6 @@ public class CustomEntity {
 	public void onDamage(Skylander skylander) { return; }
 	
 	public void onDeath() { return; }
+	
+	public Boolean onFall() { return false; }
 }
