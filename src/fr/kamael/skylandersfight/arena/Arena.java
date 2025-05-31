@@ -32,6 +32,17 @@ public class Arena {
 		return this.name;
 	}
 	
+	public String getResumeElement() {
+	    StringBuilder resume = new StringBuilder();
+	    for (Element element : elements) {
+	        if (resume.length() > 0) {
+	            resume.append(", ");
+	        }
+	        resume.append(element.getName());
+	    }
+	    return resume.toString();
+	}
+
 	public Element getRandomElement() {
 		return this.elements.get(plugin.random.nextInt(this.elements.size()));
 	}

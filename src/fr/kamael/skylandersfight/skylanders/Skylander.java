@@ -87,7 +87,8 @@ public class Skylander {
 	
 	public void updateInfoArmorStand() {
 		this.info.teleport(player.getLocation().add(0, 2.2, 0));
-		
+		this.info.setVisible(false);
+
 		if (player.isSneaking() || status.contains(Status.INVISIBLE)) {
 			this.info.setCustomNameVisible(false);
 		} else {

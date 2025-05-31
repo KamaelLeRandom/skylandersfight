@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -31,7 +33,7 @@ public class GameRound {
 		this.timerRound = 0;
 		this.plugin.game.setState(GameState.CHOOSING);
 		
-		chooseSkylander();
+		prechooseArena();
 	}
 	
 	public Arena getArena() {
@@ -53,10 +55,76 @@ public class GameRound {
 			player.sendMessage(Constants.prefixMessage + "L'Élement de l'Arène est : "+ element.getName() +".");
 			
 			if (skylander.getElement().equals(element)) {
-				skylander.updateForce(+0.1);
-				skylander.updateResis(-0.1);
+				skylander.updateForce(+0.15);
+				skylander.updateResis(-0.15);
 			}
 		}
+	}
+	
+	public void prechooseArena() {
+		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+			gamePlayer.getPlayer().playSound(gamePlayer.getPlayer().getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
+			gamePlayer.getPlayer().sendTitle("§fChoix de l'§6Arène§f", "§fPlace aux votes.", 3, 25, 2);
+			gamePlayer.getPlayer().sendMessage(Constants.prefixMessage + "Le choix de l'Arène va commencer !");
+		}
+		
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				chooseArena();
+				cancel();
+				return;
+			}
+		}.runTaskLater(plugin, 30);
+	}
+	
+	public void chooseArena() {
+		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+			gamePlayer.getPlayer().playSound(gamePlayer.getPlayer().getLocation(), Sound.BLOCK_BARREL_OPEN, 1, 1);
+			gamePlayer.getPlayer().openInventory(ArenaInventory.getInventory());
+		}
+		
+		new BukkitRunnable() {
+			private ArrayList<GamePlayer> listPlayers = plugin.game.getPlayers();
+			
+			@Override
+			public void run() {
+				Boolean isValid = true;
+				
+				for (GamePlayer gamePlayer : listPlayers) {
+					if (gamePlayer.getVotedArena() == null) {
+						isValid = false;
+					}
+				}
+				
+				if (isValid) {
+					arena = ArenaConverter.convert(listPlayers.get(plugin.random.nextInt(listPlayers.size())).getVotedArena());
+					prechooseSkylander();
+					cancel();
+					return;
+				}
+			}
+		}.runTaskTimer(plugin, 0, 10);
+		
+		return; 
+	}
+	
+	public void prechooseSkylander() {
+		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+			gamePlayer.getPlayer().playSound(gamePlayer.getPlayer().getLocation(), Sound.ENTITY_ARROW_HIT, 1, 1);
+			gamePlayer.getPlayer().sendTitle("§7Arène selectionnée§f", arena.getName(), 3, 50, 3);
+			gamePlayer.getPlayer().sendMessage(Constants.prefixMessage + "L'§6Arène§f qui a été selectionée est " + arena.getName() + "§f, voici ses éléments possible : " + arena.getResumeElement() + "§f.");
+		}
+		
+		new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				chooseSkylander();
+				cancel();
+				return;
+			}
+		}.runTaskLater(plugin, 60);
 	}
 	
 	public void chooseSkylander() { 
@@ -78,35 +146,6 @@ public class GameRound {
 				}
 				
 				if (isValid) {
-					chooseArena();
-					cancel();
-					return;
-				}
-			}
-		}.runTaskTimer(plugin, 0, 10);
-		
-		return; 
-	}
-	
-	public void chooseArena() {
-		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
-			gamePlayer.getPlayer().playSound(gamePlayer.getPlayer().getLocation(), Sound.BLOCK_BARREL_OPEN, 1, 1);
-			gamePlayer.getPlayer().openInventory(ArenaInventory.getInventory());
-		}
-		
-		new BukkitRunnable() {
-			
-			@Override
-			public void run() {
-				Boolean isValid = true;
-				
-				for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
-					if (gamePlayer.getVotedArena() == null) {
-						isValid = false;
-					}
-				}
-				
-				if (isValid) {
 					start();
 					cancel();
 					return;
@@ -117,15 +156,11 @@ public class GameRound {
 		return; 
 	}
 	
-	public void start() {
-		ArrayList<GamePlayer> listPlayers = this.plugin.game.getPlayers();
-		
-		this.arena = ArenaConverter.convert(listPlayers.get(plugin.random.nextInt(listPlayers.size())).getVotedArena());
-		
-		for (GamePlayer gamePlayer : listPlayers) {
+	public void start() {				
+		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
 			Player player = gamePlayer.getPlayer();
 			player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT, 1, 1);
-			player.sendTitle("§7Arène :", this.arena.getName(), 5, 55, 5);
+			player.sendTitle("§7Le Round va débuter", "§fSoyez prêts.", 2, 35, 2);
 		}
 		
 		new BukkitRunnable() {
@@ -136,7 +171,7 @@ public class GameRound {
 				Bukkit.broadcastMessage(Constants.prefixMessage + "La manche démarre dans §b"+ timer +"§f secondes !");
 				
 				if (timer == 1) {
-					play();
+					preplay();
 					cancel();
 					return;
 				}
@@ -146,26 +181,56 @@ public class GameRound {
 		}.runTaskTimer(plugin, 0, 20);
 	}
 	
-	public void play() {
-		this.plugin.game.setState(GameState.FIGHTING);
-		
-		for (GamePlayer gamePlayer : this.plugin.game.getPlayers()) {
+	public void preplay() {
+		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+			Player player = gamePlayer.getPlayer();
 			Skylander skylander = gamePlayer.getSkylander();
-			
 			gamePlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
 			gamePlayer.setActualTeam(gamePlayer.getInitialTeam());
-			
 			skylander.summonInfoArmorStand();
 			skylander.giveEquipement();
 			skylander.setFullHealth();
 			skylander.onStart();
-			
 			skylander.addMates(gamePlayer.getInitialTeam().getPlayers());
+			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999, 200, false, false));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 200, false, false));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 9999, 0, false, false));
 		}
 		
 		arena.teleportAllPlayer();
 		arena.resetHeal();
-		arena.event();
+		
+		new BukkitRunnable() {
+			private Integer timer = 3;
+			@Override
+			public void run() {
+				if (timer == 0) {
+					for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+						Player player = gamePlayer.getPlayer();
+						player.removePotionEffect(PotionEffectType.BLINDNESS);
+						player.removePotionEffect(PotionEffectType.SLOW);
+						player.removePotionEffect(PotionEffectType.JUMP);
+					}
+					play();
+					cancel();
+					return;
+				}
+				
+				for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+					Player player = gamePlayer.getPlayer();
+					player.sendTitle("§fPréparez-vous", "§fDébut dans " + timer + " seconde.", 1, 18, 1);
+				}
+				
+				timer--;
+			}
+		}.runTaskTimer(plugin, 0, 20);
+	}
+	
+	public void play() {
+		plugin.game.setState(GameState.FIGHTING);
+		
+		if (plugin.game.getConfig().getActiveEventMap())
+			arena.event();
 
 		new BukkitRunnable() {
 			private ArrayList<GamePlayer> listPlayers = plugin.game.getPlayers();
@@ -188,11 +253,13 @@ public class GameRound {
 					}
 				}
 				
-				if (timer%10 == 0) {
+				if (timer%5 == 0) {
+					updateScoreboard();
+				}
+				
+				if (timer%20 == 0) {
 					timerRound++;
 					timerItem--;
-					
-					updateScoreboard();
 					
 					if (
 						timerRound == timerDeathmatch-60 ||
@@ -229,7 +296,7 @@ public class GameRound {
 								
 				timer++;
 			}
-		}.runTaskTimer(plugin, 0, 2);
+		}.runTaskTimer(plugin, 0, 1);
 	}
 	
 	public void checkVictory() {
@@ -291,8 +358,8 @@ public class GameRound {
 	        objective.getScore(" ").setScore(6);
 	        objective.getScore("§cDurée : §6" + timerRound + "s").setScore(5);
 	        objective.getScore("§8----------------").setScore(4);
-	        objective.getScore("§fSkylander : §e" + skylander.getName()).setScore(3);
-	        objective.getScore("§fÉlément : §a" + skylander.getElement().getName()).setScore(2);     
+	        objective.getScore("§fSkylander : " + skylander.getName()).setScore(3);
+	        objective.getScore("§fÉlément : " + skylander.getElement().getName()).setScore(2);     
 	        objective.getScore("§f🗡 Force : §6" + SkylanderConverter.convertForce(skylander.getForce()) + "%").setScore(1);
 	        objective.getScore("§f🛡 Résistance : §6" + SkylanderConverter.convertResis(skylander.getResis()) + "%").setScore(0);
 	        
