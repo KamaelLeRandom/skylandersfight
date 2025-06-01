@@ -23,6 +23,7 @@ import fr.kamael.skylandersfight.skylanders.terre.listener.TerreListener;
 import fr.kamael.skylandersfight.skylanders.vie.listener.VieListener;
 import fr.kamael.skylandersfight.utils.PlayerUtils;
 import fr.kamael.skylandersfight.utils.StatistiqueUtils;
+import fr.kamael.skylandersfight.utils.manager.TeamManager;
 
 public class Plugin extends JavaPlugin {
 	public static Plugin plugin;
@@ -30,7 +31,7 @@ public class Plugin extends JavaPlugin {
 	public Game game;
 	public StatistiqueUtils statsUtils;
 	public PlayerUtils playerUtils;
-	
+
 	/// --- Méthodes initial.
 	@Override
 	public void onEnable() {
@@ -58,6 +59,8 @@ public class Plugin extends JavaPlugin {
 		System.out.println("[SkylandersFight] Plugin activé.");
 
 		clearAllArmorStand();
+		
+		TeamManager.deleteAll();
 	}
 	
 	@Override

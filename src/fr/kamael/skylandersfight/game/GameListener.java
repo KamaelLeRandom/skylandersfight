@@ -37,6 +37,7 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.utils.SpellUtils;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
+import fr.kamael.skylandersfight.utils.manager.TeamManager;
 
 public class GameListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -315,6 +316,7 @@ public class GameListener implements Listener {
 				playerDeath.setGameMode(GameMode.SPECTATOR);
 
 				Bukkit.broadcastMessage("DEBUG : before");
+				TeamManager.addPlayer(plugin.game.getTeamDead(), gamePlayerDeath);
 				plugin.game.getRound().getArena().summonArenaCorpse(skylanderDeath, locationDeath);
 				plugin.game.getRound().checkVictory();
 			}

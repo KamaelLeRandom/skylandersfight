@@ -25,11 +25,7 @@ public class SkylanderCommand implements CommandExecutor {
 					if (args.length == 1) {				
 						
 						if (args[0].equalsIgnoreCase("test")) {
-							plugin.playerUtils.nickPlayer(player, "§cAypierre");
-							Bukkit.getScheduler().runTaskLater(plugin, () -> {
-							    player.sendMessage("DisplayName: " + player.getDisplayName());
-							    player.sendMessage("PlayerListName: " + player.getPlayerListName());
-							}, 40L);
+							plugin.playerUtils.nickPlayer(player, "Bogda_Kamael");
 						}
 						
 						// < /skylander help >

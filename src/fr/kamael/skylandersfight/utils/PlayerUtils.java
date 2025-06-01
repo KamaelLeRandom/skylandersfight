@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -27,7 +26,7 @@ public class PlayerUtils {
 	private Plugin plugin = Plugin.plugin;
 	private HashMap<Player, String> nicked = new HashMap<Player, String>();
 	private HashMap<Player, String> disguised = new HashMap<Player, String>();
-		
+	
     public Boolean isNicked(Player player) {
     	try {
     		if (nicked.containsKey(player)) {

@@ -12,7 +12,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
@@ -23,6 +22,7 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.SkylanderInventory;
 import fr.kamael.skylandersfight.utils.converter.ArenaConverter;
 import fr.kamael.skylandersfight.utils.converter.SkylanderConverter;
+import fr.kamael.skylandersfight.utils.manager.TeamManager;
 
 public class GameRound {
 	private Plugin plugin = Plugin.plugin;
@@ -33,6 +33,7 @@ public class GameRound {
 		this.timerRound = 0;
 		this.plugin.game.setState(GameState.CHOOSING);
 		
+		remakeTeam();
 		prechooseArena();
 	}
 	
@@ -58,6 +59,12 @@ public class GameRound {
 				skylander.updateForce(+0.15);
 				skylander.updateResis(-0.15);
 			}
+		}
+	}
+	
+	public void remakeTeam() {
+		for (GameTeam team : plugin.game.getTeams()) {
+			TeamManager.addAllPlayers(team.getTeam(), team.getPlayers());
 		}
 	}
 	
@@ -195,7 +202,6 @@ public class GameRound {
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999, 200, false, false));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 200, false, false));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 9999, 0, false, false));
-			plugin.playerUtils.nickPlayer(player, gamePlayer.getInitialTeam().getPrefixName() + player.getName());
 		}
 		
 		arena.teleportAllPlayer();
@@ -351,9 +357,8 @@ public class GameRound {
 		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
 			Skylander skylander = gamePlayer.getSkylander();
 			
-			ScoreboardManager manager = Bukkit.getScoreboardManager();
-			Scoreboard scoreboard = manager.getNewScoreboard();
-	        Objective objective = scoreboard.registerNewObjective("skylander", "dummy", "§8§l» §6§lSkylanders §8§l«");
+			Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+			Objective objective = scoreboard.registerNewObjective("skylander", "dummy", "§8§l» §6§lSkylanders §8§l«");
 	        
 	        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 	        objective.getScore(" ").setScore(6);

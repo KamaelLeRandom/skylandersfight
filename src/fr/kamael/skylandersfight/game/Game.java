@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Team;
 
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
@@ -16,6 +18,7 @@ import fr.kamael.skylandersfight.game.config.Config;
 import fr.kamael.skylandersfight.game.config.ConfigSkylander;
 import fr.kamael.skylandersfight.utils.manager.FireworkManager;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
+import fr.kamael.skylandersfight.utils.manager.TeamManager;
 
 public class Game {
 	private Plugin plugin = Plugin.plugin;
@@ -26,6 +29,7 @@ public class Game {
 	private Integer numeroRound;
 	private ArrayList<GamePlayer> listPlayers;
 	private ArrayList<GameTeam> listTeams;
+	private Team teamDead;
 	
 	public Game() {
 		this.config = new Config();
@@ -57,6 +61,10 @@ public class Game {
 	
 	public GameRound getRound() {
 		return this.round;
+	}
+	
+	public Team getTeamDead() {
+		return this.teamDead;
 	}
 	
 	public GamePlayer getPlayer(Player player) {
@@ -116,15 +124,21 @@ public class Game {
 		    Bukkit.broadcastMessage(msgKaos.toString());
 		    Bukkit.broadcastMessage(msgEon.toString());
 
-		    this.listTeams.add(new GameTeam("§cKaos", team1, "§c"));
-		    this.listTeams.add(new GameTeam("§bEon", team2, "§b"));
+		    this.listTeams.add(new GameTeam("Kaos", team1, ChatColor.RED));
+		    this.listTeams.add(new GameTeam("Eon", team2, ChatColor.AQUA));
 		} 
 		// Mode : Solo
 		else {
+			Integer idxColor = 0;
+			
 			for (GamePlayer gamePlayer : listPlayers) {
-				this.listTeams.add(new GameTeam("§7"+gamePlayer.getPlayer().getName(), gamePlayer));
+				ChatColor color = TeamManager.COLORS.get(idxColor);
+				this.listTeams.add(new GameTeam(gamePlayer.getPlayer().getName(), gamePlayer, color));
+				idxColor++;
 			}
 		}
+		
+		this.teamDead = TeamManager.create("Dead", ChatColor.BLACK);
 		
 		ArrayList<String> list = new ArrayList<>();
 		list.add("§fPoints : §6"+ config.getNbPointWin() +"§f points gagnant");
