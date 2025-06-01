@@ -1,6 +1,5 @@
 package fr.kamael.skylandersfight.arena.entity;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -12,6 +11,7 @@ import org.bukkit.util.EulerAngle;
 import fr.kamael.skylandersfight.game.CustomEntity;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.feu.Sunburn;
+import fr.kamael.skylandersfight.skylanders.tech.Drobot;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class ArenaCorpse extends CustomEntity {
@@ -21,7 +21,6 @@ public class ArenaCorpse extends CustomEntity {
 	}
 	
 	public void summon() { 
-		Bukkit.broadcastMessage("DEBUG : summon");
 		Player player = skylander.getPlayer();
 		
 		ArmorStand as = (ArmorStand) player.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
@@ -42,7 +41,9 @@ public class ArenaCorpse extends CustomEntity {
 	
 	public void onHit(Skylander skylander) {
 		if (skylander instanceof Sunburn) 
-			((Sunburn) skylander).passif(skylander);
+			((Sunburn) skylander).passif(this.skylander);
+		if (skylander instanceof Drobot)
+			((Drobot) skylander).passif(plugin.game.getPlayer(this.skylander.getPlayer()));
 		
 		removeEntity();
 		return; 

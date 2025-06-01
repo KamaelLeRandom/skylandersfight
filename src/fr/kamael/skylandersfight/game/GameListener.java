@@ -315,7 +315,6 @@ public class GameListener implements Listener {
 				playerDeath.teleport(locationDeath);
 				playerDeath.setGameMode(GameMode.SPECTATOR);
 
-				Bukkit.broadcastMessage("DEBUG : before");
 				TeamManager.addPlayer(plugin.game.getTeamDead(), gamePlayerDeath);
 				plugin.game.getRound().getArena().summonArenaCorpse(skylanderDeath, locationDeath);
 				plugin.game.getRound().checkVictory();

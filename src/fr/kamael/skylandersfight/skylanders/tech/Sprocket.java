@@ -32,8 +32,8 @@ import fr.kamael.skylandersfight.utils.manager.ItemManager;
 public class Sprocket extends Skylander {
 	public static final String name = "Sprocket";
 	
-	public static final String nameWeapon = "§e";
-	public static final String namePassif = "§e";
+	public static final String nameWeapon = "§eClé à Molette";
+	public static final String namePassif = "§eCompagnie";
 	public static final Double bonusResisPassif = 0.2;
 	
 	public static final String nameFirstSpell = "§eChar d'assault";
@@ -246,24 +246,6 @@ public class Sprocket extends Skylander {
 		meta.setUnbreakable(true);
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-		meta.setLore(lore);
-		item.setItemMeta(meta);
-		return item;
-	}
-	
-	public static ItemStack getItemPassif() {
-		List<String> lore = Arrays.asList(
-			"§f", 
-			"§f", 
-			"§f"
-		);
-		ItemStack item = new ItemStack(Material.GOLD_INGOT, 1);
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(namePassif);
-		meta.setUnbreakable(true);
-		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return item;

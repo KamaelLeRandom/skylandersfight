@@ -300,13 +300,15 @@ public class SpellUtils {
 			public void run() {
 				particleCallback.execute(player.getLocation());
 				
-				for (Entity entity : player.getNearbyEntities(range, 1., range)) {
-					if (entity instanceof Player && entity != player && !listPlayer.contains(entity)) {
-						Player playerHit = (Player) entity;
-						Skylander skylanderHit = plugin.game.getPlayer(playerHit).getSkylander();
+				if (range != null) {
+					for (Entity entity : player.getNearbyEntities(range, 1., range)) {
+						if (entity instanceof Player && entity != player && !listPlayer.contains(entity)) {
+							Player playerHit = (Player) entity;
+							Skylander skylanderHit = plugin.game.getPlayer(playerHit).getSkylander();
 
-						if (skylanderHit.isAlive() && !skylander.getMates().contains(skylanderHit)) {
-							damageCallback.execute(skylander, skylanderHit);
+							if (skylanderHit.isAlive() && !skylander.getMates().contains(skylanderHit)) {
+								damageCallback.execute(skylander, skylanderHit);
+							}
 						}
 					}
 				}

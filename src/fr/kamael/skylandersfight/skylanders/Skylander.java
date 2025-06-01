@@ -208,6 +208,10 @@ public class Skylander {
 		}
 	}
 	
+	public void removeAllMates() {
+		this.mates.removeAll(this.mates);
+	}
+	
 	public void setFullHealth() {
 		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(plugin.game.getConfig().getNbLifebar() * 20);
 		player.setHealth(plugin.game.getConfig().getNbLifebar() * 20);
