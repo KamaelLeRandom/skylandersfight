@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -127,7 +126,7 @@ public class StatistiqueUtils {
 	        String uuidStr = entry.getKey();
 	        UUID uuid = UUID.fromString(uuidStr);
 	        String name = Bukkit.getOfflinePlayer(uuid).getName();
-	        result.add(String.format("§6%s §f: §c%.2f§f KDA", name, entry.getValue()));
+	        result.add(String.format("§e%s §f: §c%.2f§f KDA", name, entry.getValue()));
 	    }
 
 	    return result;
@@ -155,9 +154,6 @@ public class StatistiqueUtils {
 	        .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
 	        .collect(Collectors.toList());
 
-	    Collections.reverse(sorted);
-	    sorted = sorted.stream().limit(10).collect(Collectors.toList());
-
 	    List<String> result = new ArrayList<>();
 	    for (Map.Entry<String, Double> entry : sorted) {
 	        String uuidStr = entry.getKey();
@@ -167,7 +163,7 @@ public class StatistiqueUtils {
 	        JSONObject stats = (JSONObject) data.get(uuidStr);
 	        double totalDamage = (Double) stats.get("nbDamage");
 
-	        result.add(String.format("§6%s§f : §c%.1f§f dégâts/game (§c%.1f§f au total)", name, entry.getValue(), totalDamage));
+	        result.add(String.format("§e%s§f : §c%.1f§f dégâts/game (§c%.1f§f au total)", name, entry.getValue(), totalDamage));
 	    }
 
 	    return result;
@@ -195,7 +191,7 @@ public class StatistiqueUtils {
 	        String uuidStr = entry.getKey();
 	        UUID uuid = UUID.fromString(uuidStr);
 	        String name = Bukkit.getOfflinePlayer(uuid).getName();
-	        result.add(name + " : " + entry.getValue());
+	        result.add("§e" + name + "§f : §c" + entry.getValue() + "§f blocs de soin récupérés");
 	    }
 
 	    return result;
@@ -230,7 +226,7 @@ public class StatistiqueUtils {
 	        UUID uuid = UUID.fromString(uuidStr);
 	        String name = Bukkit.getOfflinePlayer(uuid).getName();
 	        double ratio = entry.getValue() * 100;
-	        result.add(String.format("%s : %.2f%% de victoires", name, ratio));
+	        result.add(String.format("§e%s§f : §c%.2f%%§f de victoires", name, ratio));
 	    }
 
 	    return result;
@@ -259,7 +255,7 @@ public class StatistiqueUtils {
 	        String uuidStr = entry.getKey();
 	        UUID uuid = UUID.fromString(uuidStr);
 	        String name = Bukkit.getOfflinePlayer(uuid).getName();
-	        result.add(String.format("§6%s§f : §c%d§f objets récupérés", name, entry.getValue()));
+	        result.add(String.format("§e%s§f : §c%d§f objets récupérés", name, entry.getValue()));
 	    }
 
 	    return result;
