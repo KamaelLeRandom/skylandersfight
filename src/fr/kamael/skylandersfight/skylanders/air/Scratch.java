@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -49,7 +48,7 @@ public class Scratch extends Skylander {
 	
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
-		ItemManager.giveColorArmor(player, Color.WHITE);
+		ItemManager.giveColorArmor(player, element.getColorArmor());
 						
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());

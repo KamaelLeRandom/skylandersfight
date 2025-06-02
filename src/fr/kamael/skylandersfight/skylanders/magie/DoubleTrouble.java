@@ -51,7 +51,7 @@ public class DoubleTrouble extends Skylander {
 	
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
-		ItemManager.giveColorArmor(player, Color.PURPLE);
+		ItemManager.giveColorArmor(player, element.getColorArmor());
 		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());

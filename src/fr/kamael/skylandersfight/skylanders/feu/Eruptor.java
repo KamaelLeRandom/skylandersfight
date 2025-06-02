@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -47,7 +46,7 @@ public class Eruptor  extends Skylander {
 	
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
-		ItemManager.giveColorArmor(player, Color.RED);
+		ItemManager.giveColorArmor(player, element.getColorArmor());
 		
 		player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 1, false, false));
 		

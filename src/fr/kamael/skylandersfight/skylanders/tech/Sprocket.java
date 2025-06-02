@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -70,7 +69,7 @@ public class Sprocket extends Skylander {
 	
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
-		ItemManager.giveColorArmor(player, Color.YELLOW);
+		ItemManager.giveColorArmor(player, element.getColorArmor());
 		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());

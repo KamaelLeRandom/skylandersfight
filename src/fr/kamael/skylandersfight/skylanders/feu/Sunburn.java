@@ -53,7 +53,7 @@ public class Sunburn extends Skylander {
 	
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
-		ItemManager.giveColorArmor(player, Color.RED);
+		ItemManager.giveColorArmor(player, element.getColorArmor());
 		
 		player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 1, false, false));
 		

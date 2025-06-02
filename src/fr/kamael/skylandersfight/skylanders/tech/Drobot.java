@@ -50,7 +50,7 @@ public class Drobot extends Skylander {
 	
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
-		ItemManager.giveColorArmor(player, Color.YELLOW);
+		ItemManager.giveColorArmor(player, element.getColorArmor());
 		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());

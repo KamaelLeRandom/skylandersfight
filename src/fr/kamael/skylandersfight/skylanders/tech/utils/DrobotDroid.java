@@ -1,6 +1,5 @@
 package fr.kamael.skylandersfight.skylanders.tech.utils;
 
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -25,7 +24,7 @@ public class DrobotDroid extends Skylander {
 
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
-		ItemManager.giveColorArmor(player, Color.YELLOW);
+		ItemManager.giveColorArmor(player, element.getColorArmor());
 		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemWeapon());

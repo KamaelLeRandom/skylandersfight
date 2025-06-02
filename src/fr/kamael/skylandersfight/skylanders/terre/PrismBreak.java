@@ -58,7 +58,7 @@ public class PrismBreak extends Skylander {
 	
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
-		ItemManager.giveColorArmor(player, Color.MAROON);
+		ItemManager.giveColorArmor(player, element.getColorArmor());
 						
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());

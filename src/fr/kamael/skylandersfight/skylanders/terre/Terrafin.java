@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -49,7 +48,7 @@ public class Terrafin extends Skylander {
 	
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
-		ItemManager.giveColorArmor(player, Color.MAROON);
+		ItemManager.giveColorArmor(player, element.getColorArmor());
 						
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());

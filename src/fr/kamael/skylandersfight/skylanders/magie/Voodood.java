@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -53,7 +52,7 @@ public class Voodood extends Skylander {
 	
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
-		ItemManager.giveColorArmor(player, Color.PURPLE);
+		ItemManager.giveColorArmor(player, element.getColorArmor());
 		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());
