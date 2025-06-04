@@ -11,7 +11,7 @@ public enum Status {
 	NOFALL,        // Ne prend pas de dégats de chute
 	ONEFALL,       // Ne prend pas de dégats de chute pour une fois
 	INVISIBLE,     // Est invisible
-	
+	FREEZE,        // Quand le joueur est gélé	
 	CONCENTRATION, // Entrain de faire quelque
 	RECHERCHE,     // Quand un joueur est recherché par Zem'Zem
 }

@@ -142,7 +142,7 @@ public class GameListener implements Listener {
 							return;
 												
 						// Première possible condition d'annulation. (Status, Mates)
-						if (skylanderHit.checkStatus(Status.NOTAKEDAMAGE) || skylanderShooter.checkStatus(Status.NOMAKEDAMAGE) || skylanderShooter.getMates().contains(skylanderHit)) {
+						if (skylanderHit.checkStatus(Status.NOTAKEDAMAGE) || skylanderShooter.checkStatus(Status.FREEZE) || skylanderShooter.checkStatus(Status.NOMAKEDAMAGE) || skylanderShooter.getMates().contains(skylanderHit)) {
 							event.setCancelled(true);
 							return;
 						}
@@ -166,6 +166,9 @@ public class GameListener implements Listener {
 							playerHit.setFireTicks(80);
 						
 						event.setDamage(damage);
+						
+						if (skylanderHit.checkStatus(Status.FREEZE))
+							skylanderHit.removeStatus(Status.FREEZE);
 						
 						gamePlayerHit.updateTimerLastDamage(skylanderShooter, plugin.game.getRound().getTimer());
 						
@@ -217,6 +220,9 @@ public class GameListener implements Listener {
 						skylanderDamager.removeStatus(Status.INVISIBLE);
 					
 					event.setDamage(damage);
+					
+					if (skylanderHit.checkStatus(Status.FREEZE))
+						skylanderHit.removeStatus(Status.FREEZE);
 					
 					gamePlayerHit.updateTimerLastDamage(skylanderDamager, plugin.game.getRound().getTimer());
 					
@@ -416,7 +422,7 @@ public class GameListener implements Listener {
 	            Location from = event.getFrom();
 	            Location to = event.getTo();
 	            
-	            if (skylander.checkStatus(Status.NOMOVE) && (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ())) {
+	            if ( (skylander.checkStatus(Status.NOMOVE) || skylander.checkStatus(Status.FREEZE)) && (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ())) {
 					event.setCancelled(true);
 				}
 				

@@ -10,6 +10,7 @@ import fr.kamael.skylandersfight.skylanders.air.JetVac;
 import fr.kamael.skylandersfight.skylanders.air.LightningRod;
 import fr.kamael.skylandersfight.skylanders.air.Scratch;
 import fr.kamael.skylandersfight.skylanders.air.Warnado;
+import fr.kamael.skylandersfight.skylanders.eau.Chill;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.feu.Smolderdash;
@@ -75,6 +76,7 @@ public class ConfigSkylander {
 		ArrayList<ItemStack> eau = new ArrayList<>();
 		// TODO : Remplir les Skylanders Eau.
 		eau.add(SlamBam.getSignatureItem());
+		eau.add(Chill.getSignatureItem());
 		this.data.put(Element.EAU, eau);
 		
 		ArrayList<ItemStack> terre = new ArrayList<>();
