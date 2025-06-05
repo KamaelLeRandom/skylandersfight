@@ -94,6 +94,9 @@ public class Skylander {
 		} else {
 			String msg = "§7|";
 			
+			if (status.contains(Status.FREEZE))
+				msg += "§bGel§7|";
+			
 			if (status.contains(Status.NOTAKEDAMAGE))
 				msg += "§aInvulnérable§7|";
 			

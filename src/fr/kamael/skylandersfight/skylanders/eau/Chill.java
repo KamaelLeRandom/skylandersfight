@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -17,6 +18,7 @@ import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.eau.entity.ChillFish;
+import fr.kamael.skylandersfight.utils.ParticleUtils;
 import fr.kamael.skylandersfight.utils.SpellUtils;
 import fr.kamael.skylandersfight.utils.converter.SkylanderConverter;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
@@ -32,6 +34,7 @@ public class Chill extends Skylander {
 	public static final Integer timerFirstSpell = 20;
 	public static final Double rangeFirstSpell = 1.;
 	public static final Double damageFirstSpell = 10.;
+	public static final Integer tickFreezeFirstSpell = 60;
 	
 	public static final String nameSecondSpell = "§9Glaciation";
 	public static final Integer timerSecondSpell = 20;
@@ -77,11 +80,12 @@ public class Chill extends Skylander {
 			player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT_FREEZE, 1, 1);
 			player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre compétence " + nameSecondSpell + "§f.");
 			
+			ParticleUtils.sphereParticule(plugin, player.getLocation(), Particle.SNOWFLAKE, rangeSecondSpell);
 			for (Skylander skylanderHit : SpellUtils.skylanderAround(plugin, this, player.getLocation(), rangeSecondSpell, 2., rangeSecondSpell)) {
 				Player playerHit = skylanderHit.getPlayer();
 				playerHit.sendMessage(Constants.prefixMessage + "Vous venez d'être touché par la compétence " + nameSecondSpell + " de §b" + player.getName() + "§f.");
 				playerHit.sendTitle(nameSecondSpell, "§7Gélé pendant " + SkylanderConverter.convertTicks(tickFreezeSecondSpell), 2, tickFreezeSecondSpell, 2);
-				addStatus(tickFreezeSecondSpell, Status.FREEZE);
+				skylanderHit.addStatus(tickFreezeSecondSpell, Status.FREEZE);
 			}
 			
 			addCooldown(nameSecondSpell, timerSecondSpell);
@@ -97,7 +101,7 @@ public class Chill extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("≫ "+ namePassif +"§f, vous infligez §b" + ratioDamagePassif *100 + "%§f de vos dégats lorsque vous frappez un §bjoueur gélé§f.");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameFirstSpell + "§f, vous envoyez un §bpoisson§f qui inflige §b" + damageFirstSpell + " dégats§f si celui-ci passe proche d'un joueur. §b(" + timerFirstSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, vous envoyez un §bpoisson§f qui inflige §b" + damageFirstSpell + " dégats§f et §bgel§f si celui-ci passe proche d'un joueur. §b(" + timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("≫ " + nameSecondSpell + "§f, vous §bgelez§f les joueurs ennemies qui sont à moins de " + rangeSecondSpell + " blocs de vous. §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");

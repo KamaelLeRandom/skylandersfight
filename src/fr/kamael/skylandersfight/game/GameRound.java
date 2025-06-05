@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
@@ -354,13 +355,41 @@ public class GameRound {
 	}
 	
 	public void updateScoreboard() {
-		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
-			Skylander skylander = gamePlayer.getSkylander();
-			
-			Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-			Objective objective = scoreboard.registerNewObjective("skylander", "dummy", "§8§l» §6§lSkylanders §8§l«");
-	        
+	    Scoreboard main = Bukkit.getScoreboardManager().getMainScoreboard();
+
+	    for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+	        Player player = gamePlayer.getPlayer();
+	        Skylander skylander = gamePlayer.getSkylander();
+
+	        // Scoreboard individuel
+	        Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+
+	        // Copier les teams du scoreboard principal
+	        for (Team mainTeam : main.getTeams()) {
+	            Team team = scoreboard.registerNewTeam(mainTeam.getName());
+
+	            team.setDisplayName(mainTeam.getDisplayName());
+	            team.setPrefix(mainTeam.getPrefix());
+	            team.setSuffix(mainTeam.getSuffix());
+	            team.setColor(mainTeam.getColor());
+	            team.setOption(Team.Option.COLLISION_RULE, mainTeam.getOption(Team.Option.COLLISION_RULE));
+	            team.setOption(Team.Option.NAME_TAG_VISIBILITY, mainTeam.getOption(Team.Option.NAME_TAG_VISIBILITY));
+
+	            // Ajouter les entrées si nécessaire
+	            for (String entry : mainTeam.getEntries()) {
+	                team.addEntry(entry);
+	            }
+	        }
+
+	        // Supprimer l’ancien objectif s’il existe (sécurité)
+	        Objective old = scoreboard.getObjective("sidebar");
+	        if (old != null) old.unregister();
+
+	        // Créer l’objectif de la sidebar
+	        Objective objective = scoreboard.registerNewObjective("sidebar", "dummy", "§8§l» §6§lSkylanders §8§l«");
 	        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+	        // Remplir les lignes du scoreboard
 	        objective.getScore(" ").setScore(6);
 	        objective.getScore("§cDurée : §6" + timerRound + "s").setScore(5);
 	        objective.getScore("§8----------------").setScore(4);
@@ -368,8 +397,13 @@ public class GameRound {
 	        objective.getScore("§fÉlément : " + skylander.getElement().getName()).setScore(2);     
 	        objective.getScore("§f🗡 Force : §6" + SkylanderConverter.convertForce(skylander.getForce()) + "%").setScore(1);
 	        objective.getScore("§f🛡 Résistance : §6" + SkylanderConverter.convertResis(skylander.getResis()) + "%").setScore(0);
-	        
-	        gamePlayer.getPlayer().setScoreboard(scoreboard);
-		}
+
+	        // Appliquer le scoreboard personnalisé au joueur
+	        player.setScoreboard(scoreboard);
+	    }
 	}
+
+
+
+
 }

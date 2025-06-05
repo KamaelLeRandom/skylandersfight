@@ -6,11 +6,15 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import fr.kamael.skylandersfight.arena.ArenaListener;
 import fr.kamael.skylandersfight.command.SkylanderCommand;
@@ -62,6 +66,7 @@ public class Plugin extends JavaPlugin {
 		
 		System.out.println("[SkylandersFight] Plugin activé.");
 
+		resetScoreboard(getServer());
 		clearAllArmorStand();
 		summonAllStatsArmorStand();
 		
@@ -71,6 +76,22 @@ public class Plugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		System.out.println("[SkylandersFight] Plugin activé.");
+	}
+	
+	public void resetScoreboard(Server server) {
+	    Scoreboard scoreboard = server.getScoreboardManager().getMainScoreboard();
+
+	    for (Objective objective : scoreboard.getObjectives()) {
+	        objective.unregister();
+	    }
+
+	    for (Team team : scoreboard.getTeams()) {
+	        team.unregister();
+	    }
+
+	    for (String entry : scoreboard.getEntries()) {
+	        scoreboard.resetScores(entry);
+	    }
 	}
 	
 	private void clearAllArmorStand() {
@@ -98,8 +119,7 @@ public class Plugin extends JavaPlugin {
 	private void summonAllStatsArmorStand() {
 	    World world = Bukkit.getWorld("world");
 
-	    int chunkRadius = 2; // Rayon de 2 chunks autour du centre
-
+	    int chunkRadius = 2;
 	    int centerChunkX = -898 >> 4;
 	    int centerChunkZ = -480 >> 4;
 
