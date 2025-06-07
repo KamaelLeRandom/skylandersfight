@@ -17,6 +17,7 @@ import fr.kamael.skylandersfight.Plugin;
 import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
+import fr.kamael.skylandersfight.skylanders.tech.Boomer;
 import fr.kamael.skylandersfight.skylanders.tech.Drobot;
 import fr.kamael.skylandersfight.skylanders.tech.Sprocket;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
@@ -44,6 +45,8 @@ public class TechListener implements Listener {
             	handleTriggerHappy((TriggerHappy) skylander, action, nameItem);
             } else if (skylander instanceof Drobot) {
             	handleDrobot((Drobot) skylander, action, nameItem);
+            } else if (skylander instanceof Boomer) {
+            	handleBoomer((Boomer) skylander, action, nameItem);
             } else if (skylander instanceof Sprocket) {
             	handleSprocket((Sprocket) skylander, action, nameItem);
             }
@@ -69,6 +72,17 @@ public class TechListener implements Listener {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(Drobot.nameFirstSpell, skylander::firstSpell_Laser);
         actions.put(Drobot.nameSecondSpell, skylander::secondSpell_Fly);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleBoomer(Boomer skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(Boomer.nameWeapon, skylander::passif_ThrowTNT);
+        actions.put(Boomer.nameFirstSpell, skylander::firstSpell_Trap);
+        actions.put(Boomer.nameSecondSpell, skylander::secondSpell_Explosion);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();

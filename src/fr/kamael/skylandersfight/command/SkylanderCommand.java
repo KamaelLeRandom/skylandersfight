@@ -25,7 +25,6 @@ public class SkylanderCommand implements CommandExecutor {
 					if (args.length == 1) {				
 						
 						if (args[0].equalsIgnoreCase("test")) {
-							plugin.playerUtils.nickPlayer(player, "Bogda_Kamael");
 						}
 						
 						// < /skylander help >

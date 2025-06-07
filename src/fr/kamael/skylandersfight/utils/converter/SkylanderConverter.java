@@ -22,6 +22,7 @@ import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.mort.GrimCreeper;
+import fr.kamael.skylandersfight.skylanders.tech.Boomer;
 import fr.kamael.skylandersfight.skylanders.tech.Drobot;
 import fr.kamael.skylandersfight.skylanders.tech.Sprocket;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
@@ -60,6 +61,8 @@ public class SkylanderConverter {
 				return new TriggerHappy(player);
 			case Drobot.name:
 				return new Drobot(player);
+			case Boomer.name:
+				return new Boomer(player);
 			case Sprocket.name:
 				return new Sprocket(player);
 			case StealthElf.name:
