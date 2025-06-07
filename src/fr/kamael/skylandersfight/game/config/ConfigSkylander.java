@@ -12,6 +12,7 @@ import fr.kamael.skylandersfight.skylanders.air.Scratch;
 import fr.kamael.skylandersfight.skylanders.air.Warnado;
 import fr.kamael.skylandersfight.skylanders.eau.Chill;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
+import fr.kamael.skylandersfight.skylanders.eau.WhamShell;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
 import fr.kamael.skylandersfight.skylanders.feu.Smolderdash;
 import fr.kamael.skylandersfight.skylanders.feu.Sunburn;
@@ -76,6 +77,7 @@ public class ConfigSkylander {
 		ArrayList<ItemStack> eau = new ArrayList<>();
 		// TODO : Remplir les Skylanders Eau.
 		eau.add(SlamBam.getSignatureItem());
+		eau.add(WhamShell.getSignatureItem());
 		eau.add(Chill.getSignatureItem());
 		this.data.put(Element.EAU, eau);
 		

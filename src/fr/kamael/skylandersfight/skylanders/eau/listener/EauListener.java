@@ -18,6 +18,7 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.eau.Chill;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
+import fr.kamael.skylandersfight.skylanders.eau.WhamShell;
 
 public class EauListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -40,6 +41,8 @@ public class EauListener implements Listener {
 
             if (skylander instanceof SlamBam) {
             	handleSlamBam((SlamBam) skylander, action, nameItem);
+            } else if (skylander instanceof WhamShell) {
+            	handleWhamShell((WhamShell) skylander, action, nameItem);
             } else if (skylander instanceof Chill) {
             	handleChill((Chill) skylander, action, nameItem);
             }
@@ -54,6 +57,16 @@ public class EauListener implements Listener {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(SlamBam.nameFirstSpell, skylander::firstSpell_Reset);
         actions.put(SlamBam.nameSecondSpell, skylander::secondSpell_Resis);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleWhamShell(WhamShell skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(WhamShell.nameFirstSpell, skylander::firstSpell_SwapWeapon);
+        actions.put(WhamShell.nameSecondSpell, skylander::secondSpell_Blindness);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();
