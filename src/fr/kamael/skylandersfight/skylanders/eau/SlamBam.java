@@ -47,6 +47,7 @@ public class SlamBam extends Skylander {
 		ItemManager.giveColorArmor(player, element.getColorArmor());
 				
 		player.setLevel(nbHitPassif);
+		player.setWalkSpeed(0.23f);
 		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());

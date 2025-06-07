@@ -49,6 +49,8 @@ public class Chill extends Skylander {
 		ItemManager.clearPlayer(player);
 		ItemManager.giveColorArmor(player, element.getColorArmor());
 					
+		player.setWalkSpeed(0.23f);
+		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());
 		inv.setItem(1, getItemWeapon());
