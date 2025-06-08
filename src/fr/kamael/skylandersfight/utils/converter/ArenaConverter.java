@@ -2,6 +2,7 @@ package fr.kamael.skylandersfight.utils.converter;
 
 import fr.kamael.skylandersfight.arena.Arena;
 import fr.kamael.skylandersfight.arena.map.JungleProfonde;
+import fr.kamael.skylandersfight.arena.map.NouveauLabogda;
 import fr.kamael.skylandersfight.arena.map.ParadisBlanc;
 
 public class ArenaConverter {
@@ -12,6 +13,8 @@ public class ArenaConverter {
 				return new ParadisBlanc();
 			case JungleProfonde.nameArena:
 				return new JungleProfonde();
+			case NouveauLabogda.nameArena:
+				return new NouveauLabogda();
 				
 			default:
 				return null;
