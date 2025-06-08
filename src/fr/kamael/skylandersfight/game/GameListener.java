@@ -15,6 +15,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -521,6 +522,25 @@ public class GameListener implements Listener {
 		}
 		catch (Exception e) {
 			Bukkit.broadcastMessage(Constants.prefixError + "(GameListener, playerInteractEmeraldBlock) : §7"+e.getMessage());	
+			return;
+		}
+	}
+	
+	@EventHandler
+	public void playerBlockPlace(BlockPlaceEvent event) {
+		try {
+			if (plugin.game != null && plugin.game.isState(GameState.FIGHTING)) {
+				Block block = event.getBlock();
+				Player player = event.getPlayer();
+				Skylander skylander = plugin.game.getPlayer(player).getSkylander();
+				
+				if (skylander.isAlive()) {
+					event.setCancelled(skylander.onPlace(block));
+				}
+			}
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage(Constants.prefixError + "(GameListener, playerBlockPlace) : §7"+e.getMessage());	
 			return;
 		}
 	}

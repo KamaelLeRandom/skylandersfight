@@ -26,6 +26,7 @@ import fr.kamael.skylandersfight.skylanders.tech.Boomer;
 import fr.kamael.skylandersfight.skylanders.tech.Drobot;
 import fr.kamael.skylandersfight.skylanders.tech.Sprocket;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
+import fr.kamael.skylandersfight.skylanders.terre.Bash;
 import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
@@ -85,6 +86,7 @@ public class ConfigSkylander {
 		ArrayList<ItemStack> terre = new ArrayList<>();
 		// TODO : Remplir les Skylanders Terre.
 		terre.add(Terrafin.getSignatureItem());
+		terre.add(Bash.getSignatureItem());
 		terre.add(PrismBreak.getSignatureItem());
 		this.data.put(Element.TERRE, terre);
 		

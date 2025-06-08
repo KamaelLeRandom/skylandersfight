@@ -26,6 +26,7 @@ import fr.kamael.skylandersfight.skylanders.tech.Boomer;
 import fr.kamael.skylandersfight.skylanders.tech.Drobot;
 import fr.kamael.skylandersfight.skylanders.tech.Sprocket;
 import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
+import fr.kamael.skylandersfight.skylanders.terre.Bash;
 import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
@@ -87,6 +88,8 @@ public class SkylanderConverter {
 				return new Chill(player);
 			case Terrafin.name: 
 				return new Terrafin(player);
+			case Bash.name:
+				return new Bash(player);
 			case PrismBreak.name: 
 				return new PrismBreak(player);
 			case LightningRod.name: 

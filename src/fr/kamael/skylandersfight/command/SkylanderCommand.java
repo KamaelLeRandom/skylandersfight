@@ -25,6 +25,7 @@ public class SkylanderCommand implements CommandExecutor {
 					if (args.length == 1) {				
 						
 						if (args[0].equalsIgnoreCase("test")) {
+							plugin.game.getPlayer(player).getSkylander().updateForce(+2.);
 						}
 						
 						// < /skylander help >

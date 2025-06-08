@@ -3,6 +3,7 @@ package fr.kamael.skylandersfight.skylanders;
 import java.util.ArrayList;
 
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -225,6 +226,8 @@ public class Skylander {
 	public void giveEquipement() { return; }
 	
 	public void sendDescription() { return; }
+	
+	public Boolean onPlace(Block block) { return true; } // Quand le joueur place un bloc.
 	
 	public void onStart() { return; } // Quand le round commence. 
 	
