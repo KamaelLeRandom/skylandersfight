@@ -12,6 +12,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.kamael.skylandersfight.game.GamePlayer;
@@ -29,6 +31,7 @@ public class PluginListener implements Listener {
 			player.setFoodLevel(20);
 			
 			plugin.statsUtils.tryInitializaJSONPlayer(player);
+			plugin.loreUtils.initPlayerIfNeeded(player.getUniqueId());
 			if (plugin.playerUtils.isNicked(player))
 				plugin.playerUtils.unnickPlayer(player);
 			
@@ -67,6 +70,7 @@ public class PluginListener implements Listener {
 	@EventHandler
 	public void inventoryConfigClick(InventoryClickEvent event) {
 		try {
+			Player player = (Player) event.getWhoClicked();
 			ItemStack it = event.getCurrentItem();
 			InventoryAction action = event.getAction();
 			
@@ -126,6 +130,16 @@ public class PluginListener implements Listener {
 					default:
 						break;
 				}
+			} else if (event.getView().getTitle().equalsIgnoreCase(Constants.inventoryLoreName)) {
+				event.setCancelled(true);
+				
+	            ItemStack clicked = event.getCurrentItem();
+	            if (clicked == null || clicked.getType() != Material.WRITTEN_BOOK) return;
+
+	            ItemMeta meta = clicked.getItemMeta();
+	            if (!(meta instanceof BookMeta)) return;
+
+	            plugin.loreUtils.openBook(player, clicked);
 			}
 		}
 		catch (Exception e) {

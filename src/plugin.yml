@@ -8,3 +8,7 @@ commands:
     description: "Commande principale du plugin Skylander"
     permission: skylander.use
     aliases: [s]
+  lore:
+    description: "Commande pour voir le Lore"
+    permission: lore.use
+    aliases: [l]

@@ -17,6 +17,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import fr.kamael.skylandersfight.arena.ArenaListener;
+import fr.kamael.skylandersfight.command.LoreCommand;
 import fr.kamael.skylandersfight.command.SkylanderCommand;
 import fr.kamael.skylandersfight.command.SkylanderTabCompleter;
 import fr.kamael.skylandersfight.game.Game;
@@ -29,6 +30,7 @@ import fr.kamael.skylandersfight.skylanders.mort.listener.MortListener;
 import fr.kamael.skylandersfight.skylanders.tech.listener.TechListener;
 import fr.kamael.skylandersfight.skylanders.terre.listener.TerreListener;
 import fr.kamael.skylandersfight.skylanders.vie.listener.VieListener;
+import fr.kamael.skylandersfight.utils.LoreUtils;
 import fr.kamael.skylandersfight.utils.PlayerUtils;
 import fr.kamael.skylandersfight.utils.StatistiqueUtils;
 import fr.kamael.skylandersfight.utils.manager.TeamManager;
@@ -38,6 +40,7 @@ public class Plugin extends JavaPlugin {
 	public Random random;
 	public Game game;
 	public StatistiqueUtils statsUtils;
+	public LoreUtils loreUtils;
 	public PlayerUtils playerUtils;
 
 	/// --- Méthodes initial.
@@ -46,8 +49,10 @@ public class Plugin extends JavaPlugin {
 		plugin = this;
 		random = new Random();
 		statsUtils = new StatistiqueUtils();
+		loreUtils = new LoreUtils();
 		playerUtils = new PlayerUtils();
 
+		getCommand("lore").setExecutor(new LoreCommand());
         getCommand("skylander").setExecutor(new SkylanderCommand());
         getCommand("skylander").setTabCompleter(new SkylanderTabCompleter());
 		

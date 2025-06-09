@@ -21,6 +21,7 @@ public class Constants {
 	public final static String inventorySkylanderName = "§cSkylanders";
 	public final static String inventoryArenaName = "§cArènes";
 	public final static String inventoryConfigName = "§cConfiguration";
+	public final static String inventoryLoreName = "§cChapitre du Journal des Bogdanoff";
 	
 	public final static String itemNameEon = "§3Bénédiction d'Eon";
 	public final static String itemNameFlynn = "§6Montgolfière de Flynn";
@@ -33,4 +34,6 @@ public class Constants {
 	public final static Double valueHeal = 5.;
 
 	public final static Integer secondsForAssist = 15;
+	
+	public final static Integer numberOfChapterLore = 20;
 }
