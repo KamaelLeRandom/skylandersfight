@@ -94,6 +94,7 @@ public class Warnado extends Skylander {
 			
 			SpellUtils.dash(
 				this, 
+				player,
 				powerVectorFirstSpell, 
 				2.5,
 				20,

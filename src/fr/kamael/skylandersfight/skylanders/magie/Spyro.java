@@ -75,6 +75,7 @@ public class Spyro extends Skylander {
 			
 			SpellUtils.dash(
 				this, 
+				player,
 				vectorPowerFirstSpell,
 				2.5,
 				20,

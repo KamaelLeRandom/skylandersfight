@@ -16,6 +16,7 @@ import fr.kamael.skylandersfight.Plugin;
 import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
+import fr.kamael.skylandersfight.skylanders.mort.FrightRider;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.mort.GrimCreeper;
 
@@ -40,6 +41,8 @@ public class MortListener implements Listener {
 
             if (skylander instanceof GhostRoaster) {
             	handleGhostRoaster((GhostRoaster) skylander, action, nameItem);
+            } else if (skylander instanceof FrightRider) {
+            	handleFrightRider((FrightRider) skylander, action, nameItem);
             } else if (skylander instanceof GrimCreeper) {
             	handleGrimCreeper((GrimCreeper) skylander, action, nameItem);
             }
@@ -54,6 +57,17 @@ public class MortListener implements Listener {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(GhostRoaster.nameFirstSpell, skylander::firstSpell_Invul);
         actions.put(GhostRoaster.nameSecondSpell, skylander::secondSpell_Spectral);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleFrightRider(FrightRider skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(FrightRider.namePassif, skylander::passif_Horse);
+        actions.put(FrightRider.nameFirstSpell, skylander::firstSpell_Dash);
+        actions.put(FrightRider.nameSecondSpell, skylander::secondSpell_Invisibility);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();

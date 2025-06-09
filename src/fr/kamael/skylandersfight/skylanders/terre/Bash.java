@@ -119,6 +119,7 @@ public class Bash extends Skylander {
 			
 			SpellUtils.dash(
 				this, 
+				player,
 				powerDashFirstSpell, 
 				rangeDashFirstSpell,
 				15,

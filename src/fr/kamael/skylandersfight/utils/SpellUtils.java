@@ -219,13 +219,22 @@ public class SpellUtils {
 		return skylandersHit;
 	}
 	
-	public static void dash(Skylander skylander, Double value, Double range, Integer timerDamage, SkylanderDamageRunnable damageCallback, ParticleRunnable particleCallback) {
+	public static void dash(Skylander skylander, Entity entity, Double value, Double range, Integer timerDamage, SkylanderDamageRunnable damageCallback, ParticleRunnable particleCallback) {
 		Plugin plugin = Plugin.plugin;
 		Player player = skylander.getPlayer();
 		
 		Vector direction = player.getLocation().getDirection();
 		Vector dashVector = direction.multiply(value);
-		player.setVelocity(dashVector);
+		
+		entity.setVelocity(new Vector(0, 0, 0));
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				entity.setVelocity(dashVector);
+				cancel();
+				return;
+			}
+		}.runTaskLater(plugin, 2);
 		
 		new BukkitRunnable() {
 			private Integer timer = timerDamage;
@@ -233,11 +242,11 @@ public class SpellUtils {
 
 			@Override
 			public void run() {
-				particleCallback.execute(player.getLocation());
+				particleCallback.execute(entity.getLocation());
 				
-				for (Entity entity : player.getNearbyEntities(range, 2, range)) {
-					if (entity instanceof Player && entity != player && !listPlayer.contains(entity)) {
-						Player playerHit = (Player) entity;
+				for (Entity entityCheck : entity.getNearbyEntities(range, 2, range)) {
+					if (entityCheck instanceof Player && entityCheck != player && !listPlayer.contains(entityCheck)) {
+						Player playerHit = (Player) entityCheck;
 						Skylander skylanderHit = plugin.game.getPlayer(playerHit).getSkylander();
 
 						if (skylanderHit.isAlive() && !skylander.getMates().contains(skylanderHit)) {

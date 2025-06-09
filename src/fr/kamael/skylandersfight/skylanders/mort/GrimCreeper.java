@@ -101,6 +101,7 @@ public class GrimCreeper extends Skylander {
 			
 			SpellUtils.dash(
 				this, 
+				player,
 				vectorPowerFirstSpell, 
 				2.5,
 				8,
