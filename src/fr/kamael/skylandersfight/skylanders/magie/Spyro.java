@@ -38,7 +38,7 @@ public class Spyro extends Skylander {
 	
 	public Spyro(Player player) {
 		super(player, Element.MAGIE, name);
-		this.force = 1.10;
+		this.force = 1. + Element.magieForce;
 	}
 	
 	public void giveEquipement() {

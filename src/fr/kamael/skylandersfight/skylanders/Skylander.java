@@ -46,6 +46,10 @@ public class Skylander {
 		return this.element;
 	}
 	
+	public void setElement(Element element) {
+		this.element = element;
+	}
+	
 	public String getName() {
 		return this.name;
 	}

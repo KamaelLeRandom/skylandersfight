@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -48,7 +49,7 @@ public class WhamShell extends Skylander {
 		ItemManager.clearPlayer(player);
 		ItemManager.giveColorArmor(player, element.getColorArmor());
 					
-		player.setWalkSpeed(0.23f);
+		player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(Element.eauSpeed);
 		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());

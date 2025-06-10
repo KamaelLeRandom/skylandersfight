@@ -53,7 +53,7 @@ public class PrismBreak extends Skylander {
 	
 	public PrismBreak(Player player) {
 		super(player, Element.TERRE, name);
-		resis = 0.9;
+		resis = 1. - Element.terreResis;
 	}
 	
 	public void giveEquipement() {

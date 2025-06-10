@@ -63,8 +63,8 @@ public class Sprocket extends Skylander {
 	
 	public Sprocket(Player player) {
 		super(player, Element.TECH, name);
-		this.force = 1.05;
-		this.resis = 0.95;
+		this.force = 1. + Element.techForce;
+		this.resis = 1. - Element.techResis;
 	}
 	
 	public void giveEquipement() {

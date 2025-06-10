@@ -20,6 +20,7 @@ import fr.kamael.skylandersfight.skylanders.magie.DoubleTrouble;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
+import fr.kamael.skylandersfight.skylanders.mort.Cynder;
 import fr.kamael.skylandersfight.skylanders.mort.FrightRider;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.mort.GrimCreeper;
@@ -73,6 +74,8 @@ public class SkylanderConverter {
 				return new ZooLou(player);
 			case GhostRoaster.name:
 				return new GhostRoaster(player);
+			case Cynder.name: 
+				return new Cynder(player);
 			case FrightRider.name:
 				return new FrightRider(player);
 			case GrimCreeper.name:

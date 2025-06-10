@@ -20,6 +20,7 @@ import fr.kamael.skylandersfight.skylanders.magie.DoubleTrouble;
 import fr.kamael.skylandersfight.skylanders.magie.Spyro;
 import fr.kamael.skylandersfight.skylanders.magie.StarStrike;
 import fr.kamael.skylandersfight.skylanders.magie.Voodood;
+import fr.kamael.skylandersfight.skylanders.mort.Cynder;
 import fr.kamael.skylandersfight.skylanders.mort.FrightRider;
 import fr.kamael.skylandersfight.skylanders.mort.GhostRoaster;
 import fr.kamael.skylandersfight.skylanders.mort.GrimCreeper;
@@ -60,8 +61,8 @@ public class ConfigSkylander {
 		this.data.put(Element.VIE, vie);
 		
 		ArrayList<ItemStack> mort = new ArrayList<>();
-		// TODO : Remplir les Skylanders Mort.
 		mort.add(GhostRoaster.getSignatureItem());
+		mort.add(Cynder.getSignatureItem());
 		mort.add(FrightRider.getSignatureItem());
 		mort.add(GrimCreeper.getSignatureItem());
 		this.data.put(Element.MORT, mort);

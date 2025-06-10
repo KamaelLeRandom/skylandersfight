@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.kamael.skylandersfight.game.CustomEntity;
+import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.vie.ZooLou;
 import fr.kamael.skylandersfight.utils.SpellUtils;
@@ -32,7 +33,8 @@ public class ZooLouWolf extends CustomEntity {
 	}
 	
 	public void onDamage(Skylander skylander) {
-		SpellUtils.heal(this.skylander, ZooLou.healFirstSpell, true);
+		if (skylander.getElement().equals(Element.VIE))
+			SpellUtils.heal(this.skylander, ZooLou.healFirstSpell, true);
 		return; 
 	}
 }

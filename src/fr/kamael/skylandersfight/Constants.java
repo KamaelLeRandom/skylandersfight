@@ -36,4 +36,6 @@ public class Constants {
 	public final static Integer secondsForAssist = 15;
 	
 	public final static Integer numberOfChapterLore = 20;
+	
+	public final static Double baseSpeed = 0.1;
 }

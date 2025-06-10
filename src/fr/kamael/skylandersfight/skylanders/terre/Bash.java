@@ -46,7 +46,7 @@ public class Bash extends Skylander {
 	
 	public Bash(Player player) {
 		super(player, Element.TERRE, name);
-		resis = 0.9;
+		resis = 1. - Element.terreResis;
 	}
 	
 	public void giveEquipement() {

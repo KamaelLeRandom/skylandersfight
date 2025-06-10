@@ -46,7 +46,7 @@ public class DoubleTrouble extends Skylander {
 	
 	public DoubleTrouble(Player player) {
 		super(player, Element.MAGIE, name);
-		this.force = 1.10;
+		this.force = 1. + Element.magieForce;
 	}
 	
 	public void giveEquipement() {

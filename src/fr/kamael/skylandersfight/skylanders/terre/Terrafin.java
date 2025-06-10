@@ -43,7 +43,7 @@ public class Terrafin extends Skylander {
 	
 	public Terrafin(Player player) {
 		super(player, Element.TERRE, name);
-		resis = 0.9;
+		resis = 1. - Element.terreResis;
 	}
 	
 	public void giveEquipement() {

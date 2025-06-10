@@ -52,7 +52,7 @@ public class StarStrike extends Skylander {
 	
 	public StarStrike(Player player) {
 		super(player, Element.MAGIE, name);
-		this.force = 1.10;
+		this.force = 1. + Element.magieForce;
 	}
 	
 	public void giveEquipement() {

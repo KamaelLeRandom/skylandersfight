@@ -62,7 +62,8 @@ public class StealthElf extends Skylander {
 			skylanderHit.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, tickPoisonFirstSpell, 1, false, false));
 		}
 		
-		SpellUtils.heal(this, damage * pourcentHealPassif, false);
+		if (element.equals(Element.VIE))
+			SpellUtils.heal(this, damage * pourcentHealPassif, false);
 		
 		return damage; 
 	}

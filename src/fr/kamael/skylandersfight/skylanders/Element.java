@@ -15,6 +15,12 @@ public enum Element {
 	AUCUN ("§8Aucun§f", "§8", "§8Aucun§f : vous n'avez aucun element.", Color.GRAY),
 	;
 	
+	public static final Double magieForce = 0.1;
+	public static final Double techForce = 0.05;
+	public static final Double techResis = 0.05;
+	public static final Double eauSpeed = 0.12;
+	public static final Double terreResis = 0.1;
+
 	private String name;
 	private String color;
 	private String desc;
