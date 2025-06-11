@@ -14,6 +14,7 @@ import fr.kamael.skylandersfight.skylanders.eau.Chill;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.eau.WhamShell;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
+import fr.kamael.skylandersfight.skylanders.feu.Flameslinger;
 import fr.kamael.skylandersfight.skylanders.feu.Smolderdash;
 import fr.kamael.skylandersfight.skylanders.feu.Sunburn;
 import fr.kamael.skylandersfight.skylanders.magie.DoubleTrouble;
@@ -72,10 +73,9 @@ public class ConfigSkylander {
 		this.data.put(Element.BOGDA, bogda);
 		
 		ArrayList<ItemStack> feu = new ArrayList<>();
-		// TODO : Remplir les Skylanders Feu.
 		feu.add(Eruptor.getSignatureItem());
+		feu.add(Flameslinger.getSignatureItem());
 		feu.add(Sunburn.getSignatureItem());
-		
 		feu.add(Smolderdash.getSignatureItem());
 		this.data.put(Element.FEU, feu);
 		

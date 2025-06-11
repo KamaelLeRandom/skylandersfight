@@ -14,6 +14,7 @@ import fr.kamael.skylandersfight.skylanders.eau.Chill;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.eau.WhamShell;
 import fr.kamael.skylandersfight.skylanders.feu.Eruptor;
+import fr.kamael.skylandersfight.skylanders.feu.Flameslinger;
 import fr.kamael.skylandersfight.skylanders.feu.Smolderdash;
 import fr.kamael.skylandersfight.skylanders.feu.Sunburn;
 import fr.kamael.skylandersfight.skylanders.magie.DoubleTrouble;
@@ -82,6 +83,8 @@ public class SkylanderConverter {
 				return new GrimCreeper(player);
 			case Eruptor.name:
 				return new Eruptor(player);
+			case Flameslinger.name:
+				return new Flameslinger(player);
 			case Sunburn.name:
 				return new Sunburn(player);
 			case Smolderdash.name: 
