@@ -33,6 +33,7 @@ import fr.kamael.skylandersfight.skylanders.terre.Bash;
 import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
+import fr.kamael.skylandersfight.skylanders.vie.StumpSmash;
 import fr.kamael.skylandersfight.skylanders.vie.ZooLou;
 
 public class SkylanderConverter {
@@ -71,6 +72,8 @@ public class SkylanderConverter {
 				return new Sprocket(player);
 			case StealthElf.name:
 				return new StealthElf(player);
+			case StumpSmash.name: 
+				return new StumpSmash(player);
 			case ZooLou.name:
 				return new ZooLou(player);
 			case GhostRoaster.name:

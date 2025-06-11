@@ -33,6 +33,7 @@ import fr.kamael.skylandersfight.skylanders.terre.Bash;
 import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
+import fr.kamael.skylandersfight.skylanders.vie.StumpSmash;
 import fr.kamael.skylandersfight.skylanders.vie.ZooLou;
 
 public class ConfigSkylander {
@@ -58,6 +59,7 @@ public class ConfigSkylander {
 		ArrayList<ItemStack> vie = new ArrayList<>();
 		// TODO : Remplir les Skylanders Vie.
 		vie.add(StealthElf.getSignatureItem());
+		vie.add(StumpSmash.getSignatureItem());
 		vie.add(ZooLou.getSignatureItem());
 		this.data.put(Element.VIE, vie);
 		

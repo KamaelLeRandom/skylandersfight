@@ -17,6 +17,7 @@ import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
+import fr.kamael.skylandersfight.skylanders.vie.StumpSmash;
 import fr.kamael.skylandersfight.skylanders.vie.ZooLou;
 
 public class VieListener implements Listener {
@@ -40,6 +41,8 @@ public class VieListener implements Listener {
 
             if (skylander instanceof StealthElf) {
             	handleStealthElf((StealthElf) skylander, action, nameItem);
+            } else if (skylander instanceof StumpSmash) {
+            	handleStumpSmash((StumpSmash) skylander, action, nameItem);
             } else if (skylander instanceof ZooLou) {
             	handleZooLou((ZooLou) skylander, action, nameItem);
             }
@@ -54,6 +57,16 @@ public class VieListener implements Listener {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put(StealthElf.nameFirstSpell, skylander::firstSpell_Invi);
         actions.put(StealthElf.nameSecondSpell, skylander::secondSpell_Dash);
+
+        if (isRightClick(action) && actions.containsKey(name))
+        	actions.get(name).run();
+	}
+	
+	private void handleStumpSmash(StumpSmash skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(StumpSmash.namePassif, skylander::passif_Heal);
+        actions.put(StumpSmash.nameFirstSpell, skylander::firstSpell_Damage);
+        actions.put(StumpSmash.nameSecondSpell, skylander::secondSpell_Poison);
 
         if (isRightClick(action) && actions.containsKey(name))
         	actions.get(name).run();
