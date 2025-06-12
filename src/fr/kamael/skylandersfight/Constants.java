@@ -38,4 +38,5 @@ public class Constants {
 	public final static Integer numberOfChapterLore = 20;
 	
 	public final static Double baseSpeed = 0.1;
+	public final static Double baseKnockback = 0.0;
 }

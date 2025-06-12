@@ -3,7 +3,6 @@ package fr.kamael.skylandersfight.utils.manager;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +10,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
+
+import fr.kamael.skylandersfight.Constants;
 
 public class ItemManager {
 	
@@ -34,10 +35,8 @@ public class ItemManager {
 		player.setTotalExperience(0);
 		player.setLevel(0);
 		player.setExp(0);
-		
-        AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-        if (attribute != null)
-            attribute.setBaseValue(0.1);
+		player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(Constants.baseKnockback);
+		player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(Constants.baseSpeed);
 	}
 	
 	public static void removeAmount(ItemStack item, Integer amount) {

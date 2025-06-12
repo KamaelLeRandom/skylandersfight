@@ -24,7 +24,7 @@ public class StumpSmash extends Skylander {
 	
 	public static final String nameWeapon = "§2Marto";
 	public static final String namePassif = "§2Sève Vitale";
-	public static final Double healPassif = 4.;
+	public static final Double healPassif = 2.;
 	public static final Integer numberMaxPassif = 2;
 	
 	public static final String nameFirstSpell = "§2Écrasement";
@@ -57,6 +57,7 @@ public class StumpSmash extends Skylander {
 	@Override
 	public Boolean onDamageSword(Skylander skylanderHit) { 
 		if (numberOfPassif < numberMaxPassif) {
+			numberOfPassif++;
 			player.getInventory().addItem(getItemPassif());
 		}
 		
@@ -65,10 +66,11 @@ public class StumpSmash extends Skylander {
 	
 	public void passif_Heal() {
 		if (numberOfPassif > 0) {
+			numberOfPassif--;
 			ItemStack itemInHand = player.getInventory().getItemInMainHand();
 			
 			if (itemInHand.getType().equals(Material.LIME_DYE)) {
-				ItemManager.removeAmount(itemInHand, 1);
+				ItemManager.removeAmount(itemInHand, -1);
 				SpellUtils.heal(this, healPassif, true);
 			}
 		}
@@ -111,11 +113,11 @@ public class StumpSmash extends Skylander {
 	    player.sendMessage("\n");
 	    player.sendMessage("   ▶ " + element.getColor() + name + "§f ◀");
 	    player.sendMessage("\n");
-	    player.sendMessage("≫ "+ namePassif +"§f, .");
+	    player.sendMessage("≫ "+ namePassif +"§f, pour obtenir une "+ namePassif +" vous devez infligez un dégat au corps à corps, en l'utilisant vous êtes régénéré de §c"+ healPassif +"<3§f. ("+ numberMaxPassif +" cumulable à la fois)");
 	    player.sendMessage("\n");
-	    player.sendMessage("≫ "+ nameFirstSpell +"§f, . §b(" + timerFirstSpell + "s de recharge)");
+	    player.sendMessage("≫ "+ nameFirstSpell +"§f, vous écraser les joueurs autour de vous (- de "+ rangeFirstSpell +" blocs) ce qui inflige §a"+ damageFirstSpell +" dégats§f et les §aenterre d'un bloc§f. §b(" + timerFirstSpell + "s de recharge)");
 	    player.sendMessage("\n");
-	    player.sendMessage("≫ "+ nameSecondSpell +"§f, . §b(" + timerSecondSpell + "s de recharge)");
+	    player.sendMessage("≫ "+ nameSecondSpell +"§f, vous lancez une boule empoisonné qui §aexplose au contact d'un joueur§f (- de "+ rangeDetectPoisonSecondSpell +" blocs) qui applique l'§aeffet Poison§f pendant "+ secDurationPoisonSecondSpell +" secondes. §b(" + timerSecondSpell + "s de recharge)");
 	    player.sendMessage("\n");
 	    player.sendMessage("===============");
 	    player.sendMessage("\n");
@@ -123,8 +125,8 @@ public class StumpSmash extends Skylander {
 	
 	public static ItemStack getSignatureItem() {
 		ArrayList<String> lore = new ArrayList<>();
-		lore.add("§2"+ name +"§f est un Skylander §cmélée§f ...");
-		lore.add("§f.");
+		lore.add("§2"+ name +"§f est un Skylander §cmélée§f capable de soigner");
+		lore.add("§fassez facilement.");
 		ItemStack item = new ItemStack(Material.OAK_LOG, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName("§2"+name);
@@ -154,7 +156,7 @@ public class StumpSmash extends Skylander {
 	
 	public static ItemStack getItemFirstSpell() {
 		List<String> lore = Arrays.asList(
-			"§f."
+			"§fVous écrasez les joueurs proche de vous (- de "+ rangeFirstSpell +" blocs) ce qui infligie "+ damageFirstSpell +" dégats et enterre d'un bloc sous terre."
 		);
 		ItemStack item = new ItemStack(Material.ANVIL, 1);
 		ItemMeta meta = item.getItemMeta();
@@ -170,7 +172,7 @@ public class StumpSmash extends Skylander {
 	
 	public static ItemStack getItemSecondSpell() {
 		List<String> lore = Arrays.asList(
-			"§f."
+			"§fVous lancez une boule empoisonné qui §aexplose au contact d'un joueur§f (- de "+ rangeDetectPoisonSecondSpell +" blocs) qui applique l'§aeffet Poison§f pendant "+ secDurationPoisonSecondSpell +"s."
 		);
 		ItemStack item = new ItemStack(Material.SPIDER_EYE, 1);
 		ItemMeta meta = item.getItemMeta();
