@@ -233,6 +233,8 @@ public class Skylander {
 	
 	public Boolean onPlace(Block block) { return true; } // Quand le joueur place un bloc.
 	
+	public void onMove() { return; } // Quand le joueur se déplace.
+	
 	public void onStart() { return; } // Quand le round commence. 
 	
 	public void onSneak() { return; } // Quand un joueur se met en sneak.

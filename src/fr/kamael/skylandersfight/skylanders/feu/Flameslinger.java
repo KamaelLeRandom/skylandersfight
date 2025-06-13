@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.Inventory;
@@ -21,6 +23,7 @@ import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
+import fr.kamael.skylandersfight.utils.converter.SkylanderConverter;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class Flameslinger extends Skylander {
@@ -30,7 +33,7 @@ public class Flameslinger extends Skylander {
 	public static final String namePassif = "§4Sniper";
 	public static final Double minRangePassif = 10.;
 	
-	public static final String nameFirstSpell = "§4";
+	public static final String nameFirstSpell = "§4Flèches Brulantes";
 	public static final Integer timerFirstSpell = 30;
 	public static final Integer secDurationFirstSpell = 10;
 	
@@ -39,6 +42,7 @@ public class Flameslinger extends Skylander {
 	public static final Integer timerSecondSpell = 30;
 
 	private Boolean firstSpellActived = false;
+	private Boolean secondSpellActived = false;
 	
 	public Flameslinger(Player player) {
 		super(player, Element.FEU, name);
@@ -72,10 +76,29 @@ public class Flameslinger extends Skylander {
 	
 	@Override
 	public void onShoot(Projectile projectile) { 
-		if (firstSpellActived) {
-			// Mettres les flammes.
+		if (firstSpellActived && projectile instanceof Arrow) {
+			new BukkitRunnable() {
+				
+				@Override
+				public void run() {
+					if (projectile.isDead() || projectile.isOnGround() || !alive || !plugin.game.isState(GameState.FIGHTING)) {
+						cancel();
+						return;
+					}
+					
+					if (projectile.getLocation().getBlock().getType().equals(Material.AIR))
+						swapVoidToFire(projectile.getLocation());
+				}
+			}.runTaskTimer(plugin, 0, 1);
 		}
 		
+		return; 
+	}
+	
+	@Override
+	public void onMove() { 
+		if (secondSpellActived && player.getLocation().getBlock().getType().equals(Material.AIR)) 
+			swapVoidToFire(player.getLocation());
 		return; 
 	}
 	
@@ -112,6 +135,7 @@ public class Flameslinger extends Skylander {
 			player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_SPLASH_HIGH_SPEED, 1, 1);
 			player.sendMessage(Constants.prefixMessage + "Vous venez d'utliser votre compétence " + nameSecondSpell + "§f.");
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
+			secondSpellActived = true;
 			
 			new BukkitRunnable() {
 				private Integer timer = tickDurationSecondSpell;
@@ -119,12 +143,11 @@ public class Flameslinger extends Skylander {
 				public void run() {
 					if (timer == 0 || !alive || !plugin.game.isState(GameState.FIGHTING)) {
 						player.removePotionEffect(PotionEffectType.SPEED);
+						secondSpellActived = false;
 						cancel();
 						return;
 					}
-					
-					// Mettre les flammes.
-					
+										
 					timer--;
 				}
 			}.runTaskTimer(plugin, 0, 1);
@@ -133,6 +156,23 @@ public class Flameslinger extends Skylander {
 			return;
 		}
 	}
+	
+	public void swapVoidToFire(Location loc) {
+		loc.getBlock().setType(Material.FIRE);
+	
+		new BukkitRunnable() {
+			private Integer timer = 3;
+			@Override
+			public void run() {
+				if (timer == 0) {
+					loc.getBlock().setType(Material.AIR);
+					cancel();
+				}
+				
+				timer--;
+			}
+		}.runTaskTimer(plugin, 0, 20);
+	}
 
 	public void sendDescription() {
 		player.sendMessage("\n");
@@ -140,11 +180,11 @@ public class Flameslinger extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("   ▶ " + element.getColor() + name + "§f ◀");
 		player.sendMessage("\n");
-		player.sendMessage("≫ §6" + namePassif + "§f, .");
+		player.sendMessage("≫ §6" + namePassif + "§f, si vous touchez une flèche à plus de "+ minRangePassif +" blocs, vos dégats sont augmentés du montant restants. (15 blocs = 5% de dégats bonus)");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameFirstSpell + "§f, . §b(" + timerFirstSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, vous enflammes vos flèches ce qui laisse une trainée de flamme derrière elle. §b(" + timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameSecondSpell + "§f, . §b(" + timerSecondSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameSecondSpell + "§f, vous gagnez l'effet Vitesse 2 pendant "+ SkylanderConverter.convertTicks(tickDurationSecondSpell) +" secondes, vous laissez une trainée de flamme derrière vous. §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");
@@ -153,7 +193,7 @@ public class Flameslinger extends Skylander {
 	public static ItemStack getSignatureItem() {
 		ArrayList<String> lore = new ArrayList<>();
 		lore.add("§4"+ name +"§f est un Skylander §cdistance§f possèdant");
-		lore.add("§fdes flèches enflammées.");
+		lore.add("§fdes flèches enflammées et inflige plus de dégats via des longshots.");
 		ItemStack item = new ItemStack(Material.BOW, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(Element.FEU.getColor() + name);

@@ -426,6 +426,8 @@ public class GameListener implements Listener {
 	            if ( (skylander.checkStatus(Status.NOMOVE) || skylander.checkStatus(Status.FREEZE)) && (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ())) {
 					event.setCancelled(true);
 				}
+	            
+	            skylander.onMove();
 				
 				if (skylander.isAlive() && player.getLocation().getY() <= 0.) {
 					skylander.addStatus(null, Status.ONEFALL);
