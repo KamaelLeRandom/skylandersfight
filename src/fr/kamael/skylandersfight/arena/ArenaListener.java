@@ -11,7 +11,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -99,14 +98,7 @@ public class ArenaListener implements Listener {
 		}
 		return;
 	}
-		
-	@EventHandler
-	public void entityPickupItem(EntityPickupItemEvent event) {
-		if (plugin.game != null && plugin.game.isState(GameState.FIGHTING)) {
-			event.setCancelled(true);
-		}
-	}
-	
+			
 	@EventHandler
 	public void playerDropItem(PlayerDropItemEvent event) {
 		if (plugin.game != null && plugin.game.isState(GameState.FIGHTING)) {

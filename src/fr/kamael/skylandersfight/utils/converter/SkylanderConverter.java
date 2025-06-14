@@ -33,6 +33,7 @@ import fr.kamael.skylandersfight.skylanders.tech.TriggerHappy;
 import fr.kamael.skylandersfight.skylanders.terre.Bash;
 import fr.kamael.skylandersfight.skylanders.terre.PrismBreak;
 import fr.kamael.skylandersfight.skylanders.terre.Terrafin;
+import fr.kamael.skylandersfight.skylanders.vie.Camo;
 import fr.kamael.skylandersfight.skylanders.vie.StealthElf;
 import fr.kamael.skylandersfight.skylanders.vie.StumpSmash;
 import fr.kamael.skylandersfight.skylanders.vie.ZooLou;
@@ -73,6 +74,8 @@ public class SkylanderConverter {
 				return new Sprocket(player);
 			case StealthElf.name:
 				return new StealthElf(player);
+			case Camo.name: 
+				return new Camo(player);
 			case StumpSmash.name: 
 				return new StumpSmash(player);
 			case ZooLou.name:

@@ -6,6 +6,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -240,6 +241,8 @@ public class Skylander {
 	public void giveEquipement() { return; }
 	
 	public void sendDescription() { return; }
+	
+	public Boolean onPickupItem(Item item) { return true; } // Quand un joueur recupere un objet au sol.
 	
 	public Boolean onPlace(Block block) { return true; } // Quand le joueur place un bloc.
 	

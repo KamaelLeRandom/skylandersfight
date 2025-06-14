@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -19,6 +20,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -149,7 +151,7 @@ public class GameListener implements Listener {
 						}
 						
 						// Deuxième possible condition d'annulation. (onHit, onDamage)
-						if (skylanderShooter.onDamageBow(skylanderShooter, projectile) || skylanderHit.onHitBow(skylanderShooter)) {
+						if (skylanderShooter.onDamageBow(skylanderHit, projectile) || skylanderHit.onHitBow(skylanderShooter)) {
 							event.setCancelled(true);
 							return;
 						}
@@ -544,6 +546,25 @@ public class GameListener implements Listener {
 		catch (Exception e) {
 			Bukkit.broadcastMessage(Constants.prefixError + "(GameListener, playerBlockPlace) : §7"+e.getMessage());	
 			return;
+		}
+	}
+
+	@EventHandler
+	public void playerPickupItem(EntityPickupItemEvent event) {
+		if (plugin.game != null && plugin.game.isState(GameState.FIGHTING)) {
+			
+			if (event.getEntity() instanceof Player) {
+				Item item = event.getItem();
+				Player player = (Player) event.getEntity();
+				Skylander skylander = plugin.game.getPlayer(player).getSkylander();
+				
+				event.setCancelled(skylander.onPickupItem(item));
+				
+				return;
+			} else {
+				event.setCancelled(true);
+				return;
+			}
 		}
 	}
 }
