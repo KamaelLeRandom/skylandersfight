@@ -4,6 +4,7 @@ import fr.kamael.skylandersfight.arena.Arena;
 import fr.kamael.skylandersfight.arena.map.JungleProfonde;
 import fr.kamael.skylandersfight.arena.map.NouveauLabogda;
 import fr.kamael.skylandersfight.arena.map.ParadisBlanc;
+import fr.kamael.skylandersfight.arena.map.VillageTemTepe;
 
 public class ArenaConverter {
 	
@@ -15,6 +16,8 @@ public class ArenaConverter {
 				return new JungleProfonde();
 			case NouveauLabogda.nameArena:
 				return new NouveauLabogda();
+			case VillageTemTepe.nameArena:
+				return new VillageTemTepe();
 				
 			default:
 				return null;
