@@ -69,11 +69,12 @@ public class Drobot extends Skylander {
 			droid.giveEquipement();
 			droid.summonInfoArmorStand();
 			droid.removeAllMates();
-			droid.addMates(gamePlayer.getInitialTeam().getPlayers());
+			droid.addMatesSkylanders(getMates());
 
 			gamePlayer.setActualTeam(plugin.game.getPlayer(player).getActualTeam());
 			gamePlayer.setSkylander(droid);
 			
+			addMate(droid);
 			addCooldown(namePassif, timerPassif);
 		}
 	}

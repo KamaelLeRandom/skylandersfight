@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -31,8 +32,10 @@ public class DoubleTrouble extends Skylander {
 	
 	public static final String nameWeapon = "§5Sceptre";
 	
-	public static final String namePassif = "§5Laser";
-	public static final Integer tickTimerPassif = 15;
+	public static final String namePassif = "§5Échange";
+	public static final Integer timerPassif = 15;
+	public static final Integer distancePassif = 15;
+	public static final Double rangePassif = 1.;
 	
 	public static final String nameFirstSpell = "§5Invocation";
 	public static final Integer numberInvocFirstSpell = 3;
@@ -41,9 +44,7 @@ public class DoubleTrouble extends Skylander {
 	public static final String nameSecondSpell = "§5Métamorphose";
 	public static final Integer durationSecondSpell = 15;
 	public static final Integer timerSecondSpell = 30;
-	
-	private Boolean canUsePassif = true;
-	
+		
 	public DoubleTrouble(Player player) {
 		super(player, Element.MAGIE, name);
 		this.force = 1. + Element.magieForce;
@@ -60,39 +61,45 @@ public class DoubleTrouble extends Skylander {
 		inv.setItem(9, new ItemStack(Material.ARROW));
 	}
 	
-	public void passif() {
-		if (canUsePassif) {
-			canUsePassif = false;
-			
+	public void passif_Teleportation() {
+		if (checkCooldown(namePassif, true)) {
 			Skylander skylanderTarget = SpellUtils.targetPlayer(
 				this, 
-				10, 
-				0.75, 
-			    (location) -> {
+				distancePassif,
+				rangePassif, 
+				(location) -> {
+					Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(128, 0, 128), 1);
+
 			        location.getWorld().spawnParticle(
-			            Particle.REDSTONE, 
-			            location, 
-			            2, 
+			            Particle.REDSTONE,
+			            location,
+			            1, 
 			            0.05, 0.05, 0.05,
-			            new Particle.DustOptions(Color.FUCHSIA, 1.0f)
+			            0,
+			            dustOptions
 			        );
-			    }
+				}
 			);
 			
-			if (skylanderTarget != null) {
-				skylanderTarget.getPlayer().damage(6, player);
-				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT, 1, 1);
-			}
-			
-			new BukkitRunnable() {
+			if (skylanderTarget == null) {
+				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+				player.sendMessage(Constants.prefixMessage + "Aucun joueur trouvé.");
+				return;
+			} else {
+				Player playerTarget = skylanderTarget.getPlayer();
+
+				Location playerLocation = player.getLocation().clone();
+				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+				player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre "+ namePassif +"§f avec §5"+ playerTarget.getName() + "§f.");
+				player.teleport(playerTarget);
 				
-				@Override
-				public void run() {
-					canUsePassif = true;
-					cancel();
-					return;
-				}
-			}.runTaskTimer(plugin, 0, tickTimerPassif);
+				playerTarget.playSound(playerTarget.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+				playerTarget.sendMessage(Constants.prefixMessage + "Vous avez été touché par la compétence "+ namePassif +"§f de §5"+ playerTarget.getName() + "§f.");
+				playerTarget.teleport(playerLocation);
+				
+				addCooldown(namePassif, timerPassif);
+				return;
+			}
 		}
 	}
 	
@@ -141,14 +148,18 @@ public class DoubleTrouble extends Skylander {
 	}
 	
 	public void secondSpell_Transform(Player playerRecherche) {
+		Skylander skylanderRecherche = plugin.game.getPlayer(playerRecherche).getSkylander();
+		
 		player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_CHAIN, 1, 1);
 		player.sendMessage(Constants.prefixMessage + "Vous venez de vous §dtransformez§c en §6"+ player.getName() +"§f, dans "+ durationSecondSpell +" secondes vous reprendrez votre véritable apparence.");
 		
 		plugin.playerUtils.nickPlayer(player, playerRecherche.getName());
 		plugin.playerUtils.changeSkin(player, playerRecherche.getName());
+		ItemManager.giveColorArmor(player, skylanderRecherche.getElement().getColorArmor());
 		
 		plugin.playerUtils.nickPlayer(playerRecherche, player.getName());
 		plugin.playerUtils.changeSkin(playerRecherche, player.getName());
+		ItemManager.giveColorArmor(playerRecherche, getElement().getColorArmor());
 		
 		new BukkitRunnable() {
 			private Integer timer = durationSecondSpell;
@@ -157,10 +168,12 @@ public class DoubleTrouble extends Skylander {
 				if (timer == 0 || !alive || !plugin.game.isState(GameState.FIGHTING)) {
 					plugin.playerUtils.unnickPlayer(player);
 					plugin.playerUtils.revertSkin(player);
+					ItemManager.giveColorArmor(player, getElement().getColorArmor());
 					
 					plugin.playerUtils.unnickPlayer(playerRecherche);
 					plugin.playerUtils.revertSkin(playerRecherche);
-					
+					ItemManager.giveColorArmor(playerRecherche, skylanderRecherche.getElement().getColorArmor());
+
 					cancel();
 					return;
 				}

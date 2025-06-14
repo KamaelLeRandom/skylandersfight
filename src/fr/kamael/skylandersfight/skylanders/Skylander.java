@@ -216,6 +216,16 @@ public class Skylander {
 		}
 	}
 	
+	public void addMatesSkylanders(ArrayList<Skylander> skylanders) {
+		for (Skylander skylander : skylanders) {
+			this.mates.add(skylander);
+		}
+	}
+	
+	public void addMate(Skylander skylander) {
+		this.mates.add(skylander);
+	}
+	
 	public void removeAllMates() {
 		this.mates.removeAll(this.mates);
 	}

@@ -107,7 +107,7 @@ public class MagieListener implements Listener {
 	
 	private void handleDoubleTrouble(DoubleTrouble skylander, Action action, String name) {
         Map<String, Runnable> actions = new HashMap<>();
-        actions.put(DoubleTrouble.nameWeapon, skylander::passif);
+        actions.put(DoubleTrouble.nameWeapon, skylander::passif_Teleportation);
         actions.put(DoubleTrouble.nameFirstSpell, skylander::firstSpell_Invocation);
         actions.put(DoubleTrouble.nameSecondSpell, skylander::secondSpell_Metamorphose);
 

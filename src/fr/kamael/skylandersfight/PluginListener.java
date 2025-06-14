@@ -171,7 +171,13 @@ public class PluginListener implements Listener {
 					String nameSkylander = it.getItemMeta().getDisplayName().substring(2);
 					
 					if (it.getType().equals(Material.COMPASS)) {
-						// TODO : Choix aléatoire.
+						ItemStack randomIt = event.getView().getItem(plugin.random.nextInt(plugin.game.getConfig().getNbSkylanderLine() * 9) + 9);
+						
+						while (randomIt.getType().equals(Material.COMPASS) || randomIt.getType().equals(Material.BLACK_STAINED_GLASS)) {
+							randomIt =  event.getView().getItem(plugin.random.nextInt(plugin.game.getConfig().getNbSkylanderLine() * 9) + 9);
+						}
+						
+						nameSkylander = randomIt.getItemMeta().getDisplayName().substring(2);
 					}
 					
 					gamePlayer.setSkylander(SkylanderConverter.convert(nameSkylander, player));

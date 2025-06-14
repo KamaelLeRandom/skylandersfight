@@ -192,7 +192,6 @@ public class Game {
 	    playRound();
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void finish(GameTeam winningTeam) {
 		this.state = GameState.ENDING;
 		
@@ -207,10 +206,10 @@ public class Game {
 			if (winningTeam.getPlayers().contains(gamePlayer)) {
 				player.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
 				player.setPlayerListName("§e★ " + player.getName());
-				player.sendTitle("§aVictoire !", "§7Juste le GOAT enfaite");
+				player.sendTitle("§aVictoire !", "§7Juste le GOAT enfaite", 1, 60, 1);
 			} else {
 				player.setPlayerListName(player.getName());
-				player.sendTitle("§cDéfaite !", "§7Bah frérot tu pues la merde");
+				player.sendTitle("§cDéfaite !", "§7Bah frérot tu pues la merde", 1, 60, 1);
 			}
 		}
 		

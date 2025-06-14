@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.entity.Player;
 
 import fr.kamael.skylandersfight.skylanders.Skylander;
+import fr.kamael.skylandersfight.utils.manager.TeamManager;
 
 public class GamePlayer {
 	private Player player;
@@ -69,6 +70,7 @@ public class GamePlayer {
 	
 	public GameTeam setActualTeam(GameTeam newTeam) {
 		this.actualTeam = newTeam;
+		TeamManager.addPlayer(newTeam.getTeam(), this);
 		return this.actualTeam;
 	}
 	

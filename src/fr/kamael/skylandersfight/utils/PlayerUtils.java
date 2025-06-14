@@ -17,8 +17,10 @@ import com.mojang.authlib.properties.Property;
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
 import net.minecraft.network.protocol.game.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.network.protocol.game.PacketPlayOutPlayerInfo;
+import net.minecraft.network.syncher.DataWatcher;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.network.PlayerConnection;
 
@@ -150,6 +152,14 @@ public class PlayerUtils {
                 
             		onlineConnection.sendPacket(new PacketPlayOutEntityDestroy(entityId));
             		onlineConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(entityPlayer));
+            		
+            		DataWatcher watcher = entityPlayer.getDataWatcher();
+            		PacketPlayOutEntityMetadata metadataPacket = new PacketPlayOutEntityMetadata(
+            		    entityPlayer.getId(),
+            		    watcher,
+            		    true
+            		);
+            		onlineConnection.sendPacket(metadataPacket);
             	}
             );
     	}
@@ -161,8 +171,6 @@ public class PlayerUtils {
 
     public void revertSkin(Player player) {
     	try {
-
-            
             return;
     	}
     	catch (Exception e) {
@@ -223,36 +231,42 @@ public class PlayerUtils {
 		}
 	}
 
-    private String getUUIDFromName(String playerName) {
-        try {
-            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
+	private String getUUIDFromName(String playerName) {
+	    try {
+	        URL url = new URL("https://playerdb.co/api/player/minecraft/" + playerName);
+	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	        connection.setRequestMethod("GET");
+	        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+	        connection.setConnectTimeout(5000);
+	        connection.setReadTimeout(5000);
 
-            int responseCode = connection.getResponseCode();
-            if (responseCode != 200) {
-                System.out.println("⚠️ Erreur Mojang API: Code " + responseCode);
-                return null;
-            }
+	        int responseCode = connection.getResponseCode();
+	        if (responseCode != 200) {
+	            System.out.println("⚠️ Erreur PlayerDB API: Code " + responseCode);
+	            return null;
+	        }
 
-            // Lire la réponse correctement
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+	        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
             JsonObject json =  new JsonParser().parse(reader).getAsJsonObject();
             reader.close();
 
-            if (!json.has("id")) {
-                System.out.println("⚠️ Aucun UUID trouvé pour " + playerName);
-                return null;
-            }
+	        if (!json.has("data")) {
+	            System.out.println("⚠️ Réponse invalide pour " + playerName);
+	            return null;
+	        }
 
-            return json.get("id").getAsString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+	        JsonObject data = json.getAsJsonObject("data");
+	        JsonObject player = data.getAsJsonObject("player");
 
+	        if (!player.has("id")) {
+	            System.out.println("⚠️ Aucun UUID trouvé pour " + playerName);
+	            return null;
+	        }
+
+	        return player.get("id").getAsString();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
 }
