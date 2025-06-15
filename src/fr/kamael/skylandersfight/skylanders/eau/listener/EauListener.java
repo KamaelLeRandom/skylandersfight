@@ -55,7 +55,7 @@ public class EauListener implements Listener {
 	
 	private void handleSlamBam(SlamBam skylander, Action action, String name) {
         Map<String, Runnable> actions = new HashMap<>();
-        actions.put(SlamBam.nameFirstSpell, skylander::firstSpell_Reset);
+        actions.put(SlamBam.nameFirstSpell, skylander::firstSpell_Force);
         actions.put(SlamBam.nameSecondSpell, skylander::secondSpell_Resis);
 
         if (isRightClick(action) && actions.containsKey(name)) {

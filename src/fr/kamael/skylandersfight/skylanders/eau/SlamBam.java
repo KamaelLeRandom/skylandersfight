@@ -30,15 +30,16 @@ public class SlamBam extends Skylander {
 	
 	public static final String nameFirstSpell = "§9Stéroïdes";
 	public static final Integer timerFirstSpell = 20;
-	public static final Integer numberHitPassif = 12;
+	public static final Integer durationFirstSpell = 8;
+	public static final Double pourcentForceFirstSpell = 0.25;
+
 	
-	public static final String nameSecondSpell = "§9Gonflette";
+	public static final String nameSecondSpell = "§9Contraction";
 	public static final Integer timerSecondSpell = 20;
 	public static final Integer durationSecondSpell = 8;
 	public static final Double pourcentResisSecondSpell = 0.25;
-	
-	public Integer nbHitPassif = numberHitPassif;
-	
+	public static final Double valueKnockbackResisSecondSpell = 0.8;
+		
 	public SlamBam(Player player) {
 		super(player, Element.EAU, name);
 	}
@@ -47,17 +48,12 @@ public class SlamBam extends Skylander {
 		ItemManager.clearPlayer(player);
 		ItemManager.giveColorArmor(player, element.getColorArmor());
 				
-		player.setLevel(nbHitPassif);
 		player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(Element.eauSpeed);
 		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());
 		inv.setItem(2, getItemSecondSpell());
 		inv.setItem(9, new ItemStack(Material.ARROW));
-	}
-	
-	public Boolean applyEnemyResistance() { 
-		return false; 
 	}
 	
 	public Double addDamage(Double damage, Skylander skylanderHit) { 
@@ -69,30 +65,45 @@ public class SlamBam extends Skylander {
 	}
 	
 	public Boolean onDamageSword(Skylander skylanderHit) { 
-		if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR) && nbHitPassif > 0) {	
-	        new BukkitRunnable() {
-	            @Override
-	            public void run() {
-	    			skylanderHit.getPlayer().setNoDamageTicks(skylanderHit.getPlayer().getMaximumNoDamageTicks() / 4);
-	    			nbHitPassif--;
-	    			player.setLevel(nbHitPassif);
-	            }
-	        }.runTaskLater(plugin, 1);
+		if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {	
+			new BukkitRunnable() {
+				@Override
+		        public void run() {
+					skylanderHit.getPlayer().setNoDamageTicks(skylanderHit.getPlayer().getMaximumNoDamageTicks() / 4);
+		    		cancel();
+		    		return;
+				}
+		    }.runTaskLater(plugin, 1);		
 		}
 		
 		return false; 
 	}
 	
-	public void firstSpell_Reset() {
-		if (checkCooldown(nameFirstSpell, true)) {
-			nbHitPassif = numberHitPassif;
-			
+	public void firstSpell_Force() {
+		if (checkCooldown(nameFirstSpell, true)) {			
 			player.playSound(player.getLocation(), Sound.ITEM_HONEY_BOTTLE_DRINK, 1, 1);
 			player.sendMessage(Constants.prefixMessage+ "Vous venez d'utiliser votre compétence "+ nameFirstSpell +"§f.");
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 8 * 20, 0, false, false));
-			player.setLevel(nbHitPassif);
+			force += pourcentForceFirstSpell;
+			
+			new BukkitRunnable() {
+				private Integer timer = durationFirstSpell;
+				
+				@Override
+				public void run() {
+					if (timer == 0 || !alive || !plugin.game.isState(GameState.FIGHTING)) {
+						player.playSound(player.getLocation(), Sound.ITEM_HONEY_BOTTLE_DRINK, 1, 1);
+						player.sendMessage(Constants.prefixMessage+ "Votre compétence "+ nameFirstSpell +"§f vient de prendre fin.");
+						force -= pourcentForceFirstSpell;
+						cancel();
+						return;
+					}
+					
+					timer--;
+				}
+			}.runTaskTimer(plugin, 0, 20);
 			
 			addCooldown(nameFirstSpell, timerFirstSpell);
+			return;
 		}
 	}
 	
@@ -101,6 +112,7 @@ public class SlamBam extends Skylander {
 			player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_DIAMOND, 1, 1);
 			player.sendMessage(Constants.prefixMessage+ "Vous venez d'utiliser votre compétence "+ nameSecondSpell +"§f.");
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 2, false, false));
+			player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(valueKnockbackResisSecondSpell);
 			resis -= pourcentResisSecondSpell;
 			
 			new BukkitRunnable() {
@@ -112,6 +124,7 @@ public class SlamBam extends Skylander {
 						player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
 						player.sendMessage(Constants.prefixMessage+ "Votre compétence "+ nameSecondSpell +"§f vient de prendre fin.");
 						player.removePotionEffect(PotionEffectType.SLOW);
+						player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(Constants.baseKnockback);
 						resis += pourcentResisSecondSpell;
 						cancel();
 						return;
@@ -131,11 +144,11 @@ public class SlamBam extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("   ▶§9" + name + "§f◀");
 		player.sendMessage("\n");
-		player.sendMessage("≫ "+ namePassif +"§f, vous frappez vos adversaires au pied ce qui vous permet de travers de la §3Résistance§f de l'adversaire.");
+		player.sendMessage("≫ "+ namePassif +"§f, lorsque vous frappez à la main, vous annulez le délai d'invulnérabilité du joueur touché, vous permettant de faire des gros combos.");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameFirstSpell + "§f, lors de vos §3"+ numberHitPassif +"§f prochain coups, l'adversaire n'a plus de délai d'§3invulnérabilité§f. §b(" + timerFirstSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, vous gagnez §6"+ (pourcentForceFirstSpell*100) +"%§f de §cForce§f pendant "+ durationFirstSpell +" secondes. §b(" + timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameSecondSpell + "§f, vous gagnez §3"+ (pourcentResisSecondSpell*100) +"% de Résistance§3 pendant §3"+ durationSecondSpell +" secondes§f, cependant vous êtes grandement §cralenti§f. §b(" + timerSecondSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameSecondSpell + "§f, vous gagnez §6"+ (pourcentResisSecondSpell*100) +"%§f de §cRésistance§f et réduisez votre §eknockback§f de §6"+ valueKnockbackResisSecondSpell*100 +"%§f pendant §b"+ durationSecondSpell +" secondes§f, cependant vous êtes grandement §cralenti§f durant cette période. §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");
@@ -145,7 +158,6 @@ public class SlamBam extends Skylander {
 		ArrayList<String> lore = new ArrayList<>();
 		lore.add("§9"+ name +"§f est un Skylander §cmélée§f ayant la");
 		lore.add("§fcapacité de frappé très vite et très fort.");
-		
 		ItemStack item = new ItemStack(Material.BLUE_ICE, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName("§9"+name);
@@ -154,13 +166,13 @@ public class SlamBam extends Skylander {
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
-		
 		return item;
 	}
 	
 	public static ItemStack getItemFirstSpell() {
-		List<String> lore = Arrays.asList("§fLors de vos "+ numberHitPassif + " prochain coups,", "§fl'adversaire n'a plus de délai d'invulnérabilité.");
-		
+		List<String> lore = Arrays.asList(
+			"§f."
+		);
 		ItemStack item = new ItemStack(Material.SUGAR, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameFirstSpell);
@@ -170,14 +182,14 @@ public class SlamBam extends Skylander {
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
-		
 		return item;
 	}
 
 	public static ItemStack getItemSecondSpell() {
-		List<String> lore = Arrays.asList("§fVous gagnez §3"+ (pourcentResisSecondSpell*100) +"%§f de Résistance", "§fpendant "+ durationSecondSpell +" secondes, cependant", "§fvous êtes §cralenti§f et ne pouvez §cplus sauter§f.");
-		
-		ItemStack item = new ItemStack(Material.BLUE_DYE, 1);
+		List<String> lore = Arrays.asList(
+			"§f."
+		);
+		ItemStack item = new ItemStack(Material.IRON_INGOT, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameSecondSpell);
 		meta.setUnbreakable(true);
@@ -186,7 +198,6 @@ public class SlamBam extends Skylander {
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
-		
 		return item;
 	}
 }
