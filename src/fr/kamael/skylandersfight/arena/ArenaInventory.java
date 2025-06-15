@@ -7,6 +7,7 @@ import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.arena.map.JungleProfonde;
 import fr.kamael.skylandersfight.arena.map.NouveauLabogda;
 import fr.kamael.skylandersfight.arena.map.ParadisBlanc;
+import fr.kamael.skylandersfight.arena.map.VestigesAzteques;
 import fr.kamael.skylandersfight.arena.map.VillageTemTepe;
 
 public class ArenaInventory {
@@ -16,6 +17,7 @@ public class ArenaInventory {
 		inventory.setItem(12, JungleProfonde.getItem());
 		inventory.setItem(13, NouveauLabogda.getItem());
 		inventory.setItem(14, VillageTemTepe.getItem());
+		inventory.setItem(15, VestigesAzteques.getItem());
 		return inventory;
 	}
 }
