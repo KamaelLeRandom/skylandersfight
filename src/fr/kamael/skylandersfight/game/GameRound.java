@@ -195,10 +195,8 @@ public class GameRound {
 			Skylander skylander = gamePlayer.getSkylander();
 			gamePlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
 			gamePlayer.setActualTeam(gamePlayer.getInitialTeam());
-			skylander.summonInfoArmorStand();
 			skylander.giveEquipement();
 			skylander.setFullHealth();
-			skylander.onStart();
 			skylander.addMates(gamePlayer.getInitialTeam().getPlayers());
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999, 200, false, false));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 200, false, false));
@@ -239,6 +237,12 @@ public class GameRound {
 		
 		if (plugin.game.getConfig().getActiveEventMap())
 			arena.event();
+		
+		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+			Skylander skylander = gamePlayer.getSkylander();
+			skylander.summonInfoArmorStand();
+			skylander.onStart();
+		}
 
 		new BukkitRunnable() {
 			private ArrayList<GamePlayer> listPlayers = plugin.game.getPlayers();

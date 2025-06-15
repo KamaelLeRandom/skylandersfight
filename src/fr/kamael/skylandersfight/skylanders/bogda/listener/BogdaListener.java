@@ -10,8 +10,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import fr.kamael.skylandersfight.Constants;
@@ -20,6 +22,7 @@ import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.bogda.Cyroule;
+import fr.kamael.skylandersfight.skylanders.bogda.DJMomone;
 
 public class BogdaListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -43,6 +46,13 @@ public class BogdaListener implements Listener {
 					
 					player.closeInventory();
 					return;
+				} else if (event.getView().getTitle().equalsIgnoreCase(DJMomone.nameFirstSpell) && skylander instanceof DJMomone) {
+					event.setCancelled(true);
+					
+					((DJMomone) skylander).firstSpell_Select(it);
+					
+					player.closeInventory();
+					return;
 				}
 				
 				return;	
@@ -53,6 +63,27 @@ public class BogdaListener implements Listener {
 			return;
 		}
 	}
+	
+    @EventHandler
+    public void onDJMomoneEditBook(PlayerEditBookEvent event) {
+        try {
+            if (plugin == null || !plugin.game.isState(GameState.FIGHTING) ||  event.isSigning() || event.isCancelled())
+                return;
+            
+            BookMeta bookMeta = event.getNewBookMeta();
+            Player player = event.getPlayer();
+            Skylander skylander = plugin.game.getPlayer(player).getSkylander();
+            
+            if (skylander instanceof DJMomone && skylander.isAlive()) {
+            	String content = bookMeta.getPage(1);
+            	
+            	((DJMomone) skylander).secondSpell_Apply(content.replaceAll("\\s+", ""));
+            }
+		}
+		catch (Exception e) {
+			Bukkit.broadcastMessage("§c[Error]§f (PluginListener, onDJMomoneEditBook) : §7"+e.getMessage());	
+		}
+    }
 	
 	@EventHandler
 	public void playerInteractBogda(PlayerInteractEvent event) {
@@ -72,6 +103,8 @@ public class BogdaListener implements Listener {
 
             if (skylander instanceof Cyroule) {
             	handleCyroule((Cyroule) skylander, action, nameItem);
+            } else if (skylander instanceof DJMomone) {
+            	handleDJMomone((DJMomone) skylander, action, nameItem);
             }
 		}
 		catch (Exception e) {
@@ -85,6 +118,21 @@ public class BogdaListener implements Listener {
         actions.put(Cyroule.namePassif, skylander::passif_Inventory);
         actions.put(Cyroule.nameFirstSpell, skylander::firstSpell_NoAttack);
         actions.put(Cyroule.nameSecondSpell, skylander::secondSpell_Arena);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleDJMomone(DJMomone skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(DJMomone.nameImmortelSpell, skylander::firstSpell_Immortel);
+        actions.put(DJMomone.namePommeSpell, skylander::firstSpell_Pomme);
+        actions.put(DJMomone.nameZoukerSpell, skylander::firstSpell_Zouker);
+        actions.put(DJMomone.nameSaiyanSpell, skylander::firstSpell_Saiyan);
+        actions.put(DJMomone.namePapillonSpell, skylander::firstSpell_Papillon);
+        actions.put(DJMomone.nameFirstSpell, skylander::firstSpell_Inventory);
+        actions.put(DJMomone.nameSecondSpell, skylander::secondSpell_Book);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();

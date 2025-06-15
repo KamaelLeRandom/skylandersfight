@@ -11,6 +11,7 @@ import fr.kamael.skylandersfight.skylanders.air.LightningRod;
 import fr.kamael.skylandersfight.skylanders.air.Scratch;
 import fr.kamael.skylandersfight.skylanders.air.Warnado;
 import fr.kamael.skylandersfight.skylanders.bogda.Cyroule;
+import fr.kamael.skylandersfight.skylanders.bogda.DJMomone;
 import fr.kamael.skylandersfight.skylanders.eau.Chill;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.eau.WhamShell;
@@ -118,6 +119,8 @@ public class SkylanderConverter {
 				return new Scratch(player);
 			case Cyroule.name:
 				return new Cyroule(player);
+			case DJMomone.name:
+				return new DJMomone(player);
 			default:
 				return null;
 		}
