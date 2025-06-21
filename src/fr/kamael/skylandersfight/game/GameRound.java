@@ -21,6 +21,7 @@ import fr.kamael.skylandersfight.arena.ArenaInventory;
 import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.SkylanderInventory;
+import fr.kamael.skylandersfight.skylanders.bogda.Trayyks;
 import fr.kamael.skylandersfight.utils.converter.ArenaConverter;
 import fr.kamael.skylandersfight.utils.converter.SkylanderConverter;
 import fr.kamael.skylandersfight.utils.manager.TeamManager;
@@ -57,8 +58,12 @@ public class GameRound {
 			player.sendMessage(Constants.prefixMessage + "L'Élement de l'Arène est : "+ element.getName() +".");
 			
 			if (skylander.getElement().equals(element)) {
-				skylander.updateForce(+0.15);
-				skylander.updateResis(-0.15);
+				skylander.updateForce(+Constants.bonusElementaire);
+				skylander.updateResis(-Constants.bonusElementaire);
+			}
+			
+			if (skylander instanceof Trayyks) {
+				((Trayyks) skylander).giveItemFromElement(element);
 			}
 		}
 	}

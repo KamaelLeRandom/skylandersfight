@@ -12,6 +12,7 @@ import fr.kamael.skylandersfight.skylanders.air.Scratch;
 import fr.kamael.skylandersfight.skylanders.air.Warnado;
 import fr.kamael.skylandersfight.skylanders.bogda.Cyroule;
 import fr.kamael.skylandersfight.skylanders.bogda.DJMomone;
+import fr.kamael.skylandersfight.skylanders.bogda.Trayyks;
 import fr.kamael.skylandersfight.skylanders.eau.Chill;
 import fr.kamael.skylandersfight.skylanders.eau.SlamBam;
 import fr.kamael.skylandersfight.skylanders.eau.WhamShell;
@@ -77,6 +78,7 @@ public class ConfigSkylander {
 		// TODO : Remplir les Skylanders Bogda.
 		bogda.add(Cyroule.getSignatureItem());
 		bogda.add(DJMomone.getSignatureItem());
+		bogda.add(Trayyks.getSignatureItem());
 		this.data.put(Element.BOGDA, bogda);
 		
 		ArrayList<ItemStack> feu = new ArrayList<>();

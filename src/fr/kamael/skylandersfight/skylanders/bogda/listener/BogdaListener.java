@@ -23,6 +23,7 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.bogda.Cyroule;
 import fr.kamael.skylandersfight.skylanders.bogda.DJMomone;
+import fr.kamael.skylandersfight.skylanders.bogda.Trayyks;
 
 public class BogdaListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -53,6 +54,13 @@ public class BogdaListener implements Listener {
 					
 					player.closeInventory();
 					return;
+				} else if (event.getView().getTitle().equals(Trayyks.nameFirstSpell) && skylander instanceof Trayyks) {
+					event.setCancelled(true);
+					
+					SkullMeta itM = (SkullMeta) it.getItemMeta();
+					((Trayyks) skylander).firstSpell_Apply(itM.getOwningPlayer().getPlayer());
+					
+					player.closeInventory();
 				}
 				
 				return;	
@@ -105,6 +113,8 @@ public class BogdaListener implements Listener {
             	handleCyroule((Cyroule) skylander, action, nameItem);
             } else if (skylander instanceof DJMomone) {
             	handleDJMomone((DJMomone) skylander, action, nameItem);
+            } else if (skylander instanceof Trayyks) {
+            	handleTrayyks((Trayyks) skylander, action, nameItem);
             }
 		}
 		catch (Exception e) {
@@ -133,6 +143,24 @@ public class BogdaListener implements Listener {
         actions.put(DJMomone.namePapillonSpell, skylander::firstSpell_Papillon);
         actions.put(DJMomone.nameFirstSpell, skylander::firstSpell_Inventory);
         actions.put(DJMomone.nameSecondSpell, skylander::secondSpell_Book);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleTrayyks(Trayyks skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(Trayyks.nameFirstSpell, skylander::firstSpell_Inventory);
+        actions.put(Trayyks.nameSecondSpellAir, skylander::secondSpell_Air);
+        actions.put(Trayyks.nameSecondSpellBogda, skylander::secondSpell_Bogda);
+        actions.put(Trayyks.nameSecondSpellEau, skylander::secondSpell_Eau);
+        actions.put(Trayyks.nameSecondSpellFeu, skylander::secondSpell_Feu);
+        actions.put(Trayyks.nameSecondSpellMagie, skylander::secondSpell_Magie);
+        actions.put(Trayyks.nameSecondSpellMort, skylander::secondSpell_Mort);
+        actions.put(Trayyks.nameSecondSpellTech, skylander::secondSpell_Tech);
+        actions.put(Trayyks.nameSecondSpellTerre, skylander::secondSpell_Terre);        
+        actions.put(Trayyks.nameSecondSpellVie, skylander::secondSpell_Vie);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();
