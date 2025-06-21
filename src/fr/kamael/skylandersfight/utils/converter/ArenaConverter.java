@@ -2,6 +2,7 @@ package fr.kamael.skylandersfight.utils.converter;
 
 import fr.kamael.skylandersfight.arena.Arena;
 import fr.kamael.skylandersfight.arena.map.CanyonPerdu;
+import fr.kamael.skylandersfight.arena.map.DesertRoyale;
 import fr.kamael.skylandersfight.arena.map.JungleProfonde;
 import fr.kamael.skylandersfight.arena.map.NouveauLabogda;
 import fr.kamael.skylandersfight.arena.map.ParadisBlanc;
@@ -24,7 +25,8 @@ public class ArenaConverter {
 				return new VestigesAzteques();
 			case CanyonPerdu.nameArena:
 				return new CanyonPerdu();
-				
+			case DesertRoyale.nameArena:
+				return new DesertRoyale();
 			default:
 				return null;
 		}
