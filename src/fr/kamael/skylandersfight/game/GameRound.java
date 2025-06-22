@@ -54,7 +54,7 @@ public class GameRound {
 			Skylander skylander = gamePlayer.getSkylander();
 			Player player = gamePlayer.getPlayer();
 			player.playSound(player.getLocation(), Sound.BLOCK_BAMBOO_BREAK, 1, 1);
-			player.sendTitle("§8Bonus Élémentaire :", element.getName(), 5, 20, 5);
+			player.sendTitle("§7Bonus Élémentaire :", element.getName(), 5, 20, 5);
 			player.sendMessage(Constants.prefixMessage + "L'Élement de l'Arène est : "+ element.getName() +".");
 			
 			if (skylander.getElement().equals(element)) {
@@ -77,7 +77,7 @@ public class GameRound {
 	public void prechooseArena() {
 		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
 			gamePlayer.getPlayer().playSound(gamePlayer.getPlayer().getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
-			gamePlayer.getPlayer().sendTitle("§fChoix de l'§6Arène§f", "§fPlace aux votes.", 3, 25, 2);
+			gamePlayer.getPlayer().sendTitle("§7Choix de l'§6Arène§f", "§7Place aux votes.", 2, 30, 2);
 			gamePlayer.getPlayer().sendMessage(Constants.prefixMessage + "Le choix de l'Arène va commencer !");
 		}
 		
@@ -239,22 +239,66 @@ public class GameRound {
 	
 	public void play() {
 		plugin.game.setState(GameState.FIGHTING);
+				
+		ArrayList<GamePlayer> listPlayers = plugin.game.getPlayers();
 		
-		if (plugin.game.getConfig().getActiveEventMap())
-			arena.event();
-		
-		for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
+		for (GamePlayer gamePlayer : listPlayers) {
 			Skylander skylander = gamePlayer.getSkylander();
 			skylander.summonInfoArmorStand();
 			skylander.onStart();
 		}
-
+		
+		arena.onStart();
+		if (plugin.game.getConfig().getActiveEventMap())
+			arena.event();
+		
+		// Runnable pour le timer, etc...
 		new BukkitRunnable() {
-			private ArrayList<GamePlayer> listPlayers = plugin.game.getPlayers();
-			private Integer timerItem = 15 + (plugin.random.nextInt(45)+1);
+			private Boolean activeBonusMap = plugin.game.getConfig().getActiveBonusMap();
+			private Boolean activeDeathmatch = plugin.game.getConfig().getActiveDeathmatch();
 			private Integer timerDeathmatch = plugin.game.getConfig().getTimerDM() * 60;
-			private Integer timer = 0;
+			private Boolean activeItem = plugin.game.getConfig().getActiveItem();
+			private Integer timerItem = arena.getRandomTimerRespawnItem();
 			
+			@Override
+			public void run() {
+				if (!plugin.game.isState(GameState.FIGHTING)) {
+					cancel();
+					return;
+				}
+				
+				timerRound++;
+				timerItem--;
+				
+				updateScoreboard();
+				
+				// Deathmatch
+				if (activeDeathmatch && (timerRound == timerDeathmatch-60 || timerRound == timerDeathmatch-30 || timerRound == timerDeathmatch-10)) {
+					Bukkit.broadcastMessage(Constants.prefixMessage + "Le §cDeathmatch§f commence dans §c"+ (timerDeathmatch - timerRound) + "§f secondes !");
+				}
+				
+				if (activeDeathmatch && timerRound.equals(timerDeathmatch)) {
+					Bukkit.broadcastMessage(Constants.prefixMessage + "L'heure du §cDeathmatch§f a sonné ! Bon courage.");
+					arena.deathmatch();
+				}
+					
+				// Bonus Élémentaire
+				if (activeBonusMap && timerRound == 5) {
+					chooseElement();
+				}
+				
+				// Item
+				if (activeItem && timerItem != null && timerItem == 0) {
+					if (arena.onSummonItem())
+						arena.summonArenaItem();
+					
+					timerItem = arena.getRandomTimerRespawnItem();
+				}
+			}
+		}.runTaskTimer(plugin, 0, 20);
+		
+		// Runnable tout les ticks afin d'actualiser les informations.
+		new BukkitRunnable() {
 			@Override
 			public void run() {
 				if (!plugin.game.isState(GameState.FIGHTING)) {
@@ -269,49 +313,6 @@ public class GameRound {
 						skylander.updateInfoArmorStand();
 					}
 				}
-				
-				if (timer%5 == 0) {
-					updateScoreboard();
-				}
-				
-				if (timer%20 == 0) {
-					timerRound++;
-					timerItem--;
-					
-					if (
-						timerRound == timerDeathmatch-60 ||
-						timerRound == timerDeathmatch-30 ||
-						timerRound == timerDeathmatch-10
-					) {
-						if (plugin.game.getConfig().getActiveDeathmatch()) {
-							Integer sec = timerDeathmatch-timerRound;
-							Bukkit.broadcastMessage(Constants.prefixMessage + "Le §cDeathmatch§f commence dans §c"+ sec + "§f secondes !");
-						}
-					}
-					
-					if (timerRound.equals(timerDeathmatch)) {
-						if (plugin.game.getConfig().getActiveDeathmatch()) {
-							Bukkit.broadcastMessage(Constants.prefixMessage + "L'heure du §cDeathmatch§f a sonné ! Bon courage.");
-							arena.deathmatch();
-							arena.teleportAllPlayer();
-						}
-					}
-					
-					if (timerRound == 5) {
-						if (plugin.game.getConfig().getActiveBonusMap()) {
-							chooseElement();
-						}
-					}
-					
-					if (plugin.game.getConfig().getActiveItem()) {
-						if (timerItem == 0) {
-							arena.summonArenaItem();
-							timerItem = 15 + (plugin.random.nextInt(45)+1);
-						}
-					}
-				}
-								
-				timer++;
 			}
 		}.runTaskTimer(plugin, 0, 1);
 	}
@@ -370,10 +371,8 @@ public class GameRound {
 	        Player player = gamePlayer.getPlayer();
 	        Skylander skylander = gamePlayer.getSkylander();
 
-	        // Scoreboard individuel
 	        Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
-	        // Copier les teams du scoreboard principal
 	        for (Team mainTeam : main.getTeams()) {
 	            Team team = scoreboard.registerNewTeam(mainTeam.getName());
 
@@ -384,21 +383,16 @@ public class GameRound {
 	            team.setOption(Team.Option.COLLISION_RULE, mainTeam.getOption(Team.Option.COLLISION_RULE));
 	            team.setOption(Team.Option.NAME_TAG_VISIBILITY, mainTeam.getOption(Team.Option.NAME_TAG_VISIBILITY));
 
-	            // Ajouter les entrées si nécessaire
 	            for (String entry : mainTeam.getEntries()) {
 	                team.addEntry(entry);
 	            }
 	        }
 
-	        // Supprimer l’ancien objectif s’il existe (sécurité)
 	        Objective old = scoreboard.getObjective("sidebar");
 	        if (old != null) old.unregister();
 
-	        // Créer l’objectif de la sidebar
 	        Objective objective = scoreboard.registerNewObjective("sidebar", "dummy", "§8§l» §6§lSkylanders §8§l«");
 	        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-	        // Remplir les lignes du scoreboard
 	        objective.getScore(" ").setScore(6);
 	        objective.getScore("§cDurée : §6" + timerRound + "s").setScore(5);
 	        objective.getScore("§8----------------").setScore(4);
@@ -407,12 +401,7 @@ public class GameRound {
 	        objective.getScore("§f🗡 Force : §6" + SkylanderConverter.convertForce(skylander.getForce()) + "%").setScore(1);
 	        objective.getScore("§f🛡 Résistance : §6" + SkylanderConverter.convertResis(skylander.getResis()) + "%").setScore(0);
 
-	        // Appliquer le scoreboard personnalisé au joueur
 	        player.setScoreboard(scoreboard);
 	    }
 	}
-
-
-
-
 }

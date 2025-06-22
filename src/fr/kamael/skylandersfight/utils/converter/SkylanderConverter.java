@@ -55,6 +55,22 @@ public class SkylanderConverter {
         BigDecimal seconds = new BigDecimal(ticks).divide(new BigDecimal(20), 10, RoundingMode.HALF_UP);
         return seconds.stripTrailingZeros().toPlainString();
     }
+    
+    public static String convertSeconds(Integer seconds) {
+        if (seconds < 60)
+            return seconds + " seconde" + (seconds != 1 ? "s" : "");
+        else {
+        	Integer minutes = seconds / 60;
+        	Integer remainingSeconds = seconds % 60;
+
+            if (remainingSeconds == 0)
+                return minutes + " minute" + (minutes != 1 ? "s" : "");
+            else
+                return minutes + " minute" + (minutes != 1 ? "s" : "") + " et " +
+                       remainingSeconds + " seconde" + (remainingSeconds != 1 ? "s" : "");
+        }
+    }
+
 	
 	public static Skylander convert(String name, Player player) {
 		

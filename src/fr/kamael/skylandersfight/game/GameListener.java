@@ -34,6 +34,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.Plugin;
+import fr.kamael.skylandersfight.arena.Arena;
 import fr.kamael.skylandersfight.arena.entity.ArenaItem;
 import fr.kamael.skylandersfight.skylanders.Element;
 import fr.kamael.skylandersfight.skylanders.Skylander;
@@ -289,11 +290,14 @@ public class GameListener implements Listener {
 					Player playerKiller = playerDeath.getKiller();
 					GamePlayer gamePlayerKiller = this.plugin.game.getPlayer(playerKiller); 
 					Skylander skylanderKiller = gamePlayerKiller.getSkylander();
+					Arena arena = plugin.game.getRound().getArena();
 					
 					if (skylanderDeath.onDeath(skylanderKiller))
 						return;
 					
 					skylanderKiller.onKill(skylanderDeath);
+					
+					arena.onKill(skylanderKiller, skylanderDeath);
 					
 					gamePlayerKiller.getStats().nbKill++;
 					gamePlayerDeath.getStats().nbDeath++;
@@ -301,7 +305,6 @@ public class GameListener implements Listener {
 					HashMap<Skylander, Integer> timerLastDamage = gamePlayerDeath.getTimerLastDamage();
 					for (Skylander skylanderOther : timerLastDamage.keySet()) {
 						if (timerLastDamage.get(skylanderOther) >= this.plugin.game.getRound().getTimer() - Constants.secondsForAssist && !skylanderKiller.equals(skylanderOther)) {
-							Bukkit.broadcastMessage("Debug | PlayerOther = "+ skylanderOther.getPlayer().toString() +"; Timer = "+ timerLastDamage.get(skylanderOther) + " ; Condition = " + (this.plugin.game.getRound().getTimer() - Constants.secondsForAssist) + " ; Condition 2 = "+  !skylanderKiller.equals(skylanderOther));
 							this.plugin.game.getPlayer(skylanderOther.getPlayer()).getStats().nbAssist++;
 						}
 					}
@@ -486,8 +489,9 @@ public class GameListener implements Listener {
 			if (plugin.game != null && plugin.game.isState(GameState.FIGHTING)) {
 				Block clickedBlock = event.getClickedBlock();
 				Player player = event.getPlayer();
-				GamePlayer gamePlayer = this.plugin.game.getPlayer(player);
+				GamePlayer gamePlayer = plugin.game.getPlayer(player);
 				Skylander skylander = gamePlayer.getSkylander();
+				Arena arena = plugin.game.getRound().getArena();
 				
 				if (skylander.isAlive() && player.getGameMode().equals(GameMode.ADVENTURE) && clickedBlock != null && clickedBlock.getType().equals(Material.EMERALD_BLOCK)) {
 				
@@ -499,7 +503,7 @@ public class GameListener implements Listener {
 						clickedBlock.setType(Material.BEDROCK);
 						
 						new BukkitRunnable() {
-							private Integer timer = plugin.random.nextInt(30) + 30;
+							private Integer timer = arena.getRandomTimerRespawnHeal();
 							
 							@Override
 							public void run() {

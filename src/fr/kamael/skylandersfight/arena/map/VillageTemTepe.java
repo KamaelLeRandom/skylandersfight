@@ -10,18 +10,32 @@ import org.bukkit.World;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.arena.Arena;
+import fr.kamael.skylandersfight.arena.entity.ArenaItem;
+import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Element;
 
 public class VillageTemTepe extends Arena {
 	public static final String nameArena = "§dVillage Tem'Tepe";
-	public static final String nameEvent = "§d-";
+	public static final String nameEvent = "§dMarché aux Objets !";
+	public static final Integer secondMinEvent = 90;
+	public static final Integer secondMaxEvent = 180;
+	public static final Integer secondMinItem = 15;
+	public static final Integer secondMaxItem = 60;
+	public static final Integer secondMinHeal = 30;
+	public static final Integer secondMaxHeal = 60;
 	
 	public VillageTemTepe() {
 		World w = Bukkit.getWorld("world");
 		
 		this.name = nameArena;
+		this.secondMinRespawnItem = secondMinItem;
+		this.secondMaxRespawnItem = secondMaxItem;
+		this.secondMinRespawnHeal = secondMinHeal;
+		this.secondMaxRespawnHeal = secondMaxHeal;
 		
 		this.playerSpawns.add(new Location(w, -1300.5, 18.5, -1039.5)); // Lac
 		this.playerSpawns.add(new Location(w, -1355.5, 22.5, -1057.5)); // Fermier
@@ -51,16 +65,64 @@ public class VillageTemTepe extends Arena {
 	}
 	
 	@Override
-	public void event() {
+	public void onStart() {
 		// TODO - Musique d'ambiance.
 		Bukkit.getWorld("world").setTime(0);
 	}
 	
+	@Override
+	public void event() {
+		if (plugin.game.getConfig().getActiveItem()) {
+			Bukkit.broadcastMessage(Constants.prefixMessage + "§e" + nameEvent + " §fest activé ! Une fois entre §b" + secondMinEvent + "§f et §b" + secondMaxEvent + "§f secondes, §atous les emplacements d'objet§f recevront un objet !");
+			
+			new BukkitRunnable() {
+				private Integer timer = plugin.random.nextInt((secondMaxEvent - secondMinEvent) + 1) + secondMinEvent;
+				
+				@Override
+				public void run() {
+					if (!plugin.game.isState(GameState.FIGHTING)) {
+						cancel();
+						return;
+					}
+					
+					if (timer == 0) {
+						Bukkit.broadcastMessage(Constants.prefixMessage + "§eLe " + nameEvent + "§f est ouvert ! §aPlein d'objets sont apparus§f !");
+						
+						items.removeIf(i -> i.getEntity() == null || i.getEntity().isDead());
+						
+					    for (Location location : itemSpawns) {
+					        Boolean alreadyOccuped = false;
+
+					        for (ArenaItem existingItem : items) {
+					            if (existingItem.getEntity().getLocation().distance(location) < 1.0) {
+					            	alreadyOccuped = true;
+					                break;
+					            }
+					        }
+
+					        if (alreadyOccuped == false) {
+					        	items.add(new ArenaItem(location));
+					        }
+					    }
+						
+						cancel();
+						return;
+					}
+					
+					timer--;
+				}
+			}.runTaskTimer(plugin, 0, 20);	
+		}
+	}
+	
 	public static ItemStack getItem() {
 		ArrayList<String> lore = new ArrayList<>(List.of(
-			"§fBonus Élémentaire : §7"+ Element.VIE.getName() + " | " + Element.BOGDA.getName())
-		);
-		ItemStack item = new ItemStack(Material.OAK_LOG, 1);
+			"§7Bonus Élémentaire : " + Element.VIE.getName() + " §7| " + Element.BOGDA.getName(),
+			"§fUn objet aléatoire apparaît toutes les §6" + secondMinItem + "§f à §6" + secondMaxItem + "§f secondes.",
+			"§fUn soin réapparaît entre §6" + secondMinHeal + "§f et §6" + secondMaxHeal + "§f secondes."
+		));
+
+		ItemStack item = new ItemStack(Material.OAK_PLANKS, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameArena);
 		meta.setUnbreakable(true);

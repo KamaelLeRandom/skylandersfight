@@ -1,6 +1,7 @@
 package fr.kamael.skylandersfight.arena;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,6 +21,10 @@ public class Arena {
 	protected Plugin plugin = Plugin.plugin;
 	protected String name;
 	protected Boolean deathmatch = false;
+	protected Integer secondMinRespawnHeal = 30;
+	protected Integer secondMaxRespawnHeal = 60;
+	protected Integer secondMinRespawnItem = 60;
+	protected Integer secondMaxRespawnItem = 90;
 	protected ArrayList<Element> elements = new ArrayList<Element>();
 	protected ArrayList<Location> playerSpawns = new ArrayList<Location>();
 	protected ArrayList<Location> itemSpawns = new ArrayList<Location>();
@@ -30,6 +35,14 @@ public class Arena {
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public Integer getRandomTimerRespawnHeal() {
+		return plugin.random.nextInt((secondMaxRespawnHeal - secondMinRespawnHeal) + 1) + secondMinRespawnHeal;
+	}
+	
+	public Integer getRandomTimerRespawnItem() {
+		return plugin.random.nextInt((secondMaxRespawnItem - secondMinRespawnItem) + 1) + secondMinRespawnItem;
 	}
 	
 	public String getResumeElement() {
@@ -80,11 +93,39 @@ public class Arena {
 		return;
 	}
 
-	public ArenaItem summonArenaItem() {
-		Bukkit.broadcastMessage(Constants.prefixMessage + "Un §eObjet Aléatoire§f est apparu dans l'arène !");
-		ArenaItem item = new ArenaItem(getRandomItemSpawn());
-		this.items.add(item);		
-		return item;
+	@SuppressWarnings("unchecked")
+	public void summonArenaItem() {
+		items.removeIf(i -> i.getEntity() == null || i.getEntity().isDead());
+		
+		ArrayList<Location> locationToTest = (ArrayList<Location>) itemSpawns.clone();
+		Collections.shuffle(locationToTest);
+		
+	    Location validLocation = null;
+
+	    for (Location location : locationToTest) {
+	        Boolean alreadyOccuped = false;
+
+	        for (ArenaItem existingItem : items) {
+	            if (existingItem.getEntity().getLocation().distance(location) < 1.0) {
+	            	alreadyOccuped = true;
+	                break;
+	            }
+	        }
+
+	        if (!alreadyOccuped) {
+	            validLocation = location;
+	            break;
+	        }
+	    }
+
+	    if (validLocation == null) {
+	        Bukkit.broadcastMessage(Constants.prefixMessage + "Un §eObjet Aléatoire§f n'est pas apparu car il n'y a plus d'emplacement libre.");
+	        return;
+	    } else {
+		    Bukkit.broadcastMessage(Constants.prefixMessage + "Un §eObjet Aléatoire§f est apparu dans l'arène !");
+		    items.add(new ArenaItem(validLocation));
+		    return;
+	    }
 	}
 	
 	public void removeArenaItem(ArenaItem item) {
@@ -159,4 +200,10 @@ public class Arena {
 	public void deathmatch() { return; }
 	
 	public void event() { return; }
+	
+	public Boolean onSummonItem() { return true; }
+	
+	public void onStart() { return; }
+	
+	public void onKill(Skylander skylanderKiller, Skylander skylanderDeath) { return; }
 }
