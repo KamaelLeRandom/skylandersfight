@@ -23,6 +23,7 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.bogda.Cyroule;
 import fr.kamael.skylandersfight.skylanders.bogda.DJMomone;
+import fr.kamael.skylandersfight.skylanders.bogda.LeRosatas;
 import fr.kamael.skylandersfight.skylanders.bogda.Trayyks;
 
 public class BogdaListener implements Listener {
@@ -113,6 +114,8 @@ public class BogdaListener implements Listener {
             	handleCyroule((Cyroule) skylander, action, nameItem);
             } else if (skylander instanceof DJMomone) {
             	handleDJMomone((DJMomone) skylander, action, nameItem);
+            } else if (skylander instanceof LeRosatas) {
+            	handleLeRosatas((LeRosatas) skylander, action, nameItem);
             } else if (skylander instanceof Trayyks) {
             	handleTrayyks((Trayyks) skylander, action, nameItem);
             }
@@ -143,6 +146,16 @@ public class BogdaListener implements Listener {
         actions.put(DJMomone.namePapillonSpell, skylander::firstSpell_Papillon);
         actions.put(DJMomone.nameFirstSpell, skylander::firstSpell_Inventory);
         actions.put(DJMomone.nameSecondSpell, skylander::secondSpell_Book);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleLeRosatas(LeRosatas skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(LeRosatas.nameFirstSpell, skylander::firstSpell_TimeRewind);
+        actions.put(LeRosatas.nameSecondSpell, skylander::secondSpell_TimeRoot);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();
