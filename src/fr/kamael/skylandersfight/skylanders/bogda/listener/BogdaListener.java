@@ -25,6 +25,7 @@ import fr.kamael.skylandersfight.skylanders.bogda.Cyroule;
 import fr.kamael.skylandersfight.skylanders.bogda.DJMomone;
 import fr.kamael.skylandersfight.skylanders.bogda.LeRosatas;
 import fr.kamael.skylandersfight.skylanders.bogda.Trayyks;
+import fr.kamael.skylandersfight.skylanders.bogda.ZemZem;
 
 public class BogdaListener implements Listener {
 	private Plugin plugin = Plugin.plugin;
@@ -62,7 +63,7 @@ public class BogdaListener implements Listener {
 					((Trayyks) skylander).firstSpell_Apply(itM.getOwningPlayer().getPlayer());
 					
 					player.closeInventory();
-				}
+				} else if (event.getView().getTitle().equals(ZemZem.nameFirstSpell) && skylander instanceof ZemZem)
 				
 				return;	
 			}
@@ -112,6 +113,8 @@ public class BogdaListener implements Listener {
 
             if (skylander instanceof Cyroule) {
             	handleCyroule((Cyroule) skylander, action, nameItem);
+            } else if (skylander instanceof ZemZem) {
+            	handleZemZem((ZemZem) skylander, action, nameItem);
             } else if (skylander instanceof DJMomone) {
             	handleDJMomone((DJMomone) skylander, action, nameItem);
             } else if (skylander instanceof LeRosatas) {
@@ -131,6 +134,16 @@ public class BogdaListener implements Listener {
         actions.put(Cyroule.namePassif, skylander::passif_Inventory);
         actions.put(Cyroule.nameFirstSpell, skylander::firstSpell_NoAttack);
         actions.put(Cyroule.nameSecondSpell, skylander::secondSpell_Arena);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
+	}
+	
+	private void handleZemZem(ZemZem skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(ZemZem.nameFirstSpell, skylander::firstSpell_Inventory);
+        actions.put(ZemZem.nameSecondSpell, skylander::secondSpell_Teleport);
 
         if (isRightClick(action) && actions.containsKey(name)) {
         	actions.get(name).run();

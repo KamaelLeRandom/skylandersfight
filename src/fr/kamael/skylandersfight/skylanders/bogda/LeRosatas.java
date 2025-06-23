@@ -208,13 +208,13 @@ public class LeRosatas extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("§6§l===============");
 		player.sendMessage("\n");
-		player.sendMessage("   §e▶ " + element.getColor() + name + "§f ◀");
+		player.sendMessage("   §f▶ " + element.getColor() + name + "§f ◀");
 		player.sendMessage("\n");
-		player.sendMessage("§f≫ §a" + namePassif + "§f, Lorsque vous mourrez, un compteur de §b" + durationPassif + " secondes§f commence. Si la manche n’est pas finie à la fin du compteur, vous êtes §ares­suscité§f.");
+		player.sendMessage("§f≫ " + namePassif + "§f, Lorsque vous mourrez, un compteur de §b" + durationPassif + " secondes§f commence. Si la manche n’est pas finie à la fin du compteur, vous êtes §ares­suscité§f.");
 		player.sendMessage("\n");
-		player.sendMessage("§f≫ §a" + nameFirstSpell + "§f, Vous revenez à votre état d'il y a §b" + SkylanderConverter.convertTicks(numberOfInfoFirstSpell * 10) + " secondes§f. Vous récupérez ainsi votre §aposition§f, votre §evie§f, votre §cForce§f et votre §9Résistance§f. §b(" + timerFirstSpell + "s de recharge)");
+		player.sendMessage("§f≫ " + nameFirstSpell + "§f, Vous revenez à votre état d'il y a §b" + SkylanderConverter.convertTicks(numberOfInfoFirstSpell * 10) + " secondes§f. Vous récupérez ainsi votre §aposition§f, votre §evie§f, votre §cForce§f et votre §9Résistance§f. §b(" + timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
-		player.sendMessage("§f≫ §a" + nameSecondSpell + "§f, Vous devez viser un joueur. Si ça touche, vous l’immobilisez §b" + numberOfStunSecondSpell + " fois§f pour une durée de §b" + SkylanderConverter.convertTicks(durationStunSecondSpell) + "§f, toutes les §b" + SkylanderConverter.convertTicks(durationStunSecondSpell + durationBetweenSecondSpell) + " secondes§f. §b(" + timerSecondSpell + "s de recharge)");
+		player.sendMessage("§f≫ " + nameSecondSpell + "§f, Vous devez viser un joueur. Si ça touche, vous l’immobilisez §b" + numberOfStunSecondSpell + " fois§f pour une durée de §b" + SkylanderConverter.convertTicks(durationStunSecondSpell) + "§f, toutes les §b" + SkylanderConverter.convertTicks(durationStunSecondSpell + durationBetweenSecondSpell) + " secondes§f. §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("§6§l===============");
 		player.sendMessage("\n");
