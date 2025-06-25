@@ -23,6 +23,7 @@ import fr.kamael.skylandersfight.skylanders.Skylander;
 import fr.kamael.skylandersfight.skylanders.Status;
 import fr.kamael.skylandersfight.skylanders.bogda.Cyroule;
 import fr.kamael.skylandersfight.skylanders.bogda.DJMomone;
+import fr.kamael.skylandersfight.skylanders.bogda.Higrishta;
 import fr.kamael.skylandersfight.skylanders.bogda.LeRosatas;
 import fr.kamael.skylandersfight.skylanders.bogda.Trayyks;
 import fr.kamael.skylandersfight.skylanders.bogda.ZemZem;
@@ -111,7 +112,9 @@ public class BogdaListener implements Listener {
             
             String nameItem = item.getItemMeta().getDisplayName();
 
-            if (skylander instanceof Cyroule) {
+            if (skylander instanceof Higrishta) {
+            	handleHigrishta((Higrishta) skylander, action, nameItem);
+            } else if (skylander instanceof Cyroule) {
             	handleCyroule((Cyroule) skylander, action, nameItem);
             } else if (skylander instanceof ZemZem) {
             	handleZemZem((ZemZem) skylander, action, nameItem);
@@ -127,6 +130,16 @@ public class BogdaListener implements Listener {
 			Bukkit.broadcastMessage(Constants.prefixError + "(BogdaListener, playerInteractBogda) : §7"+e.getMessage());	
 			return;
 		}
+	}
+	
+	private void handleHigrishta(Higrishta skylander, Action action, String name) {
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put(Higrishta.nameFirstSpell, skylander::firstSpell_Sphere);
+        actions.put(Higrishta.nameSecondSpell, skylander::secondSpell_Blackhole);
+
+        if (isRightClick(action) && actions.containsKey(name)) {
+        	actions.get(name).run();
+        }
 	}
 	
 	private void handleCyroule(Cyroule skylander, Action action, String name) {
