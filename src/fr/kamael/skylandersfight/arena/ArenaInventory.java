@@ -36,9 +36,9 @@ public class ArenaInventory {
 		inventory.setItem(14, VestigesAzteques.getItem());
 		inventory.setItem(15, CanyonPerdu.getItem());
 		inventory.setItem(16, DesertRoyale.getItem());
-		inventory.setItem(18, CiteFlamme.getItem());
-		inventory.setItem(19, CrypteMaudite.getItem());
-		inventory.setItem(21, Purgatoire.getItem());
+		inventory.setItem(19, CiteFlamme.getItem());
+		inventory.setItem(20, CrypteMaudite.getItem());
+		inventory.setItem(22, Purgatoire.getItem());
 		
 		return inventory;
 	}

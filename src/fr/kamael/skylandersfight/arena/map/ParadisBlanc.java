@@ -73,19 +73,19 @@ public class ParadisBlanc extends Arena {
 		this.playerSpawns.add(new Location(Bukkit.getWorld("world"), -1483.5, 3.5, 100.5));
 		return;
 	}
+	
+	@Override
+	public void onStart() {
+		// TODO - Musique d'ambiance.
+		Bukkit.getWorld("world").setTime(1000);
+	}
 
 	@Override
 	public void event() {
-		// TODO - Musique d'ambiance.
-		Bukkit.getWorld("world").setTime(1000);
-		
-		if (plugin.game.getConfig().getActiveEventMap()) {
-			Bukkit.broadcastMessage(Constants.prefixMessage + "L'événement "+ nameSnowball +"§f est activé, toutes les "+ timerSnowball +" secondes vous gagnez une boule de neige qui vous téléporte à l'endroit où elle tombe.");
+		Bukkit.broadcastMessage(Constants.prefixMessage + "L'événement "+ nameSnowball +"§f est activé, toutes les "+ timerSnowball +" secondes vous gagnez une boule de neige qui vous téléporte à l'endroit où elle tombe.");
 			
-			for (GamePlayer gamePlayer : plugin.game.getPlayers()) {
-				gamePlayer.getPlayer().getInventory().addItem(ItemManager.makeBasicItem(Material.SNOWBALL, nameSnowball, 1));
-			}
-		}
+		for (GamePlayer gamePlayer : plugin.game.getPlayers())
+			gamePlayer.getPlayer().getInventory().addItem(ItemManager.makeBasicItem(Material.SNOWBALL, nameSnowball, 1));
 	}
 	
 	public void waitingTimeSnowball(Skylander skylander) {
@@ -111,9 +111,12 @@ public class ParadisBlanc extends Arena {
 	}
 	
 	public static ItemStack getItem() {
-		ArrayList<String> lore = new ArrayList<>(List.of("§fBonus Élémentaire : §7"+ Element.EAU.getName() + " | " + Element.AIR.getName()));
-		
-		ItemStack item = new ItemStack(Material.BLUE_ICE, 1);
+		ArrayList<String> lore = new ArrayList<>(List.of(
+			"§7Bonus Élémentaire : " + Element.EAU.getName() + " §7| " + Element.AIR.getName(),
+			"§fVous obtenez un "+ nameSnowball +"§f qui permet de vous §5téléportez§f à l'endroit ou elle attérit, celui-ci reviens toutes les §b"+ timerSnowball +"§f secondes."
+		));
+
+		ItemStack item = new ItemStack(Material.OAK_PLANKS, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameArena);
 		meta.setUnbreakable(true);
@@ -121,7 +124,6 @@ public class ParadisBlanc extends Arena {
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
-		
 		return item;
 	}
 }

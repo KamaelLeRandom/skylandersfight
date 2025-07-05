@@ -118,8 +118,7 @@ public class VillageTemTepe extends Arena {
 	public static ItemStack getItem() {
 		ArrayList<String> lore = new ArrayList<>(List.of(
 			"§7Bonus Élémentaire : " + Element.VIE.getName() + " §7| " + Element.BOGDA.getName(),
-			"§fUn objet aléatoire apparaît toutes les §6" + secondMinItem + "§f à §6" + secondMaxItem + "§f secondes.",
-			"§fUn soin réapparaît entre §6" + secondMinHeal + "§f et §6" + secondMaxHeal + "§f secondes."
+			"§fUne fois entre §b" + secondMinEvent + "§f et §b" + secondMaxEvent + "§f secondes, §atous les emplacements d'objet§f recevront un objet !"
 		));
 
 		ItemStack item = new ItemStack(Material.OAK_PLANKS, 1);
