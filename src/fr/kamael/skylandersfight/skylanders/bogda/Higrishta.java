@@ -10,12 +10,14 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import fr.kamael.skylandersfight.Constants;
@@ -63,8 +65,16 @@ public class Higrishta extends Skylander {
 			player.playSound(player.getLocation(), Sound.ENTITY_ENDER_EYE_LAUNCH, 1, 1);
 			player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre compétence "+ nameFirstSpell + "§f.");
 			
-			for (int i = 0; i < numberOfFirst; i++)
-				new HigrishtaSphere(this, player.getLocation());
+			Location center = player.getLocation();
+			Vector direction = center.getDirection().normalize();
+
+			Vector right = direction.clone().crossProduct(new Vector(0, 1, 0)).normalize();
+
+			Location rightLocation = center.clone().add(right.multiply(1));
+			Location leftLocation = center.clone().subtract(right.multiply(1));
+
+			new HigrishtaSphere(this, rightLocation);
+			new HigrishtaSphere(this, leftLocation);		
 			
 			addCooldown(nameFirstSpell, timerFirstSpell);
 			return;
@@ -84,30 +94,56 @@ public class Higrishta extends Skylander {
 	        Location blackholeLocation = player.getLocation().clone().add(0, 2, 0);
 	        World world = player.getWorld();
 	        
+			ArmorStand armorStand = world.spawn(blackholeLocation.clone(), ArmorStand.class);
+			armorStand.setInvisible(true);
+			armorStand.setGravity(false);
+			armorStand.setInvulnerable(true);
+			armorStand.setMarker(true);
+			armorStand.getEquipment().setHelmet(new ItemStack(Material.CRYING_OBSIDIAN));
+	        
 	        new BukkitRunnable() {
 	            private Integer timer = durationSecondSpell * 10;
+	            private Double yawAngle = 0.;
+	            private Double pitchAngle = 0.;
+	            private Double rollAngle = 0.;
 
 	            @Override
 	            public void run() {
 	                if (timer == 0 || !alive || !plugin.game.isState(GameState.FIGHTING)) {
 	                	player.playSound(player.getEyeLocation(), Sound.BLOCK_ENDER_CHEST_CLOSE, 1, 1);
 	                	player.sendMessage(Constants.prefixMessage + "Votre compétence "+ nameSecondSpell + "§f vient de prendre fin.");
-	                    cancel();
+	                	armorStand.remove();
+	                	cancel();
 	                    return;
 	                }
 
 	                world.spawnParticle(Particle.PORTAL, blackholeLocation, 50, 0.5, 0.5, 0.5, 0.1);
 	                
+	                yawAngle += Math.toRadians(10);   
+	                pitchAngle += Math.toRadians(4);
+	                rollAngle += Math.toRadians(6);
+
+	                if (yawAngle > Math.PI * 2) yawAngle -= Math.PI * 2;
+	                if (pitchAngle > Math.PI * 2) pitchAngle -= Math.PI * 2;
+	                if (rollAngle > Math.PI * 2) rollAngle -= Math.PI * 2;
+
+	                armorStand.setHeadPose(new EulerAngle(pitchAngle, yawAngle, rollAngle));
+	                
 	                for (Skylander skylanderEnemy : skylandersEnemy) {
 	                	Player playerEnemy = skylanderEnemy.getPlayer();
 	                    Double distance = playerEnemy.getLocation().distance(blackholeLocation);
 	                    
-	                    if (distance > distanceSecondSpell) {
-	                    	Double strength = 1.5 * (1 - (distance / distanceSecondSpell)); 
-		                    Vector direction = blackholeLocation.toVector().subtract(playerEnemy.getLocation().toVector());
-		                    Vector pull = direction.normalize().multiply(strength);
-
-		                    playerEnemy.setVelocity(playerEnemy.getVelocity().add(pull));	
+	                    if (distance < distanceSecondSpell) {
+	                    	if (distance < 0.8) {
+	                    	    playerEnemy.setVelocity(new Vector(0, 0, 0));
+	                    	    continue;
+	                    	} else {
+		                    	Double strength = 0.3 * (1 - (distance / distanceSecondSpell)); 
+		                    	Vector direction = blackholeLocation.toVector().subtract(playerEnemy.getLocation().toVector());
+		                    	Vector pull = direction.normalize().multiply(strength);
+		                    	Vector newVelocity = playerEnemy.getVelocity().multiply(0.3).add(pull.multiply(0.7));
+		                    	playerEnemy.setVelocity(newVelocity);
+	                    	}
 	                    }
 	                }
 
@@ -122,7 +158,7 @@ public class Higrishta extends Skylander {
 	
 	public void sendDescription() {
 		player.sendMessage("\n");
-		player.sendMessage("§6§l===============");
+		player.sendMessage("===============");
 		player.sendMessage("\n");
 		player.sendMessage("   §f▶ " + element.getColor() + name + "§f ◀");
 		player.sendMessage("\n");
@@ -132,7 +168,7 @@ public class Higrishta extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("§f≫ " + nameSecondSpell + "§f, . §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
-		player.sendMessage("§6§l===============");
+		player.sendMessage("===============");
 		player.sendMessage("\n");
 	}
 	

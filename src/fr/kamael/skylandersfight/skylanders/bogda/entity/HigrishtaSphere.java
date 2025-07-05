@@ -29,7 +29,7 @@ public class HigrishtaSphere extends CustomEntity {
 		Player player = skylander.getPlayer();
 		World world = player.getWorld();
 		
-        ArmorStand sphere = world.spawn(player.getLocation().add(0, 1.5, 0), ArmorStand.class);
+        ArmorStand sphere = world.spawn(location, ArmorStand.class);
         sphere.setInvisible(true);
         sphere.setSmall(true);
         sphere.setGravity(false);
@@ -53,7 +53,7 @@ public class HigrishtaSphere extends CustomEntity {
 
                     Location sphereLoc = sphere.getLocation();
                     Location targetLoc = playerTarget.getLocation().add(0, 1, 0);
-                    Vector direction = targetLoc.toVector().subtract(sphereLoc.toVector()).normalize().multiply(0.35);
+                    Vector direction = targetLoc.toVector().subtract(sphereLoc.toVector()).normalize().multiply(0.5);
                     sphere.teleport(sphereLoc.add(direction));
 
                     // Effets visuels
