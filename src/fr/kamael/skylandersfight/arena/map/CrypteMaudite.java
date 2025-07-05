@@ -62,7 +62,7 @@ public class CrypteMaudite extends Arena {
 			"§7Bonus Élémentaire : " + Element.MORT.getName() + " §7| " + Element.TERRE.getName()
 		));
 
-		ItemStack item = new ItemStack(Material.OAK_PLANKS, 1);
+		ItemStack item = new ItemStack(Material.BONE_BLOCK, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameArena);
 		meta.setUnbreakable(true);

@@ -3,10 +3,12 @@ package fr.kamael.skylandersfight.utils.converter;
 import fr.kamael.skylandersfight.arena.Arena;
 import fr.kamael.skylandersfight.arena.map.CanyonPerdu;
 import fr.kamael.skylandersfight.arena.map.CiteFlamme;
+import fr.kamael.skylandersfight.arena.map.CrypteMaudite;
 import fr.kamael.skylandersfight.arena.map.DesertRoyale;
 import fr.kamael.skylandersfight.arena.map.JungleProfonde;
 import fr.kamael.skylandersfight.arena.map.NouveauLabogda;
 import fr.kamael.skylandersfight.arena.map.ParadisBlanc;
+import fr.kamael.skylandersfight.arena.map.Purgatoire;
 import fr.kamael.skylandersfight.arena.map.VestigesAzteques;
 import fr.kamael.skylandersfight.arena.map.VillageTemTepe;
 
@@ -30,6 +32,10 @@ public class ArenaConverter {
 				return new DesertRoyale();
 			case CiteFlamme.nameArena: 
 				return new CiteFlamme();
+			case CrypteMaudite.nameArena:
+				return new CrypteMaudite();
+			case Purgatoire.nameArena: 
+				return new Purgatoire();
 			default:
 				return null;
 		}

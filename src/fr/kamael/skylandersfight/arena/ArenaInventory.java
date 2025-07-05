@@ -11,6 +11,7 @@ import fr.kamael.skylandersfight.arena.map.DesertRoyale;
 import fr.kamael.skylandersfight.arena.map.JungleProfonde;
 import fr.kamael.skylandersfight.arena.map.NouveauLabogda;
 import fr.kamael.skylandersfight.arena.map.ParadisBlanc;
+import fr.kamael.skylandersfight.arena.map.Purgatoire;
 import fr.kamael.skylandersfight.arena.map.VestigesAzteques;
 import fr.kamael.skylandersfight.arena.map.VillageTemTepe;
 import fr.kamael.skylandersfight.utils.manager.ItemManager;
@@ -37,6 +38,7 @@ public class ArenaInventory {
 		inventory.setItem(16, DesertRoyale.getItem());
 		inventory.setItem(18, CiteFlamme.getItem());
 		inventory.setItem(19, CrypteMaudite.getItem());
+		inventory.setItem(21, Purgatoire.getItem());
 		
 		return inventory;
 	}
