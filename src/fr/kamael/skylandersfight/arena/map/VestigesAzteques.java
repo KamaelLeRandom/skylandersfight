@@ -101,14 +101,17 @@ public class VestigesAzteques extends Arena {
 		this.elements.add(Element.VIE);
 		this.elements.add(Element.MORT);
 	}
+	
+	@Override
+	public void onStart() {
+		// TODO - Musique d'ambiance.
+		Bukkit.getWorld("world").setTime(16000);
+		
+		rebuildAllPlatforms();
+	}
 		
 	@Override
 	public void event() {
-		// TODO - Musique d'ambiance.
-		Bukkit.getWorld("world").setTime(16000);
-
-		rebuildAllPlatforms();
-				
 	    new BukkitRunnable() {
 	        private final Set<Location> transitionPlatform = new HashSet<>();
 
@@ -197,8 +200,9 @@ public class VestigesAzteques extends Arena {
 	
 	public static ItemStack getItem() {
 		ArrayList<String> lore = new ArrayList<>(List.of(
-			"§fBonus Élémentaire : §7"+ Element.VIE.getName() + " | " + Element.MORT.getName())
-		);
+			"§fBonus Élémentaire : §7"+ Element.VIE.getName() + " | " + Element.MORT.getName(),
+			"§fPour accèder aux "+ nameEvent + "§f, vous devez passer par le centre du temple, en parcourant les platformes qui disparaissent et réapparaisent."
+		));
 		ItemStack item = new ItemStack(Material.MOSS_BLOCK, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameArena);
