@@ -6,6 +6,7 @@ import org.bukkit.inventory.Inventory;
 import fr.kamael.skylandersfight.Constants;
 import fr.kamael.skylandersfight.arena.map.CanyonPerdu;
 import fr.kamael.skylandersfight.arena.map.CiteFlamme;
+import fr.kamael.skylandersfight.arena.map.CrypteMaudite;
 import fr.kamael.skylandersfight.arena.map.DesertRoyale;
 import fr.kamael.skylandersfight.arena.map.JungleProfonde;
 import fr.kamael.skylandersfight.arena.map.NouveauLabogda;
@@ -34,7 +35,8 @@ public class ArenaInventory {
 		inventory.setItem(14, VestigesAzteques.getItem());
 		inventory.setItem(15, CanyonPerdu.getItem());
 		inventory.setItem(16, DesertRoyale.getItem());
-		inventory.setItem(17, CiteFlamme.getItem());
+		inventory.setItem(18, CiteFlamme.getItem());
+		inventory.setItem(19, CrypteMaudite.getItem());
 		
 		return inventory;
 	}
