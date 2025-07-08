@@ -25,6 +25,7 @@ import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class Spyro extends Skylander {
 	public static final String name = "Spyro";
+	public static final String nameWeapon = "§5Tri-flamme";
 	
 	public static final String nameFirstSpell = "§5Percée Cornue";
 	public static final Integer timerFirstSpell = 15;
@@ -36,11 +37,15 @@ public class Spyro extends Skylander {
 	public static final Double damageSecondSpell = 3.;
 	public static final Double rangeSecondSpell = 3.;
 	
-	public Spyro(Player player) {
+	private Boolean isSecondSpellActived = false;
+	private Integer numberFireballSecondSpell = 0;
+	
+ 	public Spyro(Player player) {
 		super(player, Element.MAGIE, name);
 		this.force = 1. + Element.magieForce;
 	}
 	
+	@Override
 	public void giveEquipement() {
 		ItemManager.clearPlayer(player);
 		ItemManager.giveColorArmor(player, element.getColorArmor());
@@ -92,13 +97,14 @@ public class Spyro extends Skylander {
 			);
 			
 			addCooldown(nameFirstSpell, timerFirstSpell);
+			return;
 		}
 	}
 	
 	public void secondSpell_Fly() {
 		if (checkCooldown(nameSecondSpell, true)) {
 			player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_ELYTRA, 1, 1);
-			player.sendMessage(Constants.prefixMessage + "Venez d'utiliser la compétence "+ nameSecondSpell +"§f.");
+			player.sendMessage(Constants.prefixMessage + "Venez d'utiliser votre compétence "+ nameSecondSpell +"§f.");
 			
 			SpellUtils.fly(
 				this, 
@@ -116,6 +122,7 @@ public class Spyro extends Skylander {
 			);
 			
 			addCooldown(nameSecondSpell, timerSecondSpell);
+			return;
 		}
 	}
 
@@ -123,13 +130,13 @@ public class Spyro extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");
-		player.sendMessage("   ▶§5" + Spyro.name + "§f◀");
+		player.sendMessage("   ▶ " + element.getColor() + Spyro.name + "§f ◀");
 		player.sendMessage("\n");
-		player.sendMessage("≫ §5Tri-flamme§f, vous tirez §dtrois flèches§f au lieu d'une.");
+		player.sendMessage("≫ " + nameWeapon +", vous tirez §dtrois flèches§f au lieu d'une.");
 		player.sendMessage("\n");
-		player.sendMessage("≫ §5" + Spyro.nameFirstSpell + "§f, vous effectuez une §druée§f vers l'avant qui inflige §d" + Spyro.damageFirstSpell + " dégats§f et §denflamme§f les joueurs sur votre passage. §b(" + Spyro.timerFirstSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, vous effectuez une §druée§f vers l'avant qui inflige §d" + Spyro.damageFirstSpell + " dégats§f et §denflamme§f les joueurs sur votre passage. §b(" + Spyro.timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
-		player.sendMessage("≫ §5" + Spyro.nameSecondSpell + "§f, vous êtes §dpropulsé§f dans les airs, vous infligez §d" + Spyro.damageSecondSpell + " dégats§f aux joueurs sur votre passage. §b(" + Spyro.timerSecondSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameSecondSpell + "§f, vous êtes §dpropulsé§f dans les airs, vous infligez §d" + Spyro.damageSecondSpell + " dégats§f aux joueurs sur votre passage. §b(" + Spyro.timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");
@@ -187,7 +194,7 @@ public class Spyro extends Skylander {
 	public static ItemStack getItemWeapon() {
 		ItemStack item = new ItemStack(Material.BOW, 1);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName("§5Tri-flamme");
+		meta.setDisplayName(nameWeapon);
 		meta.setUnbreakable(true);
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
@@ -195,7 +202,6 @@ public class Spyro extends Skylander {
 		item.setItemMeta(meta);
 		item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
 		item.addUnsafeEnchantment(Enchantment.ARROW_FIRE, 1);
-		
 		return item;
 	}
 }

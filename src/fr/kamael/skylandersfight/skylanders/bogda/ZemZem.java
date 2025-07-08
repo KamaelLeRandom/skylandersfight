@@ -67,7 +67,8 @@ public class ZemZem extends Skylander {
 		inv.setItem(0, getItemFirstSpell());
 		inv.setItem(1, getItemWeapon());
 		inv.setItem(2, getItemSecondSpell());
-		inv.setItem(9, new ItemStack(Material.ARROW));
+		inv.setItem(9, new ItemStack(Material.ARROW, 64));
+		inv.setItem(10, new ItemStack(Material.ARROW, 64));
 	}
 	
 	@Override

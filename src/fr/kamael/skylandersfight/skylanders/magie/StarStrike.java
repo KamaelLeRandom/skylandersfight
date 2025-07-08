@@ -31,10 +31,9 @@ import fr.kamael.skylandersfight.utils.manager.ItemManager;
 public class StarStrike extends Skylander {
 	public static final String name = "Star Strike";
 	
-	public static final String nameWeapon = "§5Étoile";
-	
+	public static final String nameWeapon = "§5Étoiles";
 	public static final String namePassif = "§5Enchaînement";
-	public static final Integer delayMissPassif = 8;
+	public static final Integer delayMissPassif = 3;
 	
 	public static final String nameFirstSpell = "§5Chute de Météores";
 	public static final Integer timerFirstSpell = 30;
@@ -61,7 +60,7 @@ public class StarStrike extends Skylander {
 		
 		Inventory inv = player.getInventory();
 		inv.setItem(0, getItemFirstSpell());
-		inv.setItem(1, getItemWeapon(1));
+		inv.setItem(1, getItemWeapon(3));
 		inv.setItem(2, getItemSecondSpell());
 		inv.setItem(9, new ItemStack(Material.ARROW));
 	}
@@ -89,11 +88,6 @@ public class StarStrike extends Skylander {
 		}
 
 		return false;
-	}
-	
-	public Boolean onDamageSword(Skylander skylanderHit) { 
-		passif_Reset();
-		return false; 
 	}
 
 	public Double addDamage(Double damage, Skylander skylanderHit) { 
@@ -167,23 +161,18 @@ public class StarStrike extends Skylander {
 			return;
 		}
 	}
-	
- 	public void passif_Reset() {
- 		stackPassif = 0;
- 		player.setLevel(stackPassif);
- 	}
  	
 	public void sendDescription() {
 		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");
-		player.sendMessage("   ▶§5" + name + "§f◀");
+		player.sendMessage("   ▶ §5" + name + "§f ◀");
 		player.sendMessage("\n");
-		player.sendMessage("≫ §5" + namePassif + "§f, lorsque vous touchez avec votre " + nameWeapon + " vous §dgagnez 1 dégats supplémentaires§f sur la prochaine (pas de limite) et vous §drécupérez direcement§f votre "+ nameWeapon +"§f, dans le cas contraire vous §cperdez vos dégats supplémentaires§f et devez §cattendre "+ delayMissPassif +" secondes§f pour récuperer votre "+ nameWeapon +"§f.");
+		player.sendMessage("≫ " + namePassif + "§f, lorsque vous touchez avec votre " + nameWeapon + " vous §dgagnez 1 dégats supplémentaires§f sur la prochaine (pas de limite) et vous §drécupérez direcement§f votre "+ nameWeapon +"§f, dans le cas contraire vous §cperdez vos dégats supplémentaires§f et devez §cattendre "+ delayMissPassif +" secondes§f pour récuperer votre "+ nameWeapon +"§f.");
 		player.sendMessage("\n");
-		player.sendMessage("≫ §5" + nameFirstSpell + "§f, vous invoquez des météores qui tombe du ciel, lorsque les météores touchent le sol, les §djoueurs proche§f (" + rangeFireballFirstSpell + " blocs) sont §détoudit§f pendant §d" + SkylanderConverter.convertTicks(tickStunFirstSpell) + "§f et subira §d" + damageFireballFirstSpell + " dégats§f. §b(" + timerFirstSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, vous invoquez des météores qui tombe du ciel, lorsque les météores touchent le sol, les §djoueurs proche§f (" + rangeFireballFirstSpell + " blocs) sont §détoudit§f pendant §d" + SkylanderConverter.convertTicks(tickStunFirstSpell) + "§f et subira §d" + damageFireballFirstSpell + " dégats§f. §b(" + timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
-		player.sendMessage("≫ §5" + nameSecondSpell + "§f, vous devenez §dinvulnérable§f pendant " + SkylanderConverter.convertTicks(tickInvulSecondSpell) + " et créer des liens avec les joueurs autour de vous (" + rangeSecondSpell + " blocs), si ce §dlien n'est pas brisé§f à la fin de votre invulnérabilité, le joueur liée sera §dimmobilisé§f pendant " + SkylanderConverter.convertTicks(tickImmoSecondSpell) + " secondes. §b(" + timerSecondSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameSecondSpell + "§f, vous devenez §dinvulnérable§f pendant " + SkylanderConverter.convertTicks(tickInvulSecondSpell) + " et créer des liens avec les joueurs autour de vous (" + rangeSecondSpell + " blocs), si ce §dlien n'est pas brisé§f à la fin de votre invulnérabilité, le joueur liée sera §dimmobilisé§f pendant " + SkylanderConverter.convertTicks(tickImmoSecondSpell) + " secondes. §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");

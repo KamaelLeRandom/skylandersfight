@@ -50,6 +50,14 @@ public class BogdaListener implements Listener {
 					
 					player.closeInventory();
 					return;
+				} else if (event.getView().getTitle().equalsIgnoreCase(ZemZem.nameFirstSpell) && skylander instanceof ZemZem) {
+					event.setCancelled(true);
+					
+					SkullMeta itM = (SkullMeta) it.getItemMeta();
+					((ZemZem) skylander).firstSpell_Apply(itM.getOwningPlayer().getPlayer());
+					
+					player.closeInventory();
+					return;
 				} else if (event.getView().getTitle().equalsIgnoreCase(DJMomone.nameFirstSpell) && skylander instanceof DJMomone) {
 					event.setCancelled(true);
 					
@@ -64,6 +72,7 @@ public class BogdaListener implements Listener {
 					((Trayyks) skylander).firstSpell_Apply(itM.getOwningPlayer().getPlayer());
 					
 					player.closeInventory();
+					return;
 				} else if (event.getView().getTitle().equals(ZemZem.nameFirstSpell) && skylander instanceof ZemZem)
 				
 				return;	

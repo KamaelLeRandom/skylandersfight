@@ -84,7 +84,10 @@ public class JungleProfonde extends Arena {
 	public void deathmatch() {
 		deathmatch = true;
 		this.playerSpawns.removeAll(this.playerSpawns);
-
+		this.playerSpawns.add(new Location(Bukkit.getWorld("world"), -1500.5, 3.5, 105.5));
+		this.playerSpawns.add(new Location(Bukkit.getWorld("world"), -1490.5, 3.5, 115.5));
+		this.playerSpawns.add(new Location(Bukkit.getWorld("world"), -1501.5, 3.5, 117.5));
+		this.playerSpawns.add(new Location(Bukkit.getWorld("world"), -1483.5, 3.5, 100.5));
 		return;
 	}
 	

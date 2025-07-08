@@ -78,6 +78,7 @@ public class DJMomone extends Skylander {
 	public static final Integer timerSecondSpell = 30;
 	public static final Integer secDurationEffectSecondSpell = 10;
 	public static final Double removeLifeSecondSpell = -5.;
+	public static final Integer rangeSecondSpell = 20;
 	
 	private Inventory musicInventory = null;
 	private ItemStack musicActual = null; 
@@ -395,7 +396,9 @@ public class DJMomone extends Skylander {
 			playerCheck.sendMessage(Constants.prefixMessage + "Vous avez reçu une "+ nameSecondSpell +" de §6"+ player.getName() +"§f.");
 			playerCheck.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, secDurationEffectSecondSpell * 20, 0, false, false));
 			playerCheck.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, secDurationEffectSecondSpell * 20, 1, false, false));
-			playerCheck.addPotionEffect(new PotionEffect(PotionEffectType.POISON, secDurationEffectSecondSpell * 20, 1, false, false));
+			if (playerCheck.getLocation().distance(player.getLocation()) <= rangeSecondSpell)
+				playerCheck.addPotionEffect(new PotionEffect(PotionEffectType.POISON, secDurationEffectSecondSpell * 20, 1, false, false));
+
 			SpellUtils.changeLife(skylanderCheck, removeLifeSecondSpell);
 			
 			player.playSound(player.getLocation(), "minecraft:djmomone.dedicace", SoundCategory.RECORDS, 1, 1);

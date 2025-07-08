@@ -280,6 +280,7 @@ public class GameRound {
 				if (activeDeathmatch && timerRound.equals(timerDeathmatch)) {
 					Bukkit.broadcastMessage(Constants.prefixMessage + "L'heure du §cDeathmatch§f a sonné ! Bon courage.");
 					arena.deathmatch();
+					arena.teleportAllPlayer();
 				}
 					
 				// Bonus Élémentaire

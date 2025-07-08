@@ -40,12 +40,15 @@ public class ArenaCorpse extends CustomEntity {
 	}
 	
 	public void onHit(Skylander skylander) {
-		if (skylander instanceof Sunburn) 
+		if (skylander instanceof Sunburn) { 
 			((Sunburn) skylander).passif(this.skylander);
-		if (skylander instanceof Drobot)
+			removeEntity();
+		}
+		if (skylander instanceof Drobot) {
 			((Drobot) skylander).passif(plugin.game.getPlayer(this.skylander.getPlayer()));
+			removeEntity();
+		}
 		
-		removeEntity();
 		return; 
 	}
 }

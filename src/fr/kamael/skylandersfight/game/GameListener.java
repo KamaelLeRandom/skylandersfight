@@ -493,7 +493,7 @@ public class GameListener implements Listener {
 				Skylander skylander = gamePlayer.getSkylander();
 				Arena arena = plugin.game.getRound().getArena();
 				
-				if (skylander.isAlive() && player.getGameMode().equals(GameMode.ADVENTURE) && clickedBlock != null && clickedBlock.getType().equals(Material.EMERALD_BLOCK)) {
+				if (skylander.isAlive() && (player.getGameMode().equals(GameMode.ADVENTURE) || player.getGameMode().equals(GameMode.SURVIVAL) ) && clickedBlock != null && clickedBlock.getType().equals(Material.EMERALD_BLOCK)) {
 				
 					if (this.plugin.game.getConfig().getActiveHeal()) {
 						SpellUtils.heal(skylander, Constants.valueHeal, true);

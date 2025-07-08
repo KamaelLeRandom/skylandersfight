@@ -139,6 +139,7 @@ public class Trayyks extends Skylander {
 				it.setItemMeta(itM);
 
 				invMetamorphose.setItem(idxInv, it);
+				idxInv++;
 			}
 		}
 		

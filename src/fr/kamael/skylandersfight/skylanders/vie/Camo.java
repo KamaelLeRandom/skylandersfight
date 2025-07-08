@@ -36,8 +36,8 @@ public class Camo extends Skylander {
 	public static final Double healPassif = 1.;
 	public static final Double probaGoldPassif = 0.10;
 	public static final Double bonusGoldPassif = 0.02;
-	public static final Integer numberMaxItemPassif = 5;
-	public static final Integer numberMinItemPassif = 2;
+	public static final Integer numberMaxItemPassif = 3;
+	public static final Integer numberMinItemPassif = 1;
 	
 	public static final String nameFirstSpell = "§2Liane Empoisonnée";
 	public static final Integer timerFirstSpell = 20;

@@ -200,7 +200,7 @@ public class VestigesAzteques extends Arena {
 	
 	public static ItemStack getItem() {
 		ArrayList<String> lore = new ArrayList<>(List.of(
-			"§fBonus Élémentaire : §7"+ Element.VIE.getName() + " | " + Element.MORT.getName(),
+			"§7Bonus Élémentaire : §7"+ Element.VIE.getName() + " | " + Element.MORT.getName(),
 			"§fPour accèder aux "+ nameEvent + "§f, vous devez passer par le centre du temple, en parcourant les platformes qui disparaissent et réapparaisent."
 		));
 		ItemStack item = new ItemStack(Material.MOSS_BLOCK, 1);

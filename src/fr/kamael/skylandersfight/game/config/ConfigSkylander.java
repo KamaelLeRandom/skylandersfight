@@ -51,7 +51,7 @@ public class ConfigSkylander {
 		
 		ArrayList<ItemStack> magie = new ArrayList<>();
 		magie.add(Spyro.getSignatureItem());
-		magie.add(DoubleTrouble.getSignatureItem());
+		// magie.add(DoubleTrouble.getSignatureItem());
 		magie.add(Voodood.getSignatureItem());
 		magie.add(StarStrike.getSignatureItem());
 		this.data.put(Element.MAGIE, magie);

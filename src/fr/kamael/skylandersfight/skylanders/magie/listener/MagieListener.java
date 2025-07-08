@@ -48,7 +48,6 @@ public class MagieListener implements Listener {
                     new BukkitRunnable() {                    	
                         @Override
                         public void run() {
-                        	((StarStrike) skylander).passif_Reset();
                         	player.getInventory().addItem(StarStrike.getItemWeapon(1));
                         	cancel();
                         	return;

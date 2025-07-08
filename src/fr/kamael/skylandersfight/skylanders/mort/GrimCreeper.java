@@ -84,7 +84,7 @@ public class GrimCreeper extends Skylander {
 	
 	public Double addDamage(Double damage, Skylander skylanderHit) {
 		if (nbHitPassif > nbHitSecondBonusPassif && SpellUtils.getPourcentLife(skylanderHit) <= pourcentExecSecondBonusPassif) {
-			return 9999.;
+			return 25.;
 		}
 		
 		if (nbHitPassif > nbHitThirdBonusPassif) {

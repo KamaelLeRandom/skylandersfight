@@ -34,7 +34,7 @@ public class Cyroule extends Skylander {
 	
 	public static final String nameWeapon = "§dPoignard";
 	public static final String namePassif = "§dContrat";
-	public static final Integer numberOfHitPassif = 25;
+	public static final Integer numberOfHitPassif = 10;
 	
 	public static final String nameFirstSpell = "§dCoup de Pression";
 	public static final Integer timerFirstSpell = 30;
@@ -123,37 +123,11 @@ public class Cyroule extends Skylander {
 				it.setItemMeta(itM);
 				
 				invPassif.setItem(idxInv, it);
+				idxInv++;
 			}
 		}
 		
-		if (skylanderPassif != null && skylanderPassif.isAlive()) {
-			ItemStack it = new ItemStack(Material.BARRIER);
-			ItemMeta itM = it.getItemMeta();
-			itM.setDisplayName("§cAnnuler le contrat actuel");
-			it.setItemMeta(itM);
-			
-			invPassif.setItem(invPassif.getSize() - 1, it);
-		}
-		
 		player.openInventory(invPassif);
-	}
-	
-	public void passif_Cancel() {
-		if (skylanderPassif != null && skylanderPassif.isAlive()) {
-			Player playerPassif = skylanderPassif.getPlayer();
-			playerPassif.playSound(playerPassif.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
-			playerPassif.sendTitle(namePassif, "§cAnnulation§f, vous êtes tout seul maintenant", 1, 25, 1);
-			playerPassif.sendMessage(Constants.prefixMessage + "Le "+ namePassif +"§f qui vous a été annulé, vous devez re-gagner seul.");
-			
-			GamePlayer gamePlayerPassif = plugin.game.getPlayer(playerPassif);
-			gamePlayerPassif.setActualTeam(gamePlayerPassif.getInitialTeam());
-			
-			skylandersHitPassif.remove(skylanderPassif);
-			skylanderPassif = null;
-			
-			player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
-			player.sendMessage(Constants.prefixMessage + "Vous venez d'§cannuler§f votre "+ namePassif +"§f sur le joueur §5"+ playerPassif.getName() +"§f.");
-		}
 	}
 	
 	public void passif_Apply(Player playerChoose) {
@@ -173,6 +147,7 @@ public class Cyroule extends Skylander {
 		if (skylandersHitPassif.get(skylanderChoose) >= numberOfHitPassif) {
 			player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 			player.sendMessage(Constants.prefixMessage + "Vous venez d'imposer votre "+ namePassif +"§f au joueur §5"+ playerChoose.getName() +"§f.");
+			player.getInventory().remove(getItemPassif());
 			
 			playerChoose.playSound(playerChoose.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 			playerChoose.sendTitle(namePassif, "§7Vous devez gagner pour §d"+ player.getName() +"§f.", 1, 25, 1);
