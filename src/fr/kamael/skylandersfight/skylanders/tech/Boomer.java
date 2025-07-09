@@ -27,8 +27,8 @@ import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class Boomer extends Skylander {
 	public static final String name = "Boomer";
-	
 	public static final String nameWeapon = "§eTNT";
+	
 	public static final String namePassif = "§eLancement de TNT";
 	public static final Integer timerPassif = 20;
 	public static final Double rangeThrowPassif = 0.5;

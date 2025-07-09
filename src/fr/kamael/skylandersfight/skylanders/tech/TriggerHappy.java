@@ -75,13 +75,12 @@ public class TriggerHappy extends Skylander {
 	}
 	
 	public Double addDamage(Double damage, Skylander skylanderHit) {
-		if (damageBonusPassif == 0) {
-			return damage;
-		} else {
+		if (damageBonusPassif != 0) {
 			Double newDamage = damage + damageBonusPassif;
 			damageBonusPassif = 0;
 			return newDamage;
-		}
+		} 
+		return damage;
 	}
 	
 	public void passif_Gold() {
@@ -91,7 +90,7 @@ public class TriggerHappy extends Skylander {
 		}
 		
 		player.playSound(player.getLocation(), Sound.ITEM_CROSSBOW_LOADING_MIDDLE, 1, 1);
-		player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre "+ namePassif + "§f, la prochaine flèche que vous toucherez infligera §e"+ damageBonusPassif + " dégats§f bonus.");
+		player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre "+ namePassif + "§f, la prochaine flèche que vous toucherez infligera §6"+ damageBonusPassif + " dégats§f bonus.");
 	}
 	
 	public void firstSpell_Arrow() {
@@ -138,7 +137,7 @@ public class TriggerHappy extends Skylander {
 			            2, 
 			            0.05, 0.05, 0.05,
 			            0,
-			            Material.GOLD_BLOCK.createBlockData() // Type de bloc
+			            Material.GOLD_BLOCK.createBlockData()
 			        );
 				}
 			);
@@ -195,7 +194,7 @@ public class TriggerHappy extends Skylander {
 	    player.sendMessage("\n");
 	    player.sendMessage("===============");
 	    player.sendMessage("\n");
-	    player.sendMessage("   ▶§eTrigger Happy§f◀");
+	    player.sendMessage("   ▶ "+ element.getName() + name +" §f◀");
 	    player.sendMessage("\n");
 	    player.sendMessage("≫ "+ namePassif +"§f, vous pouvez §6augmenter les dégâts§f de votre prochaine flèche pour un montant de §6"+ damagePassif +" * votre nombre d'or§f utilisé.");
 	    player.sendMessage("\n");

@@ -27,8 +27,8 @@ import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class Drobot extends Skylander {
 	public static final String name = "Drobot";
-	
 	public static final String nameWeapon = "§eRayon Laser";
+	
 	public static final String namePassif = "§eRecyclage";
 	public static final Integer timerPassif = 30;
 	
@@ -64,18 +64,24 @@ public class Drobot extends Skylander {
 			Player playerRez = gamePlayer.getPlayer();
 			playerRez.teleport(player.getLocation());
 			playerRez.setGameMode(GameMode.ADVENTURE);
+			playerRez.playSound(playerRez.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+			playerRez.sendTitle(namePassif, "§7Vous devez gagner pour §e" + player.getName(), 1, 60, 1);
 
 			DrobotDroid droid = new DrobotDroid(playerRez);
 			droid.giveEquipement();
 			droid.summonInfoArmorStand();
 			droid.removeAllMates();
 			droid.addMatesSkylanders(getMates());
+			
+			for (Skylander mate : getMates())
+				mate.addMate(droid);
+			addMate(droid);
 
 			gamePlayer.setActualTeam(plugin.game.getPlayer(player).getActualTeam());
 			gamePlayer.setSkylander(droid);
 			
-			addMate(droid);
 			addCooldown(namePassif, timerPassif);
+			return;
 		}
 	}
 	
