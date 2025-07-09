@@ -24,9 +24,8 @@ import fr.kamael.skylandersfight.utils.manager.ItemManager;
 
 public class Voodood extends Skylander {
 	public static final String name = "Voodood";
-	
 	public static final String nameWeapon = "§5Hache de Foudre";
-	
+
 	public static final String namePassif = "§5Chargement";
 	public static final Integer stackMaxPassif = 5;
 	
@@ -67,7 +66,8 @@ public class Voodood extends Skylander {
 			player.setLevel(stackPassif);
 		}
 		
-		lastSkylanderHit = skylanderHit;
+		if (lastSkylanderHit != skylanderHit)
+			lastSkylanderHit = skylanderHit;
 		
 		return false; 
 	}
@@ -97,14 +97,15 @@ public class Voodood extends Skylander {
 			} else {
 				Player playerTarget = skylanderTarget.getPlayer();
 				if (stackPassif == stackMaxPassif) {
-					playerTarget.damage(damageFirstSpell * 2, player);
 					stackPassif = 0;
 					player.setLevel(stackPassif);
+					playerTarget.damage(damageFirstSpell * 2, player);
 				}
 				else
 					playerTarget.damage(damageFirstSpell, player);
 				playerTarget.getWorld().strikeLightningEffect(playerTarget.getLocation());
-				playerTarget.sendMessage("Vous avez été touché par la compétence " + nameFirstSpell + "§f de §d" + player.getName() + "§f.");				
+				playerTarget.sendMessage("Vous avez été touché par la compétence " + nameFirstSpell + "§f de §d" + player.getName() + "§f.");		
+				playerTarget.sendTitle(nameFirstSpell, "§7Étourdissement pendant " + SkylanderConverter.convertTicks(tickStunFirstSpell) + "s.", 1, tickStunFirstSpell, 1);
 				skylanderTarget.addStatus(tickStunFirstSpell, Status.NOMOVE, Status.NOSPELL, Status.NOMAKEDAMAGE);
 				
 				player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre compétence "+ nameFirstSpell + "§f sur §d" + playerTarget.getName() + "§f.");
@@ -117,6 +118,12 @@ public class Voodood extends Skylander {
 	
 	public void secondSpell_Teleportation() {
 		if (checkCooldown(nameSecondSpell, true)) {
+			if (checkStatus(Status.NOTELEPORT)) {
+				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+				player.sendMessage(Constants.prefixMessage + "Vous n'êtes §cpas autorisé§f à vous téléportez pour le moment.");
+				return;
+			}
+			
 			if (lastSkylanderHit == null) {
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
 				player.sendMessage(Constants.prefixMessage + "Vous n'avez encore frappé personne.");
