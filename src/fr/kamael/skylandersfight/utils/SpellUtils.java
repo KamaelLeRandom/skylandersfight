@@ -219,6 +219,33 @@ public class SpellUtils {
 		return skylandersHit;
 	}
 	
+	public static ArrayList<Skylander> skylanderInFront(Skylander skylander, Double distance, Double width, Double height) {
+		Plugin plugin = Plugin.plugin;
+		ArrayList<Skylander> playersInFront = new ArrayList<>();
+		Player player = skylander.getPlayer();
+	    Location origin = player.getLocation();
+	    Vector direction = origin.getDirection().normalize();
+	    Location center = origin.clone().add(direction.multiply(distance)).add(0, 1, 0);
+	
+	    for (GamePlayer gamePlayerHit : plugin.game.getPlayers()) {	
+	    	Skylander skylanderHit = gamePlayerHit.getSkylander();
+	    	
+	    	if (!skylanderHit.equals(skylander) && !skylander.getMates().contains(skylanderHit) && skylanderHit.isAlive()) {
+	    		Player target = gamePlayerHit.getPlayer();
+		        Location targetLoc = target.getLocation().add(0, 1, 0); 
+
+		        if (Math.abs(targetLoc.getX() - center.getX()) <= width / 2 &&
+		            Math.abs(targetLoc.getZ() - center.getZ()) <= width / 2 &&
+		            Math.abs(targetLoc.getY() - center.getY()) <= height / 2) {
+		
+		            playersInFront.add(skylanderHit);
+		        }
+	    	}
+	    }
+	
+	    return playersInFront;
+	}
+	
 	public static void dash(Skylander skylander, Entity entity, Double value, Double range, Integer timerDamage, SkylanderDamageRunnable damageCallback, ParticleRunnable particleCallback) {
 		Plugin plugin = Plugin.plugin;
 		Player player = skylander.getPlayer();
