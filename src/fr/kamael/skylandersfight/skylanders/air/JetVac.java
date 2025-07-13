@@ -29,6 +29,7 @@ public class JetVac extends Skylander {
 	public static final String name = "Jet-Vac";
 	
 	public static final String namePassif = "§3Bobine d'air";
+	public static final Integer tickRechargeWindPassif = 1;
 	public static final Integer windNeedFly = 2;
 
 	public static final String nameFirstSpell = "§3Rafale de Vent";
@@ -116,7 +117,7 @@ public class JetVac extends Skylander {
 					player.setLevel(++windLevel);	
 				}
 			}
-		}.runTaskTimer(plugin, 0, 2);
+		}.runTaskTimer(plugin, 0, tickRechargeWindPassif);
 		
 		return; 
 	}

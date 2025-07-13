@@ -25,12 +25,13 @@ import fr.kamael.skylandersfight.utils.manager.ItemManager;
 public class Scratch extends Skylander {
 	public static final String name = "Scratch";
 	
-	public static final String namePassif = "§3";
+	public static final String namePassif = "§3Super-Sonique";
 	public static final Integer nbHitPassif = 2;
-	public static final Double pourcentSpeedPassif = 0.1;
+	public static final Integer nbStackMaxPassif = 20;
+	public static final Double pourcentSpeedPassif = 0.05;
 	
 	public static final String nameFirstSpell = "§3Conversion";
-	public static final Integer timerFirstSpell = 30;
+	public static final Integer amountSpeedConvertFirstSpell = 2;
 	public static final Double pourcentForceFirstSpell = 0.01;
 	
 	public static final String nameSecondSpell = "§3Affalement";
@@ -69,7 +70,7 @@ public class Scratch extends Skylander {
 	
 	public Boolean onDamageSword(Skylander skylanderHit) { 
 		if (++nbHit%nbHitPassif == 0) {
-			if (multiplierSpeed < 25) {
+			if (multiplierSpeed < nbStackMaxPassif) {
 				multiplierSpeed++;
 				
 				player.setLevel(multiplierSpeed);
@@ -87,29 +88,28 @@ public class Scratch extends Skylander {
 	}
 	
 	public void firstSpell_Buff() {
-		if (checkCooldown(nameFirstSpell, true)) {
-			if (multiplierSpeed <= 0) {
-				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-				player.sendMessage(Constants.prefixMessage + "Vous avez §crien à convertir§f pour le moment.");
-				return;
-			} else {
-				Double bonusForce = multiplierSpeed * pourcentForceFirstSpell;
+		if (multiplierSpeed < amountSpeedConvertFirstSpell) {
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+			player.sendMessage(Constants.prefixMessage + "Vous avez §crien à convertir§f pour le moment.");
+			return;
+		} else {
+			multiplierSpeed -= amountSpeedConvertFirstSpell;
+			
+			Double bonusForce = amountSpeedConvertFirstSpell * pourcentForceFirstSpell;				
+			Double baseSpeed = 0.1; 
+			Double newSpeed = baseSpeed * (1 + (pourcentSpeedPassif * multiplierSpeed));
+			
+	        AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+	        if (attribute != null)
+	            attribute.setBaseValue(newSpeed);
+	        
+		    force += bonusForce;
 				
-				multiplierSpeed = 0;
-				
-		        AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-		        if (attribute != null)
-		            attribute.setBaseValue(0.1);
-		        
-		        force += bonusForce;
-				
-				player.playSound(player.getLocation(), Sound.BLOCK_COMPARATOR_CLICK, 1, 1);
-				player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre compétence "+ nameFirstSpell +"§f, ce qui vous a octroyé un bonus de force de "+ bonusForce*100 +"%.");
-				player.setLevel(multiplierSpeed);
+			player.playSound(player.getLocation(), Sound.BLOCK_COMPARATOR_CLICK, 1, 1);
+			player.sendMessage(Constants.prefixMessage + "Vous venez d'utiliser votre compétence "+ nameFirstSpell +"§f, ce qui vous a octroyé un bonus de force de "+ bonusForce*100 +"%.");
+			player.setLevel(multiplierSpeed);
 
-				addCooldown(nameFirstSpell, timerFirstSpell);
-				return;
-			}
+			return;
 		}
 	}
 	
@@ -142,7 +142,7 @@ public class Scratch extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("≫ "+ namePassif +"§f, lorsque vous enchaînez "+ nbHitPassif +" coups sur un joueur sans prendre de dégats, vous gagnez "+ pourcentSpeedPassif*100 +"% de vitesse de déplacement en plus. (cummulable 25 fois à la fois)");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameFirstSpell + "§f, vous convertissez votre vitesse bonus en §eForce permanentes§f §7(1 level = "+ pourcentForceFirstSpell*100 +"%)§f. §b(" + timerFirstSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, vous convertissez §e"+ amountSpeedConvertFirstSpell +" niveau§f de vitesse bonus en §eForce permanentes§f §7(1 level = "+ pourcentForceFirstSpell*100 +"%)§f.");
 		player.sendMessage("\n");
 		player.sendMessage("≫ " + nameSecondSpell + "§f, vous infligez §e"+ damageSecondSpell +" dégats§f et §eimmobilisé§f les joueurs proche ("+ rangeSecondSpell +" blocs). §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
