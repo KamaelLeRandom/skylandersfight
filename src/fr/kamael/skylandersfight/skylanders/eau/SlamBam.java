@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -219,7 +218,7 @@ public class SlamBam extends Skylander {
 		List<String> lore = Arrays.asList(
 			"§f."
 		);
-		ItemStack item = new ItemStack(Material.IRON_INGOT, 1);
+		ItemStack item = new ItemStack(Material.BLUE_ICE, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameSecondSpell);
 		meta.setUnbreakable(true);

@@ -116,7 +116,7 @@ public class ParadisBlanc extends Arena {
 			"§fVous obtenez un "+ nameSnowball +"§f qui permet de vous §5téléportez§f à l'endroit ou elle attérit, celui-ci reviens toutes les §b"+ timerSnowball +"§f secondes."
 		));
 
-		ItemStack item = new ItemStack(Material.OAK_PLANKS, 1);
+		ItemStack item = new ItemStack(Material.ICE, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameArena);
 		meta.setUnbreakable(true);
