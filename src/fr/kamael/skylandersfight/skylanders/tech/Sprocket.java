@@ -43,23 +43,27 @@ public class Sprocket extends Skylander {
 	public static final Integer timerSecondSpell = 10;
 	
 	public static final String nameFirstMob = "§eEXP01 - Abeille Empoisonnée";
-	public static final Integer timerBuildFirstMob = 5;
+	public static final Integer timerBuildFirstMob = 2;
 	public static final Integer numberOfFirstMob = 3;
-	public static final Integer damageFirstMob = 4;
+	public static final Integer damageFirstMob = 5;
 	
 	public static final String nameSecondMob = "§eEXP02 - Rat Furtif";
-	public static final Integer timerBuildSecondMob = 10;
-	public static final Integer numberOfSecondMob = 2;
+	public static final Integer timerBuildSecondMob = 4;
+	public static final Integer numberOfSecondMob = 3;
 	public static final Integer damageSecondMob = 2;
 
 	public static final String nameThirdMob = "§eEXP03 - Golem Explosif";
-	public static final Integer timerBuildThirdMob = 15;
-	public static final Integer damageThirdMob = 8;
-	public static final Integer damageExplosionThirdMob = 20;
+	public static final Integer timerBuildThirdMob = 8;
+	public static final Integer damageThirdMob = 10;
+	public static final Integer damageExplosionThirdMob = 25;
+	public static final Double rangeExplosionThirdMob = 7.;
 	
 	private Inventory invSecondSpell = getSecondSpellInventory();
 	private Boolean secondSpellActive = false;
 	private ArrayList<CustomEntity> mobs = new ArrayList<CustomEntity>(); 
+	private ArrayList<SprocketBee> bees = new ArrayList<SprocketBee>(); 
+	private ArrayList<SprocketSilverfish> silverfishs = new ArrayList<SprocketSilverfish>(); 
+	private SprocketGolem golem = null;
 	
 	public Sprocket(Player player) {
 		super(player, Element.TECH, name);
@@ -213,9 +217,26 @@ public class Sprocket extends Skylander {
 	
 	private void summonMob(String itName) {
 	    switch (itName) {
-	        case nameFirstMob -> { for (int i = 0; i < numberOfFirstMob; i++) mobs.add(new SprocketBee(this, player.getLocation())); }
-	        case nameSecondMob -> { for (int i = 0; i < numberOfSecondMob; i++) mobs.add(new SprocketSilverfish(this, player.getLocation())); }
-	        case nameThirdMob -> mobs.add(new SprocketGolem(this, player.getLocation()));
+	        case nameFirstMob -> {
+	        	for (SprocketBee bee : bees)
+	        		bee.removeEntity();
+	        	for (int i = 0; i < numberOfFirstMob; i++) 
+	        		bees.add(new SprocketBee(this, player.getLocation()));
+	        	mobs.addAll(bees);
+	        }
+	        case nameSecondMob -> { 
+	        	for (SprocketSilverfish silverfish : silverfishs)
+	        		silverfish.removeEntity();
+	        	for (int i = 0; i < numberOfSecondMob; i++) 
+	        		silverfishs.add(new SprocketSilverfish(this, player.getLocation()));
+	        	mobs.addAll(silverfishs);
+	        }
+	        case nameThirdMob -> {
+	        	if (golem != null && golem.getEntity() != null && !golem.getEntity().isDead())
+	        		golem.removeEntity();
+	        	golem = new SprocketGolem(this, player.getLocation());
+	        	mobs.add(golem);
+	        }
 	    }
 	}
 	

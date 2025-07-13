@@ -28,13 +28,14 @@ public class AggressiveSilverfish extends EntitySilverfish {
 		this.setHealth(life);
         this.getAttributeInstance(GenericAttributes.d).setValue(0.35D);
         this.setPersistenceRequired(true);
+        this.getAttributeInstance(GenericAttributes.b).setValue(50.0D);
         
 		// targetSelector
 		this.bQ.a(); // Réinitialiser les targetSelector initiaux
 		this.bQ.a(1, new PathfinderGoalNearestAttackableTarget<>(
 			    this,
 			    EntityHuman.class,
-			    10,
+			    50,
 			    true,
 			    false,
 			    (entity) -> {

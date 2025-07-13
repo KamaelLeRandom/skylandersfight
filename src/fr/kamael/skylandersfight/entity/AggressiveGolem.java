@@ -10,6 +10,7 @@ import fr.kamael.skylandersfight.game.GameState;
 import fr.kamael.skylandersfight.skylanders.Skylander;
 import net.minecraft.network.chat.ChatComponentText;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalLookAtPlayer;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalMeleeAttack;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomLookaround;
@@ -27,13 +28,15 @@ public class AggressiveGolem extends EntityIronGolem {
 		this.setCustomName(new ChatComponentText(name));
 		this.setCustomNameVisible(true);
 		this.setHealth(life);
-
+        this.getAttributeInstance(GenericAttributes.d).setValue(0.30D);
+        this.getAttributeInstance(GenericAttributes.b).setValue(50.0D);
+        
 		// targetSelector
 		this.bQ.a(); // Réinitialiser les targetSelector initiaux
 		this.bQ.a(1, new PathfinderGoalNearestAttackableTarget<>(
 			    this,
 			    EntityHuman.class,
-			    10,
+			    50,
 			    true,
 			    false,
 			    (entity) -> {

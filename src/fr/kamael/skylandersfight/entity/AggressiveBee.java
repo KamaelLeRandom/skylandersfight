@@ -29,13 +29,14 @@ public class AggressiveBee extends EntityBee {
 		this.setAnger(Integer.MAX_VALUE);
 		this.setCannotEnterHiveTicks(Integer.MAX_VALUE);
         this.getAttributeInstance(GenericAttributes.d).setValue(0.5D);
+        this.getAttributeInstance(GenericAttributes.b).setValue(50.0D);
         
 		// targetSelector
         this.bQ.a();
         this.bQ.a(1, new PathfinderGoalNearestAttackableTarget<>(
                 this,
                 EntityHuman.class,
-                10,
+                50,
                 true,
                 false,
                 (entity) -> {

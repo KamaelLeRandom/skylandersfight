@@ -46,8 +46,8 @@ public class SprocketGolem extends CustomEntity {
 	
 	@Override
 	public void onDeath() { 
-		this.entity.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, this.entity.getLocation(), 1);
-		for (Skylander skylanderHit : SpellUtils.skylanderAround(plugin, this.skylander, this.entity.getLocation(), 5., 5., 5.)) {
+		entity.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, this.entity.getLocation(), 1);
+		for (Skylander skylanderHit : SpellUtils.skylanderAround(plugin, this.skylander, this.entity.getLocation(), Sprocket.rangeExplosionThirdMob, Sprocket.rangeExplosionThirdMob, Sprocket.rangeExplosionThirdMob)) {
 			Player playerHit = skylanderHit.getPlayer();
 			playerHit.playSound(playerHit.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
 			playerHit.sendMessage(Constants.prefixMessage + "Vous venez d'être touché par l'explosion de la construction " + Sprocket.nameThirdMob + "§f de §e" + this.skylander.getPlayer().getName() + "§f.");
