@@ -34,7 +34,7 @@ public class Chill extends Skylander {
 	public static final String nameFirstSpell = "§9Narval";
 	public static final Integer timerFirstSpell = 20;
 	public static final Double rangeFirstSpell = 1.;
-	public static final Double damageFirstSpell = 10.;
+	public static final Double damageFirstSpell = 15.;
 	public static final Integer tickFreezeFirstSpell = 60;
 	
 	public static final String nameSecondSpell = "§9Glaciation";

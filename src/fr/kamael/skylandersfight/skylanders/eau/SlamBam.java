@@ -37,8 +37,8 @@ public class SlamBam extends Skylander {
 	
 	public static final String nameFirstSpell = "§9Ora-Ora-Ora";
 	public static final Double rangeFirstSpell = 4.;
-	public static final Integer timerFirstSpell = 20;
-	public static final Integer nbHitFirstSpell = 5;
+	public static final Integer timerFirstSpell = 30;
+	public static final Integer nbHitFirstSpell = 3;
 
 	public static final String nameSecondSpell = "§9Contraction glaciale";
 	public static final Integer timerSecondSpell = 20;
@@ -46,6 +46,8 @@ public class SlamBam extends Skylander {
 	public static final Double rangeSecondSpell = 5.;
 	public static final Integer durationKnockbackSecondSpell = 8;
 	public static final Double valueKnockbackSecondSpell = 0.8;
+	
+	private Boolean firstSpellActived = false;
 		
 	public SlamBam(Player player) {
 		super(player, Element.EAU, name);
@@ -64,7 +66,10 @@ public class SlamBam extends Skylander {
 	}
 	
 	public Double addDamage(Double damage, Skylander skylanderHit) { 
-		if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR))	
+		if (
+			(player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) ||
+			(player.getInventory().getItemInMainHand().getType().equals(Material.SUGAR) && firstSpellActived) 
+		)
 			return damage + damagePassif;
 		return damage; 
 	}
@@ -89,6 +94,7 @@ public class SlamBam extends Skylander {
 			if (skylandersHit.size() > 0) {
 				player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_HIT, 1, 1);
 				player.sendMessage(Constants.prefixMessage+ "Vous venez d'utiliser votre compétence "+ nameFirstSpell +"§f, vous avez toucher "+ skylandersHit.size() +" joueurs.");
+				firstSpellActived = true;
 				
 	            new BukkitRunnable() {
 	                private int nbHit = nbHitFirstSpell;
@@ -96,6 +102,7 @@ public class SlamBam extends Skylander {
 	                @Override
 	                public void run() {
 	                    if (nbHit == 0 || !alive || !plugin.game.isState(GameState.FIGHTING)) {
+	                    	firstSpellActived = false;
 	                        cancel();
 	                        return;
 	                    }

@@ -29,14 +29,14 @@ public class WhamShell extends Skylander {
 	
 	public static final String nameWeapon = "§9Masse";
 	public static final String namePassif = "§9Armure Épineuse";
-	public static final Double damagePassif = 2.;
+	public static final Double pourcentPassif = 0.3;
 	
 	public static final String nameFirstSpell = "§9Étoiles de mer";
 	public static final Integer timerFirstSpell = 15;
 
 	public static final String nameSecondSpell = "§9Déchargement";
 	public static final Integer timerSecondSpell = 30;
-	public static final Integer durationBlindSecondSpell = 5;
+	public static final Integer durationBlindSecondSpell = 8;
 	public static final Double rangeSecondSpell = 5.;
 
 	private Boolean firstSpellActived = false;
@@ -59,9 +59,10 @@ public class WhamShell extends Skylander {
 	}
 	
 	@Override
-	public Boolean onHitSword(Skylander skylanderDamager) { 
-		skylanderDamager.getPlayer().damage(damagePassif, player);
-		return false; 
+	public Double removeDamage(Double damage, Skylander skylanderHit) { 
+		if (skylanderHit.getPlayer().getLocation().distance(player.getLocation()) <= 3.)
+			skylanderHit.getPlayer().damage(pourcentPassif * damage, player);
+		return damage; 
 	}
 	
 	public void firstSpell_SwapWeapon() {
@@ -110,11 +111,11 @@ public class WhamShell extends Skylander {
 		player.sendMessage("\n");
 		player.sendMessage("   ▶ " + element.getColor() + name + "§f◀");
 		player.sendMessage("\n");
-		player.sendMessage("≫ "+ namePassif +"§f, .");
+		player.sendMessage("≫ " + namePassif + "§f, vous §erenvoyez§f §630%§f des dégâts §cuniquement en cas d’attaque au corps à corps§f.");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameFirstSpell + "§f, . §b(" + timerFirstSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameFirstSpell + "§f, vous §eéchangez§f votre §6épée§f pour un §6arc§f enchanté Punch 1, vous pouvez reprendre votre épée en réutilisant cette compétence. §b(" + timerFirstSpell + "s de recharge)");
 		player.sendMessage("\n");
-		player.sendMessage("≫ " + nameSecondSpell + "§f, vous §baveuglez§f pendant "+ durationBlindSecondSpell +" secondes tout les adversaires qui sont à moins de " + rangeSecondSpell + " blocs de vous. §b(" + timerSecondSpell + "s de recharge)");
+		player.sendMessage("≫ " + nameSecondSpell + "§f, vous §7aveuglez§f pendant "+ durationBlindSecondSpell +" secondes tout les adversaires qui sont à moins de " + rangeSecondSpell + " blocs de vous. §b(" + timerSecondSpell + "s de recharge)");
 		player.sendMessage("\n");
 		player.sendMessage("===============");
 		player.sendMessage("\n");
@@ -136,9 +137,7 @@ public class WhamShell extends Skylander {
 	}
 	
 	public static ItemStack getItemFirstSpell() {
-		List<String> lore = Arrays.asList(
-			"§fVous pouvez activer et désactiver cette compétence, afin de changer votre armé mélée en arme distance."
-		);
+		List<String> lore = Arrays.asList("");
 		ItemStack item = new ItemStack(Material.COMPARATOR, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameFirstSpell);
@@ -152,9 +151,7 @@ public class WhamShell extends Skylander {
 	}
 
 	public static ItemStack getItemSecondSpell() {
-		List<String> lore = Arrays.asList(
-			"§fVous §9aveuglez§f pendant §b" + durationBlindSecondSpell + "s§f tout les joueurs à moins de " + rangeSecondSpell + " blocs de vous."
-		);
+		List<String> lore = Arrays.asList("");
 		ItemStack item = new ItemStack(Material.YELLOW_DYE, 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(nameSecondSpell);
@@ -189,6 +186,7 @@ public class WhamShell extends Skylander {
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		item.setItemMeta(meta);
 		item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+		item.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
 		return item;
 	}
 }
